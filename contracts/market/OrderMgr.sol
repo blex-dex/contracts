@@ -17,7 +17,7 @@ import {MarketPositionCallBackIntl, MarketOrderCallBackIntl} from "./interfaces/
 import {MarketDataTypes} from "./MarketDataTypes.sol";
 import {Position} from "../position/PositionStruct.sol";
 import {IReferral} from "../referral/interfaces/IReferral.sol";
-import {TransferHelper} from "./../utils/TransferHelper.sol";
+import {TransferHelper, IERC20Decimals} from "./../utils/TransferHelper.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./MarketStorage.sol";
 import "../ac/Ac.sol";
@@ -34,7 +34,25 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
     constructor() Ac(address(0)) {}
 
     /**
-     * The `updateOrder` function is used to update an order on the order book. It validates inputs,
+     * Called by `Admin`.
+     * @param addrs new contracts address list
+     */
+    function setContracts(address[] memory addrs) external {
+        positionBook = IPositionBook(addrs[0]);
+        orderBookLong = IOrderBook(addrs[1]);
+        orderBookShort = IOrderBook(addrs[2]);
+        marketValid = addrs[3];
+        priceFeed = addrs[4];
+        positionSubMgr = addrs[5];
+        positionAddMgr = addrs[6];
+        feeRouter = IFeeRouter(addrs[7]);
+        vaultRouter = addrs[8];
+        globalValid = addrs[9];
+        orderMgr = addrs[10];
+    }
+
+    /**
+     * Called by `MarketRouter`.The `updateOrder` function is used to update an order on the order book. It validates inputs,
      * calculates fees, and triggers events. Depending on the order's state, it either adds a new order or
      * updates an existing one. It also selects the correct order book based on whether the order is long or
      * short. If the order is being created, it calculates the required collateral based on the order size
@@ -48,7 +66,17 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
             _valid().validPay(_vars.pay());
         }
         if (false == _vars.isOpen)
-            _vars._oraclePrice = getPrice(!_vars._isLong);
+            _vars._oraclePrice = getPrice(_vars._isLong == _vars.isOpen);
+        if (_vars.isFromMarket()) {
+            if (_vars.isOpen == _vars._isLong)
+                _vars._order.price = (_vars._order.price +
+                    (_vars._order.price * _vars.slippage()) /
+                    MarketConfigStruct.DENOMINATOR_SLIPPAGE).toUint128();
+            else
+                _vars._order.price = (_vars._order.price -
+                    (_vars._order.price * _vars.slippage()) /
+                    MarketConfigStruct.DENOMINATOR_SLIPPAGE).toUint128();
+        }
 
         IOrderBook ob = _vars._isLong ? orderBookLong : orderBookShort;
         if (_vars.isCreate && _vars.isOpen) {
@@ -102,14 +130,14 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
     }
 
     /**
- * The `cancelOrderList` function cancels multiple orders belonging to a given account. It requires
-administrative access control or controller role. It takes in three arrays: one containing booleans
-that specify whether each order being cancelled is an increase or decrease order, another containing
-the order IDs, and a third containing booleans that specify whether each order is long or short.
-The function iterates over each order, removes it from the order book, and calls `_cancelOrder`
-to calculate the refundable collateral amount. Finally, it transfers the refunded collateral to the
-account.
- */
+     * Called by `MarketRouter`.The `cancelOrderList` function cancels multiple orders belonging to a given account. It requires
+     * administrative access control or controller role. It takes in three arrays: one containing booleans
+     * that specify whether each order being cancelled is an increase or decrease order, another containing
+     * the order IDs, and a third containing booleans that specify whether each order is long or short.
+     * The function iterates over each order, removes it from the order book, and calls `_cancelOrder`
+     * to calculate the refundable collateral amount. Finally, it transfers the refunded collateral to the
+     * account.
+     */
     function cancelOrderList(
         address _account,
         bool[] memory _isIncreaseList,
@@ -126,28 +154,29 @@ account.
         );
         uint len = _orderIDList.length;
         uint256 collateralRefund;
-        for (uint i; i < len; ) {
-            Order.Props memory _or = (
+        for (uint256 i; i < len; ++i) {
+            Order.Props[] memory _ors = (
                 _isLongList[i] ? orderBookLong : orderBookShort
-            ).remove(_account, _orderIDList[i], _isIncreaseList[i])[0];
-
-            collateralRefund += _cancelOrder(
-                _or,
-                _isLongList[i],
-                _isIncreaseList[i],
-                false,
-                false
-            );
-
-            unchecked {
-                ++i;
+            ).remove(_account, _orderIDList[i], _isIncreaseList[i]);
+            for (uint256 j; j < _ors.length; ++j) {
+                if (_ors[j].orderID == 0) continue;
+                collateralRefund += _cancelOrder(
+                    CancelOrderCache(
+                        _ors[j],
+                        _isLongList[i],
+                        _isIncreaseList[i],
+                        false,
+                        false,
+                        ""
+                    )
+                );
             }
         }
         TransferHelper.transferOut(collateralToken, _account, collateralRefund);
     }
 
     /**
-     * @notice Allows manager to cancel orders from the order book by specifying an array of order keys,
+     * @notice Called by `Market`.Allows manager to cancel orders from the order book by specifying an array of order keys,
      *  whether the order is long or short, and whether the order is to be increased or decreased.
      * @dev Only callable by the system contract
      * @param _orderKey An array of order keys
@@ -157,88 +186,137 @@ account.
     function sysCancelOrder(
         bytes32[] memory _orderKey,
         bool[] memory _isLong,
-        bool[] memory _isIncrease
+        bool[] memory _isIncrease,
+        string[] memory reasons
     ) external {
         require(_orderKey.length == _isLong.length);
         require(_isIncrease.length == _isLong.length);
         for (uint i = 0; i < _orderKey.length; i++) {
-            require(_orderKey[i] != bytes32(0), "OrderMgr:invalid order key");
-            Order.Props[] memory exeOrders = (
-                _isLong[i] ? orderBookLong : orderBookShort
-            ).remove(_orderKey[i], _isIncrease[i]);
-            _cancelOrder(exeOrders[0], _isLong[i], _isIncrease[i], true, true);
+            if (_orderKey[i] == bytes32(0)) continue;
+            IOrderBook ob = _isLong[i] ? orderBookLong : orderBookShort;
+            if (
+                false ==
+                (_isIncrease[i] ? ob.openStore() : ob.closeStore()).containsKey(
+                    _orderKey[i]
+                )
+            ) continue; //skip if order not exists
+            Order.Props[] memory exeOrders = ob.remove(
+                _orderKey[i],
+                _isIncrease[i]
+            );
+            for (uint j = 0; j < exeOrders.length; j++) {
+                if (exeOrders[j].orderID == 0) continue;
+                _cancelOrder(
+                    CancelOrderCache(
+                        exeOrders[j],
+                        _isLong[i],
+                        _isIncrease[i],
+                        true,
+                        true,
+                        reasons[i]
+                    )
+                );
+            }
         }
+    }
+
+    struct CancelOrderCache {
+        Order.Props order;
+        bool isLong;
+        bool isIncrease;
+        bool isTransferToUser;
+        bool isExec;
+        string reasonStr;
     }
 
     /**
      * @dev Cancels an order, returns the collateral or transfers it to the user based on parameters passed
-     * @param _order The order that needs to be canceled
-     * @param _isLong A boolean value representing whether the order is for a long position
-     * @param _isIncrease A boolean value representing whether the order is increasing a position or not
-     * @param _isTransferToUser A boolean value representing whether the collateral needs to be transferred to the user or not
-     * @param isExec A boolean value representing whether the order is being executed or not
+     * @param _cache.order The order that needs to be canceled
+     * @param _cache.isLong A boolean value representing whether the order is for a long position
+     * @param _cache.isIncrease A boolean value representing whether the order is increasing a position or not
+     * @param _cache.isTransferToUser A boolean value representing whether the collateral needs to be transferred to the user or not
+     * @param _cache.isExec A boolean value representing whether the order is being executed or not
+     * @param _cache.reasonStr A string value representing the cancel reason
      * @return collateralRefund The collateral amount that needs to be refunded to the user
      */
     function _cancelOrder(
-        Order.Props memory _order,
-        bool _isLong,
-        bool _isIncrease,
-        bool _isTransferToUser,
-        bool isExec
+        CancelOrderCache memory _cache
     ) internal returns (uint256 collateralRefund) {
-        uint256 execFee = isExec ? feeRouter.getExecFee(address(this)) : 0;
-        if (_isIncrease) {
-            if (execFee > 0) {
-                IERC20(collateralToken).approve(address(feeRouter), execFee);
+        uint256 execFee = _cache.isExec
+            ? feeRouter.getExecFee(address(this))
+            : 0;
+        if (execFee > _cache.order.collateral) return 0;
+        uint256 feeAmount = TransferHelper.formatCollateral(
+            uint256(execFee),
+            IERC20Decimals(collateralToken).decimals()
+        );
 
+        if (_cache.isIncrease) {
+            if (execFee > 0) {
+                IERC20(collateralToken).approve(address(feeRouter), feeAmount);
                 int256[] memory _fees = new int256[](4);
                 _fees[3] = int256(execFee);
-                feeRouter.collectFees(_order.account, collateralToken, _fees);
+                feeRouter.collectFees(
+                    _cache.order.account,
+                    collateralToken,
+                    _fees
+                );
             }
-            if (_isTransferToUser) {
+            if (_cache.isTransferToUser) {
                 TransferHelper.transferOut(
                     collateralToken,
-                    _order.account,
-                    _order.collateral - execFee
+                    _cache.order.account,
+                    _cache.order.collateral - execFee
                 );
             } else {
-                collateralRefund = _order.collateral;
+                // OMB-03 COLLATERAL TO BE REFUNDED SHOULD SUBTRACT THE execFee
+                collateralRefund = _cache.order.collateral - execFee;
             }
-        } else if (isExec) {
+        } else if (_cache.isExec) {
             (uint256 _longSize, uint256 _shortSize) = positionBook
                 .getMarketSizes();
             int256 _fundRate = feeRouter.getFundingRate(
                 address(this),
                 _longSize,
                 _shortSize,
-                _isLong
+                _cache.isLong
             );
             uint256 decreasedCollateral = positionBook
                 .decreaseCollateralFromCancelInvalidOrder(
-                    _order.account,
+                    _cache.order.account,
                     execFee,
                     _fundRate,
-                    _isLong
+                    _cache.isLong
                 );
             if (decreasedCollateral >= execFee) {
                 int256[] memory _fees = new int256[](4);
                 _fees[3] = int256(execFee);
-                IERC20(collateralToken).approve(address(feeRouter), execFee);
-                feeRouter.collectFees(_order.account, collateralToken, _fees);
+                IERC20(collateralToken).approve(address(feeRouter), feeAmount);
+                feeRouter.collectFees(
+                    _cache.order.account,
+                    collateralToken,
+                    _fees
+                );
+                //TransferHelper.transferOut(collateralToken, feeVault, execFee);
             }
         }
 
         MarketDataTypes.UpdatePositionInputs memory inputs;
         inputs._market = address(this);
-        inputs._isLong = _isLong;
+        inputs._isLong = _cache.isLong;
         inputs._oraclePrice = getPrice(true);
-        inputs.isOpen = _isIncrease;
+        inputs.isOpen = _cache.isIncrease;
 
         MarketLib.afterDeleteOrder(
             MarketOrderCallBackIntl.DeleteOrderEvent(
-                _order,
+                _cache.order,
                 inputs,
-                uint8(isExec ? CancelReason.SysCancel : CancelReason.Canceled),
+                uint8(
+                    _cache.isExec
+                        ? CancelReason.SysCancel
+                        : CancelReason.Canceled
+                ), //6,5
+                _cache.reasonStr,
                 int256(0)
             ),
             pluginGasLimit,

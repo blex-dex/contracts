@@ -12,7 +12,7 @@ async function main() {
 
   const LP = await deployAll(usdc)
 
-  // load status
+
   const aum = await LP.vaultReward.getAUM()
   const pnl = await LP.vaultRouter.getGlobalPnl()
   const usdBalance = await LP.vaultReward.getUSDBalance()
@@ -42,14 +42,14 @@ async function main() {
 
   const shares = await LP.vault.balanceOf(deployer.address)
   console.log("lp shares: ", await LP.vault.balanceOf(deployer.address))
-  // console.log("lp assets: ", await LP.vault.totalAssets())
+
 
   await handleTx(LP.vault.approve(LP.vaultRouter.address, shares), "LP.approve")
   await handleTx(LP.vault.approve(LP.vaultReward.address, shares), "LP.approve")
 
   await handleTx(
     LP.vaultReward.sell(LP.vault.address, deployer.address, 100, 0)
-    // LP.vaultRouter.sell(LP.vault.address, deployer.address, 100, 0)
+
   )
 
   console.log(
@@ -58,8 +58,8 @@ async function main() {
   )
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
+
+
 main().catch((error) => {
   console.error(error)
   process.exitCode = 1

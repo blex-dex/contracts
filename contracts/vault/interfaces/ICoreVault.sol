@@ -19,14 +19,17 @@ interface ICoreVault is IERC4626 {
         uint256 amount
     ) external view returns (uint256);
 
-    function verifyOutAssets(
-        address to,
-        uint256 amount
-    ) external view returns (bool);
-
     function transferOutAssets(address to, uint256 amount) external;
 
     function getLPFee(bool isBuy) external view returns (uint256);
 
-    function initialize(address _vaultRouter) external;
+    function setIsFreeze(bool f) external;
+
+    /* function initialize(
+        address _asset,
+        string memory _name,
+        string memory _symbol,
+        address _vaultRouter,
+        address
+    ) external; */
 }

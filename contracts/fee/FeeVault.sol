@@ -13,13 +13,7 @@ contract FeeVault is Ac {
 
     EnumerableSet.AddressSet internal markets;
     mapping(address => int256) public marketFees; // market -> fee
-    mapping(address => int256) public accountFees; // account -> fee
-    mapping(uint8 => int256) public kindFees; // fee kind -> fee
-    mapping(address => mapping(uint8 => int256)) public marketKindFees; // market -> kind -> fee
-    mapping(address => mapping(uint8 => int256)) public accountKindFees; // account -> kind -> fee
-    // withdraw fee info
-    mapping(address => int256) public toAccountFees; // market, account withdraw fee amount
-    mapping(uint8 => int256) public toKindFees;
+
 
     // cumulativeFundingRates tracks the funding rates based on utilization
     mapping(address => mapping(bool => int256)) public cumulativeFundingRates;
@@ -49,6 +43,12 @@ contract FeeVault is Ac {
         }
     }
 
+    /**
+     * @dev Allows an authorized role to withdraw tokens to a specified address.
+     * @param token The address of the token to be withdrawn.
+     * @param to The address to which the tokens will be transferred.
+     * @param amount The amount of tokens to be withdrawn.
+     */
     function withdraw(
         address token,
         address to,
@@ -58,57 +58,16 @@ contract FeeVault is Ac {
         emit Withdraw(token, to, amount);
     }
 
-    function decreaseFees(
-        address market,
-        address account,
-        int256[] memory fees
-    ) external onlyController {
-        require(fees.length > 0, "invalid params");
-
-        int256 _toMarketFees;
-        int256 _toAccountFees;
-
-        for (uint8 i = 0; i < fees.length; i++) {
-            if (fees[i] == 0) {
-                continue;
-            }
-
-            _toMarketFees += fees[i];
-            _toAccountFees += fees[i];
-            toKindFees[i] += fees[i];
-        }
-
-        toAccountFees[market] += _toMarketFees;
-        toAccountFees[account] += _toAccountFees;
-    }
-
-    function increaseFees(
-        address market,
-        address account,
-        int256[] memory fees
-    ) external onlyController {
-        require(fees.length > 0, "invalid params");
-
-        int256 _marketFees;
-        int256 _accountFees;
-
-        for (uint8 i = 0; i < fees.length; i++) {
-            if (fees[i] == 0) {
-                continue;
-            }
-
-            _marketFees += fees[i];
-            _accountFees += fees[i];
-            kindFees[i] += fees[i];
-            marketKindFees[market][i] += fees[i];
-            accountKindFees[account][i] += fees[i];
-        }
-
-        marketFees[market] += _marketFees;
-        markets.add(market);
-        accountFees[account] += _accountFees;
-    }
-
+    
+    /**
+     * @dev Updates the global funding rates for a market.
+     * @param market The address of the market.
+     * @param longRate The current long funding rate.
+     * @param shortRate The current short funding rate.
+     * @param nextLongRate The next long funding rate.
+     * @param nextShortRate The next short funding rate.
+     * @param timestamp The timestamp of the update.
+     */
     function updateGlobalFundingRate(
         address market,
         int256 longRate,

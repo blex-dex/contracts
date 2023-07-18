@@ -22,11 +22,11 @@ const { setLiquidateFeeRate } = require("./fee/feeRouter")
 const { setMaxMarketSizeLimit } = require("./position/positionValid")
 
 async function main() {
-  // TODO 再加一个市场BTC/USD
+
 
   const [deployer] = await ethers.getSigners()
   console.log("deployer: ", deployer.address)
-  // -------------------------------deploy  position-----------------------------------------------//
+
   const orderBookLong = await deployOrConnect(
     "OrderBook",
     [true],
@@ -58,10 +58,10 @@ async function main() {
     "CloseStoreShort"
   )
   const market = await deployOrConnect("Market", [])
-  // =============================================
-  //
-  // =============================================
-  // 给market授权
+
+
+
+
   await grantRoleIfNotGranted(
     orderBookLong,
     "ROLE_MARKET",
@@ -74,7 +74,7 @@ async function main() {
     market,
     "_orderBookS.grantRole"
   )
-  // 设置ob权限
+
   await handleTx(
     OrderStoreOpenLong.setOrderBook(orderBookLong.address),
     "_openStoreLong"
@@ -95,14 +95,14 @@ async function main() {
     "_closeStoreShort"
   )
 
-  // 设置ob地址
+
   await handleTx(orderBookLong.initialize(
     OrderStoreOpenLong.address, OrderStoreCloseLong.address
   ))
   await handleTx(orderBookShort.initialize(
     OrderStoreOpenShort.address, OrderStoreCloseShort.address
   ));
-  const marketRouter = "0x5FbDB2315678afecb367f032d93F642f64180aa3" // 暂时不管她
+  const marketRouter = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
   await handleTx(market.initialize(
     (await deployOrConnect("PositionBook", [])).address,
     orderBookLong.address,
@@ -114,13 +114,13 @@ async function main() {
     marketRouter,
     (await deployOrConnect("CoreVault", [])).address,
     (await deployOrConnect("ERC4626Router", [], "VaultRouter")).address,
-    (await deployOrConnect("USDC", [])).address//collateral token
+    (await deployOrConnect("USDC", [])).address
   ));
 
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
+
+
 main().catch((error) => {
   console.error(error)
   process.exitCode = 1

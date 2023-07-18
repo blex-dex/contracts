@@ -5,7 +5,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import {IMarket} from "./interfaces/IMarket.sol";
-import {MarketPositionCallBackIntl, MarketOrderCallBackIntl} from "./interfaces/IMarketCallBackIntl.sol";
+import {MarketCallBackIntl, MarketPositionCallBackIntl, MarketOrderCallBackIntl} from "./interfaces/IMarketCallBackIntl.sol";
 import {MarketDataTypes} from "./MarketDataTypes.sol";
 
 import {MarketLib} from "./MarketLib.sol";
@@ -16,14 +16,16 @@ import "../vault/interfaces/IVaultRouter.sol";
 import "../order/OrderLib.sol";
 import "../order/OrderStruct.sol";
 import {TransferHelper} from "./../utils/TransferHelper.sol";
-import "../ac/Ac.sol";
+import "../ac/AcUpgradable.sol";
 
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 
 contract MarketRouter is
     MarketPositionCallBackIntl,
     MarketOrderCallBackIntl,
-    Ac,
+    AcUpgradable,
     ReentrancyGuard
 {
     using EnumerableSet for EnumerableSet.AddressSet;
@@ -32,12 +34,13 @@ contract MarketRouter is
     using MarketDataTypes for MarketDataTypes.UpdatePositionInputs;
     using Order for Order.Props;
     using SafeERC20 for IERC20;
+    using SafeCast for uint256;
     mapping(address => address) pbs;
-
     EnumerableSet.AddressSet internal positionBooks;
     EnumerableSet.AddressSet internal markets;
     address public gv;
     address public vaultRouter;
+    bool public isEnableMarketConvertToOrder;
 
     function getMarkets() external view returns (address[] memory) {
         return markets.values();
@@ -59,22 +62,23 @@ contract MarketRouter is
         uint64 fromOrder
     );
 
-      event UpdateOrder(
-        address indexed account, //0
-        bool isLong, //1
-        bool isIncrease, //2 if false, trade type == "trigger", otherwise, type =="limit"
-        uint256 orderID, //3
-        address market, //4 -> market name
-        uint256 size, //5
-        uint collateral, //6
-        uint256 triggerPrice, //7
-        bool triggerAbove, // , set to bool
-        uint tp, //9
-        uint sl, //10
-        uint128 fromOrder, //11
-        bool isKeepLev //12
+    event UpdateOrder(
+        address indexed account,
+        bool isLong,
+        bool isIncrease,
+        uint256 orderID,
+        address market,
+        uint256 size,
+        uint collateral,
+        uint256 triggerPrice,
+        bool triggerAbove,
+        uint tp,
+        uint sl,
+        uint128 fromOrder,
+        bool isKeepLev,
+        MarketDataTypes.UpdateOrderInputs params
     );
- 
+
     event DeleteOrder(
         address indexed account,
         bool isLong,
@@ -82,11 +86,21 @@ contract MarketRouter is
         uint256 orderID,
         address market,
         uint8 reason,
+        string reasonStr,
         uint256 price,
         int256 dPNL
     );
 
-    constructor(address _f) Ac(_f) {}
+    function initialize(
+        address _f,
+        address _gv,
+        address vr
+    ) external initializer {
+        AcUpgradable._initialize(_f);
+        gv = _gv;
+        vaultRouter = vr;
+        isEnableMarketConvertToOrder = true;
+    }
 
     // USER ACTIONS
 
@@ -155,20 +169,22 @@ contract MarketRouter is
     function increasePosition(
         MarketDataTypes.UpdatePositionInputs memory _inputs
     ) public nonReentrant {
-        require(markets.contains(_inputs._market), "invalid market");
-        require(_inputs.isValid(), "invalid params");
-        IMarket im = IMarket(_inputs._market);
-
-        address c = im.collateralToken();
-        IERC20(c).safeTransferFrom(
-            msg.sender,
-            _inputs._market,
-            calculateEquivalentCollateralAmount(c, _inputs.collateralDelta) // transfer in amount of collateral token
-        );
-        _inputs._account = msg.sender;
-
-        validateIncreasePosition(_inputs);
-        IMarket(_inputs._market).increasePositionWithOrders(_inputs);
+        if (isEnableMarketConvertToOrder && _inputs._sizeDelta > 0) {
+            _updateOrderFromPosition(_inputs);
+        } else {
+            require(markets.contains(_inputs._market), "MarketRouter:!market");
+            require(_inputs.isValid(), "invalid params");
+            IMarket im = IMarket(_inputs._market);
+            address c = im.collateralToken();
+            IERC20(c).safeTransferFrom(
+                msg.sender,
+                _inputs._market,
+                calculateEquivalentCollateralAmount(c, _inputs.collateralDelta) // transfer in amount of collateral token
+            );
+            _inputs._account = msg.sender;
+            validateIncreasePosition(_inputs);
+            IMarket(_inputs._market).increasePositionWithOrders(_inputs);
+        }
     }
 
     /**
@@ -185,6 +201,12 @@ contract MarketRouter is
     function updateOrder(
         MarketDataTypes.UpdateOrderInputs memory _vars
     ) external nonReentrant {
+        _updateOrder(_vars);
+    }
+
+    function _updateOrder(
+        MarketDataTypes.UpdateOrderInputs memory _vars
+    ) private {
         require(markets.contains(_vars._market), "invalid market");
         require(_vars.isValid(), "invalid params");
         _vars._order.account = msg.sender;
@@ -197,6 +219,38 @@ contract MarketRouter is
             );
         }
         IMarket(_vars._market).updateOrder(_vars);
+    }
+
+    /**
+     * @dev Updates the order based on the position inputs.
+     * @param _inputs The market data inputs required for the position update.
+     */
+    function _updateOrderFromPosition(
+        MarketDataTypes.UpdatePositionInputs memory _inputs
+    ) internal {
+        MarketDataTypes.UpdateOrderInputs memory _vars;
+        _vars.initialize(_inputs.isOpen);
+        _vars.setIsFromMarket(true);
+        _vars.setSlippage(_inputs._slippage);
+        _vars._market = _inputs._market;
+        _vars._isLong = _inputs._isLong;
+        _vars.isCreate = true;
+        Order.Props memory _order;
+        if (false == _inputs.isOpen) {
+            _order.setIsKeepLev(_inputs.isKeepLev());
+            // _vars.collateralDelta = _inputs.collateralDelta;
+        } else {
+            _vars.setPay(_inputs.collateralDelta);
+            _order.setTakeprofit(_inputs.tp());
+            _order.setStoploss(_inputs.sl());
+        }
+        _order.collateral = _inputs.collateralDelta.toUint128();
+        _order.account = _inputs._account;
+        _order.size = _inputs._sizeDelta.toUint128();
+        _order.price = _inputs._price.toUint128();
+        _order.refCode = _inputs._refCode;
+        _vars._order = _order;
+        _updateOrder(_vars);
     }
 
     /**
@@ -221,10 +275,14 @@ contract MarketRouter is
     function decreasePosition(
         MarketDataTypes.UpdatePositionInputs memory _vars
     ) external nonReentrant {
-        require(markets.contains(_vars._market), "invalid market");
-        require(_vars.isValid(), "invalid params");
-        _vars._account = msg.sender;
-        IMarket(_vars._market).decreasePosition(_vars);
+        if (isEnableMarketConvertToOrder && _vars._sizeDelta > 0) {
+            _updateOrderFromPosition(_vars);
+        } else {
+            require(markets.contains(_vars._market), "invalid market");
+            require(_vars.isValid(), "invalid params");
+            _vars._account = msg.sender;
+            IMarket(_vars._market).decreasePosition(_vars);
+        }
     }
 
     /**
@@ -331,16 +389,14 @@ contract MarketRouter is
         }
     }
 
+    //==============================
     // INIT & SETTER
-
-    function initialize(address _gv, address vr) external initializeLock {
-        gv = _gv;
-        vaultRouter = vr;
-    }
+    //==============================
 
     function updatePositionBook(
         address newA
     ) external onlyRole(MARKET_MGR_ROLE) {
+        require(newA != address(0));
         address _market = msg.sender;
         require(markets.contains(msg.sender), "invalid market");
         positionBooks.remove(address(IMarket(_market).positionBook()));
@@ -351,7 +407,14 @@ contract MarketRouter is
         pbs[_market] = newA;
     }
 
+    function setIsEnableMarketConvertToOrder(
+        bool _isEnableMarketConvertToOrder
+    ) external onlyRole(MARKET_MGR_ROLE) {
+        isEnableMarketConvertToOrder = _isEnableMarketConvertToOrder;
+    }
+
     function addMarket(address _market) external onlyRole(MARKET_MGR_ROLE) {
+        require(_market != address(0));
         address _positionBook = address(IMarket(_market).positionBook());
 
         markets.add(_market);
@@ -384,7 +447,7 @@ contract MarketRouter is
                 category = 0;
             }
         } else if (_event.inputs.liqState == 1) category = 4;
-        else if (_event.inputs.liqState == 2) category = 4;
+        else if (_event.inputs.liqState == 2) category = 5;
         else if (_event.inputs._sizeDelta == 0) category = 3;
 
         emit UpdatePosition(
@@ -395,7 +458,7 @@ contract MarketRouter is
             _event.inputs._isLong,
             _event.inputs._oraclePrice,
             _event.position.realisedPnl,
-            _event.fees, 
+            _event.fees,
             _event.inputs._market,
             _event.collateralToken,
             _event.indexToken,
@@ -421,8 +484,9 @@ contract MarketRouter is
             _event._order.getTriggerAbove(),
             _event.isOpen ? _event._order.getTakeprofit() : 0,
             _event.isOpen ? _event._order.getStoploss() : 0,
-            _event._order.extra0,
-            _event._order.getIsKeepLev()
+            _event.isOpen ? 0 : uint128(_event._order.getFromOrder()),
+            _event._order.getIsKeepLev(),
+            _event
         );
     }
 
@@ -436,8 +500,23 @@ contract MarketRouter is
             e.order.orderID,
             e.inputs._market,
             e.reason,
+            e.reasonStr,
             e.inputs._oraclePrice,
             e.dPNL
         );
+    }
+
+    function getHooksCalls()
+        external
+        pure
+        override
+        returns (MarketCallBackIntl.Calls memory)
+    {
+        return
+            MarketCallBackIntl.Calls({
+                updatePosition: true,
+                updateOrder: true,
+                deleteOrder: true
+            });
     }
 }

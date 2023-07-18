@@ -36,8 +36,8 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
     constructor() Ac(address(0)) {}
 
     /**
-     * @notice Increases a position and placing take profit and stop loss orders
-     * @dev Can only be called internally by the contract, takes a struct _inputs that contains the updated position information
+     * @notice Called by `MarketRouter`.Increases a position and placing take profit and stop loss orders
+     * @dev This function will be called by `Market` contract through `delegatecall`, takes a struct _inputs that contains the updated position information
      * @param _inputs The struct containing parameters needed to update the position
      */
     function increasePositionWithOrders(
@@ -53,8 +53,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
             _inputs._slippage = 30;
         }
 
-        if (_inputs._sizeDelta > 0)
-            _inputs._oraclePrice = getPrice(_inputs._isLong);
+        _inputs._oraclePrice = getPrice(_inputs._isLong);
         Position.Props memory _position = positionBook.getPosition(
             _inputs._account,
             _inputs._sizeDelta == 0 ? 0 : _inputs._oraclePrice,
@@ -126,13 +125,19 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         }
     }
 
+    /**
+     * @dev Commits the increase position operation based on the provided parameters.
+     * @param _params The market data inputs required for the position update.
+     * @param collD The change in collateral amount.
+     * @param fr The fee amount.
+     */
     function commitIncreasePosition(
         MarketDataTypes.UpdatePositionInputs memory _params,
         int256 collD,
         int256 fr
-    ) private {
+    ) private returns (Position.Props memory result) {
         if (_params._sizeDelta == 0 && collD < 0) {
-            positionBook.decreasePosition(
+            result = positionBook.decreasePosition(
                 _params._account,
                 uint256(-collD),
                 _params._sizeDelta,
@@ -146,22 +151,31 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
                     IERC20Decimals(collateralToken).decimals()
                 )
             );
-            positionBook.increasePosition(
+            result = positionBook.increasePosition(
                 _params._account,
-                collD.toUint256(),
+                collD,
                 _params._sizeDelta,
                 _params._oraclePrice,
                 fr,
                 _params._isLong
             );
         }
+
+        //Position.Props
+        _valid().validLev(result.size, result.collateral);
     }
 
+    /**
+     * @dev Increases the position based on the provided inputs and position properties.
+     * @param _params The market data inputs required for the position update.
+     * @param _position The properties of the position being updated.
+     * @return collD The change in collateral amount.
+     */
     function _increasePosition(
         MarketDataTypes.UpdatePositionInputs memory _params,
         Position.Props memory _position
     ) private returns (int256 collD) {
-        MarketLib._updateCumulativeFundingRate(positionBook, feeRouter);
+        MarketLib._updateCumulativeFundingRate(positionBook, feeRouter); //1
         _params._market = address(this);
         int256[] memory _fees = feeRouter.getFees(_params, _position);
         int256 _totalfee = _fees.totoalFees();
@@ -210,25 +224,34 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
     function getPrice(bool _isMax) private view returns (uint256 p) {
         IPrice _p = IPrice(priceFeed);
         p = _p.getPrice(indexToken, _isMax);
-        require(p > 0, "invalid price");
+        require(p > 0, "!oracle price");
     }
 
+    /**
+     * @dev Processes the transaction fees.
+     * @param fees The amount of fees to be processed.
+     */
     function _transationsFees(int256 fees) private {
         if (fees < 0) {
             IFeeRouter(feeRouter).withdraw(
                 collateralToken,
                 address(this),
-                uint(fees * -1)
+                (fees * -1).toUint256()
             );
         } else if (fees > 0) {
             uint256 amount = TransferHelper.formatCollateral(
-                uint(fees),
+                fees.toUint256(),
                 IERC20Decimals(collateralToken).decimals()
             );
             IERC20(collateralToken).approve(address(feeRouter), amount);
         }
     }
 
+    /**
+     * @dev Called by `AutoOrder`.Executes an order key based on the provided order properties and position update inputs.
+     * @param exeOrder The properties of the order to be executed.
+     * @param _params The market data inputs required for the position update.
+     */
     function execOrderKey(
         Order.Props memory exeOrder,
         MarketDataTypes.UpdatePositionInputs memory _params
@@ -238,20 +261,33 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         _execIncreaseOrderKey(exeOrder, _params);
     }
 
+    /**
+     * @dev Executes an increase order key based on the provided order properties and position update inputs.
+     * @param order The properties of the order to be executed.
+     * @param _params The market data inputs required for the position update.
+     */
     function _execIncreaseOrderKey(
         Order.Props memory order,
         MarketDataTypes.UpdatePositionInputs memory _params
     ) private {
-        require(order.account != address(0), "PositionAddMgr:invalid account");
+        _params._oraclePrice = getPrice(_params._isLong);
+        require(order.account != address(0), "PositionAddMgr:!account");
         IMarketRouter(marketRouter).validateIncreasePosition(_params);
-        increasePositionWithOrders(_params);
-        require(
-            order.isMarkPriceValid(_params._oraclePrice),
-            "PositionAddMgr::triggerabove"
-        );
         (_params._isLong ? orderBookLong : orderBookShort).remove(
             order.getKey(),
             true
+        );
+        _params.execNum += 1;
+        require(
+            order.isMarkPriceValid(_params._oraclePrice),
+            "PositionAddMgr:triggerabove"
+        );
+
+        // Check collateralDelta before updating positions
+
+        require(
+            _params.collateralDelta == order.collateral,
+            "PositionAddMgr: insufficient collateral"
         );
 
         MarketLib.afterDeleteOrder(
@@ -259,6 +295,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
                 order,
                 _params,
                 uint8(CancelReason.Executed),
+                "",
                 int256(0)
             ),
             pluginGasLimit,
@@ -266,6 +303,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
             collateralToken,
             address(this)
         );
+        increasePositionWithOrders(_params);
     }
 
     function _valid() internal view returns (IMarketValid) {
@@ -282,7 +320,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
                 feeRouter,
                 getPrice(!_isLong)
             ) == 0,
-            "PositionAddMgr:position under liq"
+            "PositionAddMgr:should'nt liq"
         );
     }
 
@@ -296,6 +334,13 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
             );
     }
 
+    /**
+     * @dev Builds the variables required for creating a decrease order.
+     * @param _inputs The market data inputs required for the position update.
+     * @param triggerPrice The trigger price for the decrease order.
+     * @param isTP A flag indicating if the trigger price is for Take Profit.
+     * @return _createVars The variables required for creating the decrease order.
+     */
     function _buildDecreaseVars(
         MarketDataTypes.UpdatePositionInputs memory _inputs,
         uint256 /* collateralIncreased */,

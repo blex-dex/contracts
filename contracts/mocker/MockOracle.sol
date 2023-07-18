@@ -23,6 +23,10 @@ contract MockOracle {
         return _price;
     }
 
+    function fastPriceFeed() external view returns (address) {
+        return address(this);
+    }
+
     function setPrices(
         address[] memory _tokens,
         uint256[] memory _prices,

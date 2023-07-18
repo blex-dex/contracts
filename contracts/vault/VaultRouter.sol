@@ -8,107 +8,53 @@ import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet
 import {IMarket} from "../market/interfaces/IMarket.sol";
 import {ICoreVault} from "./interfaces/ICoreVault.sol";
 import {IFeeRouter} from "../fee/interfaces/IFeeRouter.sol";
-import {Ac} from "../ac/Ac.sol";
+import {AcUpgradable} from "../ac/AcUpgradable.sol";
 import {TransferHelper} from "../utils/TransferHelper.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract VaultRouter is Ac, ReentrancyGuard {
+contract VaultRouter is AcUpgradable, ReentrancyGuard {
     using SafeERC20 for IERC20;
     using EnumerableSet for EnumerableSet.AddressSet;
 
-    IFeeRouter feeRouter;
-    ICoreVault coreVault;
+    IFeeRouter public feeRouter;
+    ICoreVault public coreVault;
 
     EnumerableSet.AddressSet private markets;
     EnumerableSet.AddressSet private vaults;
+    bool public isFreezeTransfer = false;
 
     uint256 public totalFundsUsed;
     mapping(address => uint256) public fundsUsed;
     mapping(address => ICoreVault) public marketVaults;
     mapping(ICoreVault => address) public vaultMarkets;
+    bool public isFreezeAccouting = false;
 
-    bool public isFreeze = false;
+    event LogIsFreeze(bool isFreeze, uint256 freezeType);
 
-    error MinSharesError();
-    error MinOutError();
+    modifier onlyMarket() {
+        require(markets.contains(msg.sender), "VaultRouter:!market");
+        _;
+    }
 
-    constructor() Ac(msg.sender) {}
+    function setIsFreeze(bool f, uint256 freezeType) external onlyFreezer {
+        if (freezeType == 0) coreVault.setIsFreeze(f);
+        else if (freezeType == 1) isFreezeTransfer = f;
+        else if (freezeType == 2) isFreezeAccouting = f;
+        emit LogIsFreeze(f, freezeType);
+    }
 
     function initialize(
         address _coreVault,
         address _feeRouter
-    ) public initializeLock {
+    ) public initializer {
+        AcUpgradable._initialize(msg.sender);
         coreVault = ICoreVault(_coreVault);
         feeRouter = IFeeRouter(_feeRouter);
     }
 
-    /**
-     * @dev This function allows a user to buy shares of a specified Vault using a specific amount of assets.
-     * @param vault The address of the Vault contract in which the shares will be purchased.
-     * @param to The address that will receive the shares after purchase.
-     * @param amount The amount of assets to be used to purchase the shares.
-     * @param minSharesOut The minimum number of shares to be purchased.
-     * @return sharesOut The number of shares actually purchased by the user.
-     *
-     * The function transfers the specified amount of assets from the user's address to the contract's address. The "cost" variable calculates the computational costs associated with purchasing the shares, which are then transferred to the feeVault. The remaining amount is the "buyAmount" that is approved to be transferred to the Vault. If the shares purchased are less than the specified "minSharesOut", then the function reverts with a "MinSharesError".
-     */
-    function buy(
-        ICoreVault vault,
-        address to,
-        uint256 amount,
-        uint256 minSharesOut
-    ) public nonReentrant returns (uint256 sharesOut) {
-        require(false == isFreeze, "freeze");
-        SafeERC20.safeTransferFrom(
-            IERC20(vault.asset()),
-            msg.sender,
-            address(this),
-            amount
-        );
-        IERC20(vault.asset()).approve(address(vault), amount);
-        if ((sharesOut = vault.deposit(amount, to)) < minSharesOut) {
-            revert MinSharesError();
-        }
-    }
-
-    /**
-     * @dev This function sells a given amount of assets from a specified vault to the specified recipient address.
-     * @param vault The address of the vault from which the assets will be sold.
-     * @param to The address of the recipient who will receive the assets.
-     * @param amount The amount of assets to be sold from the vault.
-     * @param minAssetsOut The minimum amount of assets to be received by the recipient.
-     * @return assetOut The amount of assets actually received by the recipient after the sale.
-     */
-    function sell(
-        ICoreVault vault,
-        address to,
-        uint256 amount,
-        uint256 minAssetsOut
-    ) external nonReentrant returns (uint256 assetOut) {
-        require(false == isFreeze, "freeze");
-
-        if (
-            (assetOut = vault.redeem(amount, address(this), msg.sender)) <
-            minAssetsOut
-        ) {
-            revert MinOutError();
-        }
-    }
-
-    event LogIsFreeze(bool isFreeze);
-
-    function setIsFreeze(bool f) external {
-        require(
-            hasRole(BOSS_ROLE, msg.sender) ||
-                hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
-            "boss only"
-        );
-        isFreeze = f;
-        emit LogIsFreeze(f);
-    }
-
     event MarketSetted(address market, address vault);
 
+    // setmarket
     function setMarket(
         address market,
         ICoreVault vault
@@ -143,7 +89,7 @@ contract VaultRouter is Ac, ReentrancyGuard {
         address account,
         uint256 amount
     ) external onlyController {
-        require(false == isFreeze, "freeze");
+        require(false == isFreezeTransfer, "VaultRouter:freeze");
         ICoreVault vault = marketVaults[msg.sender];
         SafeERC20.safeTransferFrom(
             IERC20(vault.asset()),
@@ -163,12 +109,9 @@ contract VaultRouter is Ac, ReentrancyGuard {
         address to,
         uint256 amount
     ) external onlyController {
-        require(false == isFreeze, "freeze");
-
+        require(false == isFreezeTransfer, "VaultRouter:freeze");
         ICoreVault vault = marketVaults[msg.sender];
-        if (vault.verifyOutAssets(to, amount)) {
-            vault.transferOutAssets(to, amount);
-        }
+        vault.transferOutAssets(to, amount);
     }
 
     /**
@@ -178,10 +121,10 @@ contract VaultRouter is Ac, ReentrancyGuard {
      *         The function updates the funds used in the market by the borrowed amount, using the 'updateFundsUsed' internal function.
      *         The borrowed tokens will be transferred to the caller's address.
      */
-    function borrowFromVault(uint256 amount) external {
-        require(false == isFreeze, "freeze");
+    function borrowFromVault(uint256 amount) external onlyMarket {
+        require(false == isFreezeAccouting, "VaultRouter:freeze");
 
-        require(markets.contains(msg.sender), "invalid market");
+        require(markets.contains(msg.sender), "VaultRouter:!market");
         updateFundsUsed(msg.sender, amount, true);
     }
 
@@ -190,10 +133,8 @@ contract VaultRouter is Ac, ReentrancyGuard {
      * @param amount The amount of borrowed funds to be repaid.
      * The function checks if the market contract calling the function is a valid market. If the market is valid, it calls the "updateFundsUsed" function to update the amount of funds used by the market. The "amount" parameter is used to specify the amount of funds being repaid. Once the update is completed, the borrowed funds are returned to the Vault contract, and the function completes execution.
      */
-    function repayToVault(uint256 amount) external {
-        require(false == isFreeze, "freeze");
-
-        require(markets.contains(msg.sender), "invalid market");
+    function repayToVault(uint256 amount) external onlyMarket {
+        require(false == isFreezeAccouting, "VaultRouter:freeze");
         updateFundsUsed(msg.sender, amount, false);
     }
 
@@ -203,6 +144,12 @@ contract VaultRouter is Ac, ReentrancyGuard {
         uint256 totalFundsUsed
     );
 
+    /**
+     * @dev Updates the funds used for a specific market.
+     * @param market The address of the market.
+     * @param amount The amount of funds used.
+     * @param isBorrow Boolean indicating whether it's a borrow operation.
+     */
     function updateFundsUsed(
         address market,
         uint256 amount,
@@ -222,38 +169,6 @@ contract VaultRouter is Ac, ReentrancyGuard {
             totalFundsUsed -= amount;
         }
         emit FundsUsedUpdated(market, fundsUsed[market], totalFundsUsed);
-    }
-
-    function transFeeTofeeVault(
-        address account,
-        address asset,
-        uint256 fee,
-        bool isBuy
-    ) external {
-        require(msg.sender == address(coreVault), "transfer to fee vault");
-        _transFeeTofeeVault(account, asset, fee, isBuy);
-    }
-
-    function _transFeeTofeeVault(
-        address account,
-        address asset,
-        uint256 fee,
-        bool isBuy
-    ) private {
-        if (fee == 0) {
-            return;
-        }
-
-        uint8 kind = (isBuy ? 5 : 6);
-        int256[] memory fees = new int256[](kind + 1);
-        IERC20(asset).approve(address(feeRouter), fee);
-        fees[kind] = int256(
-            TransferHelper.parseVaultAsset(
-                fee,
-                IERC20Metadata(asset).decimals()
-            )
-        );
-        feeRouter.collectFees(account, asset, fees);
     }
 
     /**
@@ -287,7 +202,7 @@ contract VaultRouter is Ac, ReentrancyGuard {
     }
 
     /**
-     * @dev This function calculates the assets under management (AUM) of the contract.
+     * @dev Called by `CoreVault` and `VaultReward`.This function calculates the assets under management (AUM) of the contract.
      * @return aum The AUM value as a uint256.
      */
     function getAUM() public view returns (uint256) {
@@ -295,13 +210,9 @@ contract VaultRouter is Ac, ReentrancyGuard {
         uint256 usdBalance = getUSDBalance();
         uint256 aum;
         if (unbalancedPnl > 0) {
-            aum = usdBalance + uint256(unbalancedPnl);
+            aum = usdBalance - uint256(unbalancedPnl);
         } else {
-            require(
-                usdBalance >= uint256(-unbalancedPnl),
-                "invalid usd balance"
-            );
-            aum = usdBalance - uint256(-unbalancedPnl);
+            aum = usdBalance + uint256(-unbalancedPnl);
         }
         return aum;
     }
@@ -333,4 +244,6 @@ contract VaultRouter is Ac, ReentrancyGuard {
     function buyLpFee(ICoreVault vault) external view returns (uint256) {
         return vault.getLPFee(true);
     }
+
+    uint256[49] private ______gap;
 }

@@ -48,6 +48,6 @@ contract USDC is ERC20, ERC20Burnable, AccessControl, ERC20Permit {
             "cooldown duration not passed"
         );
         lastFaucetAt[_msgSender()] = block.timestamp;
-        _mint(_msgSender(), 1000000 ether);
+        _mint(_msgSender(), 10000 * 10 ** 6);
     }
 }

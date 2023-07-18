@@ -23,7 +23,7 @@ contract MarketStorage is IMarketStorage {
     function orderStore(
         bool isLong,
         bool isOpen
-    ) internal view returns (IOrderStore) {
+    ) public view returns (IOrderStore) {
         return orderStores[isLong][isOpen];
     }
 
@@ -52,6 +52,8 @@ contract MarketStorage is IMarketStorage {
         TpAndSlExecuted, //4
         Canceled, //5
         SysCancel, //6invalid order
-        PartialLiquidation //7
+        LeverageLiquidation //7
     }
+
+    uint256[50] private ______gap;
 }

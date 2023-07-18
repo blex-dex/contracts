@@ -3,10 +3,17 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./interfaces/IChainPriceFeed.sol";
+import {IMarket} from "../market/interfaces/IMarket.sol";
+// import {IOrderBook} from "../order/interface/IOrderBook.sol";
+// import {Order} from "../order/OrderStruct.sol";
 import "../ac/Ac.sol";
+import "../order/interface/IOrderStore.sol";
+import "../market/MarketDataTypes.sol";
+import {OrderLib} from "../order/OrderLib.sol";
 
 contract FastPriceFeed is Ac {
     using SafeMath for uint256;
+    using MarketDataTypes for MarketDataTypes.UpdatePositionInputs;
 
     // fit data in a uint256 slot to save gas costs
     struct PriceDataItem {
@@ -27,7 +34,7 @@ contract FastPriceFeed is Ac {
     uint256 public constant BASIS_POINTS_DIVISOR = 10000;
     uint256 public constant MAX_PRICE_DURATION = 30 minutes;
 
-    bool public isSpreadEnabled = false;
+    bool public isSpreadEnablede;
 
     address public chainPriceFeed;
 
@@ -93,6 +100,7 @@ contract FastPriceFeed is Ac {
     }
 
     function setPriceFeed(address _feed) external onlyAdmin {
+        require(_feed != address(0), "invalid feed");
         chainPriceFeed = _feed;
     }
 
@@ -127,7 +135,7 @@ contract FastPriceFeed is Ac {
     }
 
     function setIsSpreadEnabled(bool _enabled) external onlyAdmin {
-        isSpreadEnabled = _enabled;
+        isSpreadEnablede = _enabled;
     }
 
     function setLastUpdatedAt(uint256 _lastUpdatedAt) external onlyAdmin {
@@ -185,6 +193,43 @@ contract FastPriceFeed is Ac {
         }
     }
 
+    function setPricesAndExecute(
+        address token,
+        uint256 price,
+        uint256 timestamp,
+        IMarket.OrderExec[] memory orders
+    ) external onlyUpdater {
+        _setLastUpdatedValues(timestamp);
+        _setPrice(token, price, chainPriceFeed);
+
+        for (uint256 i = 0; i < orders.length; i++) {
+            IMarket _market = IMarket(orders[i].market);
+
+            IOrderStore _store = _market.orderStore(
+                orders[i].isLong,
+                orders[i].isIncrease
+            );
+            bytes32 _key = OrderLib.getKey(
+                orders[i].account,
+                orders[i].orderID
+            );
+
+            Order.Props memory _order = _store.orders(_key);
+
+            MarketDataTypes.UpdatePositionInputs memory _vars;
+            _vars.initialize(orders[i].isIncrease);
+            _vars.fromOrder(
+                _order,
+                orders[i].market,
+                orders[i].isLong,
+                orders[i].isIncrease,
+                true
+            );
+
+            _market.execOrderKey(_order, _vars);
+        }
+    }
+
     function setCompactedPrices(
         uint256[] memory _priceBitArray,
         uint256 _timestamp
@@ -226,6 +271,7 @@ contract FastPriceFeed is Ac {
     }
 
     // under regular operation, the fastPrice (prices[token]) is returned and there is no spread returned from this function,
+    // though VaultPriceFeed might apply its own spread
     //
     // if the fastPrice has not been updated within priceDuration then it is ignored and only _refPrice with a spread is used (spread: spreadBasisPointsIfInactive)
     // in case the fastPrice has not been updated for maxPriceUpdateDelay then the _refPrice with a larger spread is used (spread: spreadBasisPointsIfChainError)
@@ -311,7 +357,7 @@ contract FastPriceFeed is Ac {
     }
 
     function favorFastPrice(address _token) public view returns (bool) {
-        if (isSpreadEnabled) {
+        if (isSpreadEnablede) {
             return false;
         }
 

@@ -4,6 +4,8 @@ pragma solidity ^0.8.17;
 interface IFastPriceFeed {
     function prices(address token) external view returns (uint256);
 
+    function chainPriceFeed() external view returns (address);
+
     function maxCumulativeDeltaDiffs(
         address token
     ) external view returns (uint256);

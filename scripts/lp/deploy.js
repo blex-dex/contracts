@@ -3,48 +3,74 @@ const {
   waitTx,
   grantRoleIfNotGranted,
 } = require("../utils/helpers")
+const { deployCoreVault, initCoreVault } = require("../vault/coreVault")
+const {
+  initializeVaultReward,
+  deployVaultReward
+} = require("../vault/vaultReward")
+const {
+  initializeVaultRouter,
+  deployVaultRouter,
+} = require("../vault/vaultRouter")
 
 const { utils } = require("ethers")
 
-// call this function need deploy usdc first
+
 async function deployAll(usdc, isInit = true) {
-  const vault = await deployOrConnect("CoreVault", [usdc.address, "BLP", "BLP"])
-  const vaultRouter = await deployOrConnect("VaultRouter")
-  const vaultReward = await deployOrConnect("VaultReward")
+  const vault = await deployCoreVault()
+  const vaultRouter = await deployVaultRouter()
+  const vaultReward = await deployVaultReward()
   const rewardDistributor = await deployOrConnect("RewardDistributor")
 
   const setMarketLP = ({ market, vault } = {}) => {
     return waitTx(
       vaultRouter.setMarket(market.address, vault.address),
-      "setMarket"
+      "vaultRouter.setMarket"
     )
   }
 
-  const initLP = async ({ vault, vaultRouter, vaultReward, feeRouter, rewardDistributor } = {}) => {
-    await waitTx(vault.initialize(vaultRouter.address), "vault.init")
+  const initLP = async ({
+    USDC,
+    name,
+    symbol,
+    vault,
+    vaultRouter,
+    vaultReward,
+    feeRouter,
+    rewardDistributor
+  } = {}) => {
 
-    await waitTx(
-      vaultRouter.initialize(vault.address, feeRouter.address),
-      "vaultRouter.init"
+    await initializeVaultRouter(
+      vault.address,
+      feeRouter.address,
+      vaultRouter
     )
 
-    await waitTx(
-      vaultReward.initialize(
-        vault.address,
-        vaultRouter.address,
-        feeRouter.address,
-        rewardDistributor.address
-      ),
-      "vaultReward.init"
+    await initializeVaultReward(
+      vault.address,
+      vaultRouter.address,
+      feeRouter.address,
+      rewardDistributor.address,
+      vaultReward
     )
 
     await waitTx(
       rewardDistributor.initialize(
-        await vault.asset(),
+        USDC.address,
         vaultReward.address
       ),
-      "vaultReward.init"
+      "rewardDistributor.init"
     )
+
+    await initCoreVault({
+      coreVault: vault,
+      asset: USDC.address,
+      name,
+      symbol,
+      vaultRouterAddr: vaultRouter.address,
+      feeRouterAddr: feeRouter.address,
+      vaultRewardAddr:vaultReward.address
+    })
 
     await grantRoleIfNotGranted(vault, "ROLE_CONTROLLER", vaultReward.address)
     await grantRoleIfNotGranted(vault, "ROLE_CONTROLLER", vaultRouter.address)

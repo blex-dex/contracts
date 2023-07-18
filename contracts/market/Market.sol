@@ -64,11 +64,16 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
             )
         );
 
+    /**
+     * @dev Called by `AutoOrder`.Executes the order key operation using the provided order properties and market data inputs.
+     * @param exeOrder The order properties to be executed.
+     * @param _params The market data inputs required for the execution.
+     */
     function execOrderKey(
         Order.Props memory exeOrder,
         MarketDataTypes.UpdatePositionInputs memory _params
     ) external onlyPositionKeeper {
-        (, bool suc) = _callAddress(
+        (string memory errorMessage, bool suc) = _callAddress(
             _params.isOpen ? positionAddMgr : positionSubMgr,
             abi.encodeWithSelector(SELECTOR_EXE_ORDER_KEY, exeOrder, _params),
             "execOrderKey",
@@ -84,13 +89,17 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
             bool[] memory iis = new bool[](1);
             iis[0] = _params.isOpen;
 
+            string[] memory reasons = new string[](1);
+            reasons[0] = errorMessage;
+
             _callAddress(
                 orderMgr,
                 abi.encodeWithSignature(
-                    "sysCancelOrder(bytes32[],bool[],bool[])",
+                    "sysCancelOrder(bytes32[],bool[],bool[],string[])",
                     keys,
                     longs,
-                    iis
+                    iis,
+                    reasons
                 ),
                 "sysCancelOrder",
                 true
@@ -103,7 +112,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     }
 
     /**
-     * @dev This function calculates the Profit and Loss (PNL) for a user in a particular market.
+     * @dev Called by `MarketRouter`.This function calculates the Profit and Loss (PNL) for a user in a particular market.
      * @return pnl The PNL for the user in the market.
      * The function retrieves the current price of the `indexToken` using the `IPrice` contract and calculates the PNL for the market using the `getMarketPNL()` function from the `IPositionBook` contract.
      * The PNL is then converted to the user's `collateralToken` denomination using the `parseVaultAssetSigned()` function from the `TransferHelper` library.
@@ -120,7 +129,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     function initialize(
         address[] memory addrs,
         string memory _name
-    ) external initializeLock {
+    ) external initializer {
         name = _name;
 
         positionBook = IPositionBook(addrs[0]);
@@ -150,13 +159,33 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     }
 
     function addPlugin(address _addr) external onlyAdmin {
+        for (uint i = 0; i < plugins.length; i++) {
+            if (plugins[i] == _addr) {
+                revert();
+            }
+        }
         plugins.push(_addr);
+    }
+
+    function removePlugin(address _addr) external onlyAdmin {
+        for (uint i = 0; i < plugins.length; i++) {
+            if (plugins[i] == _addr) {
+                // Replace the element to remove with the last element
+                plugins[i] = plugins[plugins.length - 1];
+                // Remove the last element
+                plugins.pop();
+                // Exit the loop
+                break;
+            }
+        }
     }
 
     function setOrderBooks(
         address obl,
         address obs
     ) external onlyRole(MARKET_MGR_ROLE) {
+        require(obl != address(0));
+        require(obs != address(0));
         _setOrderBook(true, obl);
         _setOrderBook(false, obs);
     }
@@ -181,6 +210,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     }
 
     function setPositionBook(address pb) external onlyRole(MARKET_MGR_ROLE) {
+        require(pb != address(0));
         require(
             positionBook.longStore() == IPositionBook(pb).longStore(),
             "invalid store"
@@ -194,6 +224,8 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     }
 
     function setMarketValid(address _newMv) external onlyRole(MARKET_MGR_ROLE) {
+        require(_newMv != address(0));
+
         if (marketValid != address(0)) {
             IMarketValid(_newMv).setConfData(
                 IMarketValid(marketValid).conf().data
@@ -206,11 +238,14 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         address _m,
         bool add
     ) external onlyRole(MARKET_MGR_ROLE) {
+        require(_m != address(0));
+
         if (add) positionAddMgr = _m;
         else positionSubMgr = _m;
     }
 
     function setOrderMgr(address _m) external onlyRole(MARKET_MGR_ROLE) {
+        require(_m != address(0));
         orderMgr = _m;
     }
 
@@ -220,6 +255,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
 
 
     function setPriceFeed(address _a) external onlyRole(MARKET_MGR_ROLE) {
+        require(_a != address(0));
         priceFeed = _a;
     }
 
@@ -241,32 +277,27 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         return TransferHelper.getUSDDecimals();
     }
 
+   
     function _callAddress(
         address _addr,
         bytes memory msgdata,
         string memory defaultRevertMsg,
         bool raise
-    ) private returns (bytes memory returnData, bool success) {
+    ) private returns (string memory _errorMessage, bool success) {
+        bytes memory returnData;
         (success, returnData) = _addr.delegatecall(msgdata);
-        if (success || !raise) {
-            return (returnData, success);
-        }
-
-        if (returnData.length > 0) {
-            // Attempt to decode the return data as an error message
-            (bool isError, string memory errorMessage) = abi.decode(
-                returnData,
-                (bool, string)
-            );
-            if (isError) {
-                // Do something with the error message
-                if (raise) {
-                    revert(errorMessage);
+        if (!success) {
+            if (returnData.length < 68) {
+                _errorMessage = defaultRevertMsg;
+            } else {
+                assembly {
+                    returnData := add(returnData, 0x04)
                 }
+                _errorMessage = abi.decode(returnData, (string));
+                if (bytes(_errorMessage).length == 0)
+                    _errorMessage = defaultRevertMsg;
             }
-        }
-        if (raise) {
-            revert(defaultRevertMsg);
+            if (raise) revert(_errorMessage);
         }
     }
 

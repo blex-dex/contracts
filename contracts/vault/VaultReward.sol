@@ -10,9 +10,10 @@ import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import {ICoreVault, IERC4626} from "./interfaces/ICoreVault.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import {Ac} from "../ac/Ac.sol";
+import {AcUpgradable} from "../ac/AcUpgradable.sol";
+import "hardhat/console.sol";
 
-contract VaultReward is Ac, ReentrancyGuard {
+contract VaultReward is AcUpgradable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeCast for int256;
     using SafeERC20 for IERC20;
@@ -20,24 +21,28 @@ contract VaultReward is Ac, ReentrancyGuard {
 
     IFeeRouter public feeRouter;
     ICoreVault public coreVault;
-    //======================
+
     IVaultRouter public vaultRouter;
     uint256 public cumulativeRewardPerToken;
     address public distributor;
+    uint256 public apr;
 
     mapping(address => uint256) public previousCumulatedRewardPerToken;
     mapping(address => uint256) public lpEarnedRewards;
     mapping(address => uint256) public claimableReward;
     mapping(address => uint256) public averageStakedAmounts;
 
-    constructor() Ac(msg.sender) {}
-
     function initialize(
         address _coreVault,
         address _vaultRouter,
         address _feeRouter,
         address _distributor
-    ) public /*onlyRole(DEFAULT_ADMIN_ROLE)*/ initializeLock {
+    ) external initializer {
+        require(_coreVault != address(0));
+        require(_vaultRouter != address(0));
+        require(_feeRouter != address(0));
+        require(_distributor != address(0));
+        AcUpgradable._initialize(msg.sender);
         vaultRouter = IVaultRouter(_vaultRouter);
         coreVault = ICoreVault(_coreVault);
         feeRouter = IFeeRouter(_feeRouter);
@@ -57,37 +62,39 @@ contract VaultReward is Ac, ReentrancyGuard {
         address to,
         uint256 amount,
         uint256 minSharesOut
-    ) public returns (uint256 sharesOut) {
+    ) public nonReentrant returns (uint256 sharesOut) {
+        updateRewardsByAccount(msg.sender);
+        address _token = vault.asset();
+
         SafeERC20.safeTransferFrom(
-            IERC20(vault.asset()),
+            IERC20(_token),
             msg.sender,
             address(this),
             amount
         );
-        IERC20(vault.asset()).approve(address(vaultRouter), amount);
-        _updateRewards(msg.sender);
-        sharesOut = vaultRouter.buy(vault, to, amount, minSharesOut);
+        IERC20(_token).approve(address(coreVault), amount);
+        if ((sharesOut = vault.deposit(amount, to)) < minSharesOut)
+            revert("MinSharesError");
     }
 
     /**
-     * @dev This function sells a specified amount of assets in a given vault on behalf of the caller using the `vaultRouter` contract.
-     * The `to` address receives the resulting shares of the sale.
+     * @dev This function sells a specified amount of shares in a given vault on behalf of the caller using the `vaultReward` contract.
+     * The `to` address receives the resulting assets of the sale.
      * @param vault The address of the vault to sell assets from.
      * @param to The address that receives the resulting shares of the sale.
-     * @param amount The amount of assets to sell.
+     * @param shares The amount of shares to sell.
      * @param minAssetsOut The minimum amount of assets the caller expects to receive from the sale.
      * @return assetOut The resulting number of shares received by the `to` address.
      */
     function sell(
         IERC4626 vault,
         address to,
-        uint256 amount,
+        uint256 shares,
         uint256 minAssetsOut
-    ) public returns (uint256 assetOut) {
-        _updateRewards(msg.sender);
-        IERC20(vault).safeTransferFrom(msg.sender, address(this), amount);
-        IERC20(vault).approve(address(vaultRouter), amount);
-        assetOut = vaultRouter.sell(vault, to, amount, minAssetsOut);
+    ) public nonReentrant returns (uint256 assetOut) {
+        updateRewardsByAccount(msg.sender);
+        if ((assetOut = vault.redeem(shares, to, to)) < minAssetsOut)
+            revert("MinOutError");
     }
 
     event Harvest(address account, uint256 amount);
@@ -103,7 +110,7 @@ contract VaultReward is Ac, ReentrancyGuard {
     function claimLPReward() public nonReentrant {
         require(coreVault.balanceOf(msg.sender) > 0, "youn't LP");
         address _account = msg.sender;
-        _updateRewards(_account);
+        updateRewardsByAccount(_account);
         uint256 tokenAmount = claimableReward[_account];
         claimableReward[_account] = 0;
         IERC20(rewardToken()).safeTransfer(msg.sender, tokenAmount);
@@ -115,7 +122,7 @@ contract VaultReward is Ac, ReentrancyGuard {
      * @notice function can only be called without reentry.
      */
     function updateRewards() external nonReentrant {
-        _updateRewards(address(0));
+        updateRewardsByAccount(address(0));
     }
 
     event LogUpdatePool(uint256 supply, uint256 cumulativeRewardPerToken);
@@ -125,7 +132,7 @@ contract VaultReward is Ac, ReentrancyGuard {
      * @notice function can only be called without reentry.
      * @param _account needs to update the account address for rewards. If it is 0, the rewards for all accounts will be updated.
      */
-    function _updateRewards(address _account) private {
+    function updateRewardsByAccount(address _account) public {
         uint256 blockReward = IRewardDistributor(distributor).distribute();
         uint256 supply = coreVault.totalSupply();
         uint256 _cumulativeRewardPerToken = cumulativeRewardPerToken;
@@ -183,7 +190,9 @@ contract VaultReward is Ac, ReentrancyGuard {
      * @return The amount of rewards earned by the calling account as a `uint256`.
      */
     function getLPReward() public view returns (uint256) {
-        return lpEarnedRewards[msg.sender];
+        if (lpEarnedRewards[msg.sender] == 0) return 0;
+
+        return lpEarnedRewards[msg.sender] - claimableReward[msg.sender];
     }
 
     /**
@@ -267,18 +276,12 @@ contract VaultReward is Ac, ReentrancyGuard {
         return vault.buyLpFee();
     }
 
-    /**
-     * @dev This function is used to retrieve the Annual Percentage Rate (APR) for a market.
-     * The function calculates the APR by multiplying the tokens distributed per interval by the number of intervals in a year (365), the number of hours in a day (24), and the number of seconds in an hour (3600).
-     * The result is then divided by the current LP token price, which is retrieved by calling the `getLPPrice` function.
-     * @return The APR for the market as a `uint256`.
-     */
+    function setAPR(uint256 _apr) external onlyRole(VAULT_MGR_ROLE) {
+        apr = _apr;
+    }
+
     function getAPR() external view returns (uint256) {
-        return
-            ((IRewardDistributor(distributor).tokensPerInterval() *
-                365 *
-                24 *
-                3600) * (10 ** priceDecimals())) / getAUM();
+        return apr;
     }
 
     /**
@@ -331,11 +334,11 @@ contract VaultReward is Ac, ReentrancyGuard {
                     )
                     .div(PRECISION)
             );
-
-    
     }
 
     function stakedAmounts(address _account) private view returns (uint256) {
         return coreVault.balanceOf(_account);
     }
+
+    uint256[50] private ______gap;
 }

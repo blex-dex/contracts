@@ -25,7 +25,7 @@ async function main() {
   const market = await deployOrConnect("Market", [])
   const marketImpl = await deployOrConnect("MarketImpl", [])
 
-  //await uploadToTenderfly("MarketImpl", marketImpl)
+
 
   if ((await market.marketImpl()) != marketImpl.address) {
     await handleTx(
@@ -34,8 +34,8 @@ async function main() {
   }
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
+
+
 main().catch((error) => {
   console.error(error)
   process.exitCode = 1

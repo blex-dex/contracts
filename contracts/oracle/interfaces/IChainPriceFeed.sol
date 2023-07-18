@@ -2,6 +2,8 @@
 pragma solidity ^0.8.17;
 
 interface IChainPriceFeed {
+    function PRICE_PRECISION() external view returns (uint256);
+
     function sampleSpace() external view returns (uint256);
 
     function priceFeeds(address token) external view returns (address);

@@ -18,6 +18,8 @@ interface IMarketValidFuncs {
         int256 fees
     ) external view;
 
+    function validLev(uint256 newSize, uint256 newCollateral) external view;
+
     function validSize(
         uint256 _size,
         uint256 _sizeDelta,
@@ -37,15 +39,6 @@ interface IMarketValidFuncs {
         uint256 decrOrderCount
     ) external view;
 
-    function getCollateralRange(
-        bool _isIncrease,
-        uint256 _oldCollertal,
-        uint256 _oldSize,
-        uint256 _sizeDelta
-    )
-        external
-        view
-        returns (uint256 maxCollateralDelta, uint256 minCollateralDelta);
 
     function validMarkPrice(
         bool _isLong,
@@ -106,13 +99,13 @@ interface IMarketValidFuncs {
 
 interface IMarketValid is IMarketValidFuncs {
     struct Props {
-        // minSlippage; //0-11  // 16^3   滑点, 万分之x
-        // maxSlippage; //12-23 // 16^3, 滑点, 万分之x
+        // minSlippage; //0-11  // 16^3   
+        // maxSlippage; //12-23 // 16^3
         // minLeverage; //24-35  // 1 2^16
-        // maxLeverage; //36-47 // 2000 2^16, 0为不限制
+        // maxLeverage; //36-47 // 2000 2^16
         // minPay; // 48-59 // 10 2^8
         // minCollateral; // 60-71 // 2^8
-        // maxTradeAmount = 100001;// 64-95 // 2^32, 0为不限制
+        // maxTradeAmount = 100001;// 64-95 // 2^32
         uint256 data;
     }
 

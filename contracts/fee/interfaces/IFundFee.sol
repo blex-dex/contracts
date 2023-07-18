@@ -8,7 +8,7 @@ interface IFundFee {
 
     function BASIS_INTERVAL_HOU() external view returns (uint256);
 
-    function DEFAILT_RATE_DIVISOR() external view returns (uint256);
+    function DEFAULT_RATE_DIVISOR() external view returns (uint256);
 
     function minRateLimit() external view returns (uint256);
 

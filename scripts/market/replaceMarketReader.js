@@ -4,8 +4,8 @@ const { readMarketRouterContract } = require("./marketRouter.js")
 const { readVaultRouterContract } = require("../vault/vaultRouter.js")
 
 async function replaceMarketReader() {
-    // const fac = await readMarketFactoryContract()
-    // const mr = await deployMarketReader(fac.address, true)
+
+
     const marketRouter = await readMarketRouterContract()
     const vaultRouter = await readVaultRouterContract()
     await initializeReader(marketRouter.address, vaultRouter.address)

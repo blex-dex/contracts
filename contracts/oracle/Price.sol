@@ -65,14 +65,17 @@ contract Price is Ac {
     }
 
     function setGmxPriceFeed(address feed) external onlyAdmin {
+        require(feed != address(0), "invalid feed");
         gmxPriceFeed = feed;
     }
 
     function setFastPriceFeed(address _feed) external onlyAdmin {
+        require(_feed != address(0), "invalid feed");
         fastPriceFeed = _feed;
     }
 
     function setChainPriceFeed(address _feed) external onlyAdmin {
+        require(_feed != address(0), "invalid feed");
         chainPriceFeed = _feed;
     }
 
@@ -111,16 +114,6 @@ contract Price is Ac {
         address _token,
         bool _maximise
     ) public view returns (uint256) {
-        if (isGmxPriceEnabled && gmxPriceFeed != address(0)) {
-            return
-                IGmxPriceFeed(gmxPriceFeed).getPrice(
-                    _token,
-                    _maximise,
-                    false,
-                    false
-                );
-        }
-
         uint256 price = _getPrice(_token, _maximise);
 
         uint256 adjustmentBps = adjustmentBasisPoints[_token];
@@ -148,6 +141,18 @@ contract Price is Ac {
 
         if (isFastPriceEnabled) {
             price = getFastPrice(_token, price, _maximise);
+        }
+
+        if (isGmxPriceEnabled) {
+            uint256 _gmxPrice = getGmxPrice(_token, _maximise);
+            // get the higher of the two prices
+            if (_maximise && _gmxPrice > price) {
+                price = _gmxPrice;
+            }
+            // get the lower of the two prices
+            if (!_maximise && price > _gmxPrice) {
+                price = _gmxPrice;
+            }
         }
 
         if (strictStableTokens[_token]) {
@@ -208,6 +213,19 @@ contract Price is Ac {
                 _token,
                 _referencePrice,
                 _maximise
+            );
+    }
+
+    function getGmxPrice(
+        address _token,
+        bool _maximise
+    ) public view returns (uint256) {
+        return
+            IGmxPriceFeed(gmxPriceFeed).getPrice(
+                _token,
+                _maximise,
+                false,
+                false
             );
     }
 }

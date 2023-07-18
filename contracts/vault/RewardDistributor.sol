@@ -2,15 +2,13 @@
 
 pragma solidity ^0.8.17;
 
-import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {IVaultReward} from "./interfaces/IVaultReward.sol";
 import "../ac/Ac.sol";
 
-contract RewardDistributor is ReentrancyGuard, Ac {
-    using SafeMath for uint256;
+contract RewardDistributor is Ac {
     using SafeERC20 for IERC20;
 
     address public rewardToken;
@@ -26,12 +24,20 @@ contract RewardDistributor is ReentrancyGuard, Ac {
     function initialize(
         address _rewardToken,
         address _rewardTracker
-    ) external initializeLock {
+    ) external initializer {
+        require(_rewardToken != address(0));
+        require(_rewardTracker != address(0));
         rewardToken = _rewardToken;
         rewardTracker = _rewardTracker;
     }
 
-    // to help users who accidentally send their tokens to this contract
+    /**
+     * @dev Withdraws tokens from the contract and transfers them to the specified account.
+     * Only the admin can call this function.
+     * @param _token The address of the token to withdraw.
+     * @param _account The address to transfer the tokens to.
+     * @param _amount The amount of tokens to withdraw.
+     */
     function withdrawToken(
         address _token,
         address _account,
@@ -40,10 +46,19 @@ contract RewardDistributor is ReentrancyGuard, Ac {
         IERC20(_token).safeTransfer(_account, _amount);
     }
 
+    /**
+     * @dev Updates the last distribution time to the current block timestamp.
+     * Only the admin can call this function.
+     */
     function updateLastDistributionTime() external onlyAdmin {
         lastDistributionTime = block.timestamp;
     }
 
+    /**
+     * @dev Sets the number of tokens to distribute per interval.
+     * Only the admin can call this function.
+     * @param _amount The number of tokens per interval.
+     */
     function setTokensPerInterval(uint256 _amount) external onlyAdmin {
         require(
             lastDistributionTime != 0,
@@ -54,20 +69,36 @@ contract RewardDistributor is ReentrancyGuard, Ac {
         emit TokensPerIntervalChange(_amount);
     }
 
+    /**
+     * @dev Calculates the pending rewards based on the last distribution time and tokens per interval.
+     * @return The pending rewards.
+     */
     function pendingRewards() public view returns (uint256) {
         if (block.timestamp == lastDistributionTime) {
             return 0;
         }
 
-        uint256 timeDiff = block.timestamp.sub(lastDistributionTime);
-        return tokensPerInterval.mul(timeDiff);
+        uint256 timeDiff = block.timestamp - lastDistributionTime;
+        return tokensPerInterval * timeDiff;
     }
 
-    function distribute() external returns (uint256) {
+    /**
+     * @dev Modifier to only allow the reward tracker contract to call a function.
+     */
+    modifier onlyRewardTracker() {
         require(
             msg.sender == rewardTracker,
             "RewardDistributor: invalid msg.sender"
         );
+        _;
+    }
+
+    /**
+     * @dev Called by `VaultReward`.Distributes pending rewards to the reward tracker contract.
+     * Only the reward tracker contract can call this function.
+     * @return The amount of rewards distributed.
+     */
+    function distribute() external onlyRewardTracker returns (uint256) {
         uint256 amount = pendingRewards();
         if (amount == 0) {
             return 0;

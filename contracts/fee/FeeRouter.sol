@@ -4,6 +4,7 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import "../ac/Ac.sol";
 
 import {IFundFee} from "./interfaces/IFundFee.sol";
@@ -17,6 +18,8 @@ import {Precision} from "../utils/TransferHelper.sol";
 
 contract FeeRouter is Ac, IFeeRouter {
     using SafeERC20 for IERC20;
+    using SafeCast for int256;
+    using SafeCast for uint256;
 
     address public feeVault;
     address public fundFee;
@@ -29,11 +32,13 @@ contract FeeRouter is Ac, IFeeRouter {
     event UpdateFee(
         address indexed account,
         address indexed market,
-        int256[] fees
+        int256[] fees,
+        uint256 amount
     );
     event UpdateFeeAndRates(
         address indexed market,
         uint8 kind,
+        uint256 oldFeeOrRate,
         uint256 feeOrRate
     );
 
@@ -44,11 +49,21 @@ contract FeeRouter is Ac, IFeeRouter {
     function initialize(
         address vault,
         address fundingFee
-    ) external initializeLock {
+    ) external initializer {
         require(vault != address(0), "invalid fee vault");
         require(fundingFee != address(0), "invalid fundFee");
 
         feeVault = vault;
+        fundFee = fundingFee;
+    }
+
+    function setFeeVault(address vault) external onlyAdmin {
+        require(vault != address(0), "invalid fee vault");
+        feeVault = vault;
+    }
+
+    function setFundFee(address fundingFee) external onlyAdmin {
+        require(fundFee != address(0), "invalid fundFee");
         fundFee = fundingFee;
     }
 
@@ -59,12 +74,9 @@ contract FeeRouter is Ac, IFeeRouter {
         require(rates.length > 0, "invalid params");
 
         for (uint8 i = 0; i < rates.length; i++) {
-            if (rates[i] == 0) {
-                continue;
-            }
-
+            uint256 _old = rates[i];
             feeAndRates[market][i] = rates[i];
-            emit UpdateFeeAndRates(market, i, rates[i]);
+            emit UpdateFeeAndRates(market, i, _old, rates[i]);
         }
     }
 
@@ -72,6 +84,13 @@ contract FeeRouter is Ac, IFeeRouter {
         return IFeeVault(feeVault).getGlobalFees();
     }
 
+    /**
+     * @dev Withdraws tokens from the fee vault contract and transfers them to the specified account.
+     * Only the withdraw role can call this function.
+     * @param token The address of the token to withdraw.
+     * @param to The address to transfer the tokens to.
+     * @param amount The amount of tokens to withdraw.
+     */
     function withdraw(
         address token,
         address to,
@@ -80,6 +99,13 @@ contract FeeRouter is Ac, IFeeRouter {
         IFeeVault(feeVault).withdraw(token, to, amount);
     }
 
+    /**
+     * @dev Updates the cumulative funding rate for a specific market.
+     * Only the controller can call this function.
+     * @param market The address of the market.
+     * @param longSize The size of the long position.
+     * @param shortSize The size of the short position.
+     */
     function updateCumulativeFundingRate(
         address market,
         uint256 longSize,
@@ -92,53 +118,63 @@ contract FeeRouter is Ac, IFeeRouter {
         );
     }
 
+    /**
+     * @dev Collects fees from the sender and increases the fees in the fee vault for the specified account.
+     * Only the controller can call this function.
+     * @param account The account to increase fees for.
+     * @param token The address of the token to collect fees in.
+     * @param fees The array of fee amounts.
+     */
     function collectFees(
         address account,
         address token,
         int256[] memory fees
     ) external onlyController {
-        if (fees.length == 0) return;
-
-        int256 _fees;
-        for (uint256 i = 0; i < fees.length; i++) {
-            _fees += fees[i];
-        }
-        if (_fees == 0) {
+        uint256 _amount = IERC20(token).allowance(msg.sender, address(this));
+        if (_amount == 0) {
             return;
         }
 
-        uint256 _amount = TransferHelper.formatCollateral(
-            uint256(_fees),
-            IERC20Metadata(token).decimals()
-        );
         IERC20(token).safeTransferFrom(msg.sender, feeVault, _amount);
         IFeeVault(feeVault).increaseFees(msg.sender, account, fees);
 
-        emit UpdateFee(account, msg.sender, fees);
+        emit UpdateFee(account, msg.sender, fees, _amount);
     }
 
+    /**
+     * @dev Retrieves the execution fee for a specific market.
+     * @param market The address of the market.
+     * @return The execution fee for the market.
+     */
     function getExecFee(address market) external view returns (uint256) {
         return feeAndRates[market][uint8(FeeType.ExecFee)];
     }
 
+    /**
+     * @dev Retrieves the total fees for an account by subtracting the buy and sell LP fees from the account's total fees.
+     * @param account The address of the account.
+     * @return The total fees for the account.
+     */
     function getAccountFees(address account) external view returns (uint256) {
-        uint256 _fees = uint256(IFeeVault(feeVault).accountFees(account));
-        uint256 _buyFee = uint256(
-            IFeeVault(feeVault).accountKindFees(
-                account,
-                uint8(FeeType.BuyLpFee)
-            )
-        );
-        uint256 _sellFee = uint256(
-            IFeeVault(feeVault).accountKindFees(
-                account,
-                uint8(FeeType.SellLpFee)
-            )
-        );
+        uint256 _fees = IFeeVault(feeVault).accountFees(account).toUint256();
+        uint256 _buyFee = IFeeVault(feeVault)
+            .accountKindFees(account, uint8(FeeType.BuyLpFee))
+            .toUint256();
+        uint256 _sellFee = IFeeVault(feeVault)
+            .accountKindFees(account, uint8(FeeType.SellLpFee))
+            .toUint256();
 
         return (_fees - _buyFee - _sellFee);
     }
 
+    /**
+     * @dev Retrieves the funding rate for a specific market and position.
+     * @param market The address of the market.
+     * @param longSize The size of the long position.
+     * @param shortSize The size of the short position.
+     * @param isLong A flag indicating whether the position is long (true) or short (false).
+     * @return The funding rate for the market and position.
+     */
     function getFundingRate(
         address market,
         uint256 longSize,
@@ -154,6 +190,12 @@ contract FeeRouter is Ac, IFeeRouter {
             );
     }
 
+    /**
+     * @dev Retrieves the cumulative funding rates for a specific market and position.
+     * @param market The address of the market.
+     * @param isLong A flag indicating whether the position is long (true) or short (false).
+     * @return The cumulative funding rates for the market and position.
+     */
     function cumulativeFundingRates(
         address market,
         bool isLong
@@ -161,6 +203,11 @@ contract FeeRouter is Ac, IFeeRouter {
         return IFeeVault(feeVault).cumulativeFundingRates(market, isLong);
     }
 
+    /**
+     * @dev Retrieves the total fees for an order by calculating the trade fee and adding it to the execution fee.
+     * @param params The parameters of the order.
+     * @return fees The total fees for the order.
+     */
     function getOrderFees(
         MarketDataTypes.UpdateOrderInputs memory params
     ) external view returns (int256 fees) {
@@ -174,9 +221,15 @@ contract FeeRouter is Ac, IFeeRouter {
 
         uint256 _tradeFee = _getFee(params._market, params._order.size, _kind);
         uint256 _execFee = feeAndRates[params._market][uint8(FeeType.ExecFee)];
-        return int256(_tradeFee + _execFee);
+        return (_tradeFee + _execFee).toInt256();
     }
 
+    /**
+     * @dev Retrieves the fees associated with updating a position.
+     * @param params The parameters of the position update.
+     * @param position The properties of the position.
+     * @return fees An array of fees for each fee type.
+     */
     function getFees(
         MarketDataTypes.UpdatePositionInputs memory params,
         Position.Props memory position
@@ -223,6 +276,14 @@ contract FeeRouter is Ac, IFeeRouter {
         return fees;
     }
 
+    /**
+     * @dev Calculates the funding fee for a given position update.
+     * @param market The address of the market.
+     * @param isLong A flag indicating whether the position is long (true) or short (false).
+     * @param sizeDelta The change in position size.
+     * @param entryFundingRate The funding rate at the entry of the position.
+     * @return The funding fee for the position update.
+     */
     function _getFundingFee(
         address market,
         bool isLong,
@@ -241,6 +302,14 @@ contract FeeRouter is Ac, IFeeRouter {
                 isLong
             );
     }
+
+    /**
+     * @dev Calculates the fee for a given size delta and fee kind.
+     * @param market The address of the market.
+     * @param sizeDelta The change in position size.
+     * @param kind The fee kind.
+     * @return The fee amount.
+     */
 
     function _getFee(
         address market,

@@ -40,12 +40,8 @@ interface IFeeRouter {
 
     function getExecFee(address market) external view returns (uint256);
 
-    function getAccountFees(address account) external view returns (uint256);
-
     function getFundingRate(
         address market,
-        uint256 longSize,
-        uint256 shortSize,
         bool isLong
     ) external view returns (int256);
 
@@ -74,6 +70,4 @@ interface IFeeRouter {
         address token,
         int256[] memory fees
     ) external;
-
-    function getGlobalFees() external view returns (int256 total);
 }

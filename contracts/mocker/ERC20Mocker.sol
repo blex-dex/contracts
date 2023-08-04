@@ -24,4 +24,5 @@ contract ERC20Mocker is ERC20, ERC20Burnable, AccessControl {
     function burn(address to, uint256 amount) public {
         _burn(to, amount);
     }
+    
 }

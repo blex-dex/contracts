@@ -115,21 +115,16 @@ contract MarketValid is Ac, IMarketValidFuncs {
         );
 
         if (busType == 3 && newCollateral == 0) return;
-
-        if (_fees > 0) {
-            newCollateral -= uint256(_fees);
-        } else {
-            newCollateral += uint256(-_fees);
+        if (busType <= 2) {
+            if (_fees > 0) newCollateral -= uint256(_fees);
+            else newCollateral += uint256(-_fees);
         }
 
         if (
             (_collateral == 0 &&
                 busType == 1 &&
-                _collateralDelta < _conf.getMinPay()) ||
-            (busType > 2 && newCollateral < uint256(_conf.getMinCollateral()))
-        ) {
-            revert("MarketValid:Collateral");
-        }
+                _collateralDelta < _conf.getMinPay())
+        ) revert("MarketValid:Collateral");
     }
 
     function validLev(uint256 newSize, uint256 newCollateral) external view {
@@ -199,7 +194,8 @@ contract MarketValid is Ac, IMarketValidFuncs {
         bool _isIncrease
     ) public pure override {
         // Require that the size is greater than or equal to the size delta for a decrease in size
-        if (false == _isIncrease) require(_size >= _sizeDelta, "SizeValidErr");
+        if (false == _isIncrease)
+            require(_size >= _sizeDelta, "MarketValid:Size");
     }
 
     /**
@@ -330,7 +326,7 @@ contract MarketValid is Ac, IMarketValidFuncs {
         bool _allowOpen,
         bool _allowClose,
         uint256 /* _tokenDigits */
-    ) external override onlyRole(MARKET_MGR_ROLE) {
+    ) external override onlyInitOr(MARKET_MGR_ROLE) {
         IMarketValid.Props memory _conf = conf;
         _conf.setMaxLev(_maxLeverage);
 
@@ -347,7 +343,7 @@ contract MarketValid is Ac, IMarketValidFuncs {
         conf = _conf;
     }
 
-    function setConfData(uint256 _data) external onlyRole(MARKET_MGR_ROLE) {
+    function setConfData(uint256 _data) external onlyInitOr(MARKET_MGR_ROLE) {
         IMarketValid.Props memory _conf = conf;
         _conf.data = _data;
         conf = _conf;
@@ -368,9 +364,9 @@ contract MarketValid is Ac, IMarketValidFuncs {
             return 1;
         }
 
-        int256 remainingCollateral = collateral; 
+        int256 remainingCollateral = collateral;
         if (pnl < 0) {
-            remainingCollateral = collateral + pnl; 
+            remainingCollateral = collateral + pnl;
         }
 
         if (remainingCollateral < fees) {
@@ -387,7 +383,9 @@ contract MarketValid is Ac, IMarketValidFuncs {
             return 1;
         }
         if (
-            uint256(remainingCollateral) * conf.getMaxLev() * DECIMALS <
+            uint256(remainingCollateral - (fees > 0 ? fees : int256(0))) *
+                conf.getMaxLev() *
+                DECIMALS <
             size * DECIMALS
         ) {
             if (_raise) {

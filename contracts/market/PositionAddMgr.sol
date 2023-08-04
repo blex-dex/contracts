@@ -23,6 +23,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../ac/Ac.sol";
 import {IVaultRouter} from "./../vault/interfaces/IVaultRouter.sol";
 import "./interfaces/IMarketRouter.sol";
+import {StringsPlus} from "./../utils/Strings.sol";
 
 contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
     using SafeCast for int256;
@@ -280,7 +281,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         _params.execNum += 1;
         require(
             order.isMarkPriceValid(_params._oraclePrice),
-            "PositionAddMgr:triggerabove"
+            StringsPlus.POSITION_TRIGGER_ABOVE
         );
 
         // Check collateralDelta before updating positions

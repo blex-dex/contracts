@@ -19,7 +19,7 @@ interface IMarketRouter {
         address account
     ) external view returns (uint256 sizesL, uint256 sizesS);
 
-    function addMarket(address) external;
+    function addMarket(address, address) external;
 
     function removeMarket(address) external;
 

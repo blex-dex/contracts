@@ -8,7 +8,7 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.
 import {IVaultReward} from "./interfaces/IVaultReward.sol";
 import "../ac/Ac.sol";
 
-contract RewardDistributor is Ac {
+contract RewardDistributor is AcUpgradable {
     using SafeERC20 for IERC20;
 
     address public rewardToken;
@@ -19,12 +19,13 @@ contract RewardDistributor is Ac {
     event Distribute(uint256 amount);
     event TokensPerIntervalChange(uint256 amount);
 
-    constructor() Ac(msg.sender) {}
+    // constructor() Ac(msg.sender) {}
 
     function initialize(
         address _rewardToken,
         address _rewardTracker
     ) external initializer {
+        AcUpgradable._initialize(msg.sender);
         require(_rewardToken != address(0));
         require(_rewardTracker != address(0));
         rewardToken = _rewardToken;
@@ -59,7 +60,10 @@ contract RewardDistributor is Ac {
      * Only the admin can call this function.
      * @param _amount The number of tokens per interval.
      */
-    function setTokensPerInterval(uint256 _amount) external onlyAdmin {
+
+    function setTokensPerInterval(
+        uint256 _amount
+    ) external onlyRole(VAULT_MGR_ROLE) {
         require(
             lastDistributionTime != 0,
             "RewardDistributor: invalid lastDistributionTime"
@@ -116,4 +120,6 @@ contract RewardDistributor is Ac {
         emit Distribute(amount);
         return amount;
     }
+
+    uint256[50] private ______gap;
 }

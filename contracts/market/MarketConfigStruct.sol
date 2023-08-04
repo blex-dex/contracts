@@ -142,7 +142,6 @@ library MarketConfigStruct {
             self.getDecimals();
     }
 
-    //------
     function setDecrOrderLmt(
         IMarketValid.Props memory self,
         uint256 minSp
@@ -164,8 +163,6 @@ library MarketConfigStruct {
             ret = 10;
         }
     }
-
-    //------
 
     function setMaxTradeAmount(
         IMarketValid.Props memory self,

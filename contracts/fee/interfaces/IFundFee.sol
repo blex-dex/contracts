@@ -35,8 +35,6 @@ interface IFundFee {
 
     function getFundingRate(
         address market,
-        uint256 longSize,
-        uint256 shortSize,
         bool isLong
     ) external view returns (int256);
 

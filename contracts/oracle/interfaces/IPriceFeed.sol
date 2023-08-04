@@ -2,6 +2,8 @@
 pragma solidity ^0.8.17;
 
 interface IPriceFeed {
+    function decimals() external view returns (uint8);
+    function version() external view returns (uint256);
     function description() external view returns (string memory);
     function aggregator() external view returns (address);
     function latestAnswer() external view returns (int256);

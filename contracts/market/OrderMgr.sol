@@ -42,7 +42,6 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
         orderBookLong = IOrderBook(addrs[1]);
         orderBookShort = IOrderBook(addrs[2]);
         marketValid = addrs[3];
-        priceFeed = addrs[4];
         positionSubMgr = addrs[5];
         positionAddMgr = addrs[6];
         feeRouter = IFeeRouter(addrs[7]);
@@ -65,8 +64,8 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
         if (_vars.isOpen && _vars.isCreate) {
             _valid().validPay(_vars.pay());
         }
-        if (false == _vars.isOpen)
-            _vars._oraclePrice = getPrice(_vars._isLong == _vars.isOpen);
+
+        _vars._oraclePrice = getPrice(_vars._isLong == _vars.isOpen);
         if (_vars.isFromMarket()) {
             if (_vars.isOpen == _vars._isLong)
                 _vars._order.price = (_vars._order.price +
@@ -273,19 +272,10 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
                 collateralRefund = _cache.order.collateral - execFee;
             }
         } else if (_cache.isExec) {
-            (uint256 _longSize, uint256 _shortSize) = positionBook
-                .getMarketSizes();
-            int256 _fundRate = feeRouter.getFundingRate(
-                address(this),
-                _longSize,
-                _shortSize,
-                _cache.isLong
-            );
             uint256 decreasedCollateral = positionBook
                 .decreaseCollateralFromCancelInvalidOrder(
                     _cache.order.account,
                     execFee,
-                    _fundRate,
                     _cache.isLong
                 );
             if (decreasedCollateral >= execFee) {

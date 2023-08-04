@@ -31,8 +31,25 @@ library Order {
         //96 todo uint96 extra4;
     }
 
+    function setIsFromMarket(
+        Props memory order,
+        bool isIncrease,
+        bool _isFromMarket
+    ) internal pure {
+        if (isIncrease) order.extra3 = uint48(_isFromMarket ? 1 : 0);
+        else order.extra1 = uint128(_isFromMarket ? 1 : 0);
+    }
+
+    function isFromMarket(
+        Props memory order,
+        bool isIncrease
+    ) internal pure returns (bool) {
+        if (isIncrease) return order.extra3 > 0;
+        return order.extra1 > 0;
+    }
+
     function setSize(Props memory order, uint256 size) internal pure {
-        order.size = uint128(size);
+        order.size = size.toUint128();
     }
 
     function setTriggerAbove(

@@ -6,7 +6,7 @@ import "./../ac/Ac.sol";
 import "../fee/interfaces/IFeeRouter.sol";
 import {MarketPositionCallBackIntl, MarketCallBackIntl} from "../market/interfaces/IMarketCallBackIntl.sol";
 
-contract Referral is IReferral, Ac, MarketPositionCallBackIntl {
+contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
     struct Tier {
         uint256 totalRebate;
         uint256 discountShare;
@@ -47,8 +47,18 @@ contract Referral is IReferral, Ac, MarketPositionCallBackIntl {
         address referrer
     );
 
-    constructor() Ac(address(0)) {
+    function initialize() external initializer {
+        AcUpgradable._initialize(msg.sender);
         codeOwners[DEFAULT_CODE] = address(this);
+    }
+
+    function supportMarketRoleGrantControllerRole()
+        internal
+        pure
+        override
+        returns (bool)
+    {
+        return true;
     }
 
     function setTier(
@@ -178,7 +188,7 @@ contract Referral is IReferral, Ac, MarketPositionCallBackIntl {
         );
         if (referralCode == bytes32(0)) {
             referrer = codeOwners[_event.inputs._refCode];
-            require(referrer != address(0), "Referral:invalid code");
+            if (referrer == address(0)) return;
             _setTraderReferralCode(
                 _event.inputs._account,
                 _event.inputs._refCode
@@ -217,4 +227,6 @@ contract Referral is IReferral, Ac, MarketPositionCallBackIntl {
                 deleteOrder: false
             });
     }
+
+    uint256[50] private ______gap;
 }

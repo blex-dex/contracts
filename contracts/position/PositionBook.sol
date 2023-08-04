@@ -129,9 +129,9 @@ contract PositionBook is Ac {
         return _hasProfit ? int256(_pnl) : -int256(_pnl);
     }
 
-    function getMarketPNL(uint256 markPrice) external view returns (int256) {
-        int256 _totalPNL = _getMarketPNL(markPrice, true);
-        _totalPNL += _getMarketPNL(markPrice, false);
+    function getMarketPNL(uint256 longPrice, uint256 shortPrice) external view returns (int256) {
+        int256 _totalPNL = _getMarketPNL(longPrice, true);
+        _totalPNL += _getMarketPNL(shortPrice, false);
 
         return _totalPNL;
     }
@@ -231,14 +231,12 @@ contract PositionBook is Ac {
      * @dev Called by `Market`.Decreases the collateral of an account's position due to the cancellation of an invalid order.
      * @param account The account address.
      * @param collateralDelta The change in collateral.
-     * @param fundingRate The funding rate of the market.
      * @param isLong Whether the position is long or short.
      * @return The remaining collateral after decreasing the position.
      */
     function decreaseCollateralFromCancelInvalidOrder(
         address account,
         uint256 collateralDelta,
-        int256 fundingRate,
         bool isLong
     ) external onlyController returns (uint256) {
         Position.Props memory _position = _getPosition(account, isLong);
@@ -251,7 +249,7 @@ contract PositionBook is Ac {
             account,
             collateralDelta,
             0,
-            fundingRate,
+            _position.entryFundingRate,
             isLong
         );
 

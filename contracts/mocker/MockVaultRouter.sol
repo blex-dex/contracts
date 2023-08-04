@@ -2,8 +2,11 @@
 pragma solidity ^0.8.17;
 
 contract MockVaultRouter {
-    uint256 public fundLimit;
+    uint256 public fundLimit = 10000000;
+    uint256 public totalAUM = 1000000;
     uint256 public USDBalance;
+
+    address public temAddress;
 
     mapping(address => uint256) public fundsUsed; // for different market
 
@@ -15,17 +18,22 @@ contract MockVaultRouter {
         USDBalance = _balance;
     }
 
-    function borrowFromVault(address _market, uint256 _amount) external {
-        fundsUsed[_market] = fundsUsed[_market] + _amount;
+    function borrowFromVault(uint256 _amount) external {
+        temAddress = msg.sender;
+        fundsUsed[msg.sender] = fundsUsed[msg.sender] + _amount + 10000;
 
-        require(fundsUsed[_market] <= fundLimit);
+        require(fundsUsed[msg.sender] <= fundLimit);
     }
 
-    function repayToVault(address _market, uint256 _amount) external {
-        fundsUsed[_market] = fundsUsed[_market] - _amount;
+    function repayToVault(uint256 _amount) external {
+        fundsUsed[msg.sender] = fundsUsed[msg.sender] - _amount + 10000;
     }
 
     function getUSDBalance() external view returns (uint256) {
         return USDBalance;
+    }
+
+    function getAUM() external view returns (uint256) {
+        return totalAUM;
     }
 }

@@ -48,6 +48,5 @@ interface MarketOrderCallBackIntl is MarketCallBackIntl {
         string reasonStr;
         int256 dPNL;
     }
-
     function deleteOrderCallback(DeleteOrderEvent memory e) external;
 }

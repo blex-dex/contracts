@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
+import {Position} from "../position/PositionStruct.sol";
+
+import {MarketDataTypes} from "../market/MarketDataTypes.sol";
 
 contract MockFeeRouter {
     uint256 private constant FEE_RATE_PRECISION = 100000000;
@@ -40,7 +43,7 @@ contract MockFeeRouter {
         cumulativeFundingRates[market][isLong] = rate;
     }
 
-    function updateCumulativeFundingRate(address market) external {}
+    function updateCumulativeFundingRate(address market,uint256 longSize,uint256 shortSize) external {}
 
     function getExecFee(address _market) public view returns (uint256) {
         return execFee;
@@ -87,6 +90,18 @@ contract MockFeeRouter {
         return (_sizeDelta - _size);
     }
 
+      function collectFees(
+        address account,
+        address token,
+        int256[] memory fees
+    ) external  {}
+
+     function getOrderFees(
+        MarketDataTypes.UpdateOrderInputs memory params
+    ) external view returns (int256 fees){
+        return 10;
+    }
+
     function getLiquidateFees(
         address _account,
         address _market,
@@ -105,6 +120,17 @@ contract MockFeeRouter {
         bool _isLong
     ) external view returns (int256) {
         return getFundingFee(_account, _market, _isLong);
+    }
+
+    function getFees(
+        MarketDataTypes.UpdatePositionInputs memory _params,
+        Position.Props memory _position
+    )external view returns (int256[] memory ){
+        int256[] memory fees=new int256[](2);
+        fees[0]=20;
+        fees[1]=30;
+        return fees;
+       // return [20,30];
     }
 
     function getFees(

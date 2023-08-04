@@ -12,6 +12,7 @@ import {IFeeVault} from "./interfaces/IFeeVault.sol";
 import {MarketDataTypes} from "../market/MarketDataTypes.sol";
 import {Position} from "../position/PositionStruct.sol";
 import {TransferHelper} from "./../utils/TransferHelper.sol";
+import "../market/interfaces/IMarketFactory.sol";
 
 import "./interfaces/IFeeRouter.sol";
 import {Precision} from "../utils/TransferHelper.sol";
@@ -23,6 +24,7 @@ contract FeeRouter is Ac, IFeeRouter {
 
     address public feeVault;
     address public fundFee;
+    address public factory;
 
     uint256 public constant FEE_RATE_PRECISION = Precision.FEE_RATE_PRECISION;
 
@@ -42,8 +44,23 @@ contract FeeRouter is Ac, IFeeRouter {
         uint256 feeOrRate
     );
 
-    constructor(address factory) Ac(factory) {
+    constructor(address _factory) Ac(_factory) {
+        require(_factory != address(0), "invalid address");
+        factory = _factory;
         _grantRole(MANAGER_ROLE, msg.sender);
+    }
+
+    modifier onlyMarket() {
+        require(_isMarket(msg.sender), "invalid market");
+        _;
+    }
+
+    modifier onlyFeeController() {
+        require(
+            _isMarket(msg.sender) || hasRole(ROLE_CONTROLLER, msg.sender),
+            "feeRouter: access denied"
+        );
+        _;
     }
 
     function initialize(
@@ -70,7 +87,7 @@ contract FeeRouter is Ac, IFeeRouter {
     function setFeeAndRates(
         address market,
         uint256[] memory rates
-    ) external onlyRole(MARKET_MGR_ROLE) {
+    ) external onlyInitOr(MARKET_MGR_ROLE) {
         require(rates.length > 0, "invalid params");
 
         for (uint8 i = 0; i < rates.length; i++) {
@@ -80,17 +97,6 @@ contract FeeRouter is Ac, IFeeRouter {
         }
     }
 
-    function getGlobalFees() external view returns (int256 total) {
-        return IFeeVault(feeVault).getGlobalFees();
-    }
-
-    /**
-     * @dev Withdraws tokens from the fee vault contract and transfers them to the specified account.
-     * Only the withdraw role can call this function.
-     * @param token The address of the token to withdraw.
-     * @param to The address to transfer the tokens to.
-     * @param amount The amount of tokens to withdraw.
-     */
     function withdraw(
         address token,
         address to,
@@ -110,7 +116,7 @@ contract FeeRouter is Ac, IFeeRouter {
         address market,
         uint256 longSize,
         uint256 shortSize
-    ) external onlyController {
+    ) external onlyMarket {
         IFundFee(fundFee).updateCumulativeFundingRate(
             market,
             longSize,
@@ -129,14 +135,14 @@ contract FeeRouter is Ac, IFeeRouter {
         address account,
         address token,
         int256[] memory fees
-    ) external onlyController {
+    ) external onlyFeeController {
         uint256 _amount = IERC20(token).allowance(msg.sender, address(this));
         if (_amount == 0) {
             return;
         }
 
         IERC20(token).safeTransferFrom(msg.sender, feeVault, _amount);
-        IFeeVault(feeVault).increaseFees(msg.sender, account, fees);
+        // IFeeVault(feeVault).increaseFees(msg.sender, account, fees);
 
         emit UpdateFee(account, msg.sender, fees, _amount);
     }
@@ -151,43 +157,16 @@ contract FeeRouter is Ac, IFeeRouter {
     }
 
     /**
-     * @dev Retrieves the total fees for an account by subtracting the buy and sell LP fees from the account's total fees.
-     * @param account The address of the account.
-     * @return The total fees for the account.
-     */
-    function getAccountFees(address account) external view returns (uint256) {
-        uint256 _fees = IFeeVault(feeVault).accountFees(account).toUint256();
-        uint256 _buyFee = IFeeVault(feeVault)
-            .accountKindFees(account, uint8(FeeType.BuyLpFee))
-            .toUint256();
-        uint256 _sellFee = IFeeVault(feeVault)
-            .accountKindFees(account, uint8(FeeType.SellLpFee))
-            .toUint256();
-
-        return (_fees - _buyFee - _sellFee);
-    }
-
-    /**
      * @dev Retrieves the funding rate for a specific market and position.
      * @param market The address of the market.
-     * @param longSize The size of the long position.
-     * @param shortSize The size of the short position.
      * @param isLong A flag indicating whether the position is long (true) or short (false).
      * @return The funding rate for the market and position.
      */
     function getFundingRate(
         address market,
-        uint256 longSize,
-        uint256 shortSize,
         bool isLong
     ) external view returns (int256) {
-        return
-            IFundFee(fundFee).getFundingRate(
-                market,
-                longSize,
-                shortSize,
-                isLong
-            );
+        return IFundFee(fundFee).getFundingRate(market, isLong);
     }
 
     /**
@@ -328,5 +307,18 @@ contract FeeRouter is Ac, IFeeRouter {
         uint256 _size = (sizeDelta * (FEE_RATE_PRECISION - _point)) /
             FEE_RATE_PRECISION;
         return sizeDelta - _size;
+    }
+
+    function _isMarket(address _market) private view returns (bool) {
+        IMarketFactory.Outs[] memory _markets = IMarketFactory(factory)
+            .getMarkets();
+        uint _cnt = _markets.length;
+
+        for (uint i = 0; i < _cnt; i++) {
+            if (_market == _markets[i].addr) {
+                return (_markets[i].allowOpen || _markets[i].allowClose);
+            }
+        }
+        return false;
     }
 }

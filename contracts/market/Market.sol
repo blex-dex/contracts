@@ -16,6 +16,7 @@ import {Order} from "../order/OrderStruct.sol";
 import {MarketDataTypes} from "./MarketDataTypes.sol";
 import {IERC20Decimals, TransferHelper} from "../utils/TransferHelper.sol";
 import "../ac/Ac.sol";
+import {StringsPlus} from "./../utils/Strings.sol";
 
 contract Market is MarketStorage, ReentrancyGuard, Ac {
     using MarketLib for uint16;
@@ -79,6 +80,11 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
             "execOrderKey",
             false
         );
+
+        if (
+            StringsPlus.equals(errorMessage, StringsPlus.POSITION_TRIGGER_ABOVE)
+        ) return;
+
         if (!suc) {
             bytes32[] memory keys = new bytes32[](1);
             keys[0] = exeOrder.getKey();
@@ -119,12 +125,17 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
      * This function is read-only and does not modify the state of the contract.
      */
     function getPNL() external view returns (int256 pnl) {
-        uint256 p = IPrice(priceFeed).getPrice(indexToken, true);
+        uint256 longPrice = IPrice(priceFeed).getPrice(indexToken, false);
+        uint256 shortPrice = IPrice(priceFeed).getPrice(indexToken, true);
         pnl = TransferHelper.parseVaultAssetSigned(
-            IPositionBook(positionBook).getMarketPNL(p),
+            IPositionBook(positionBook).getMarketPNL(longPrice, shortPrice),
             collateralTokenDigits
         );
     }
+
+    //==============================================
+    //        初始化
+    //==============================================
 
     function initialize(
         address[] memory addrs,
@@ -158,10 +169,10 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         plugins.push(marketRouter);
     }
 
-    function addPlugin(address _addr) external onlyAdmin {
+    function addPlugin(address _addr) external onlyInitOr(MANAGER_ROLE) {
         for (uint i = 0; i < plugins.length; i++) {
             if (plugins[i] == _addr) {
-                revert();
+                revert("Market:same address");
             }
         }
         plugins.push(_addr);
@@ -219,7 +230,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
             positionBook.shortStore() == IPositionBook(pb).shortStore(),
             "invalid store"
         );
-        IMarketRouter(marketRouter).updatePositionBook(pb);
+        IMarketRouter(marketRouter).updatePositionBook(pb); 
         positionBook = IPositionBook(pb);
     }
 
@@ -253,11 +264,10 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         return IMarketValid(marketValid);
     }
 
-
-    function setPriceFeed(address _a) external onlyRole(MARKET_MGR_ROLE) {
+    /* function setPriceFeed(address _a) external onlyRole(MARKET_MGR_ROLE) {
         require(_a != address(0));
         priceFeed = _a;
-    }
+    } */
 
     function getPrice(bool _isMax) private view returns (uint256) {
         IPrice _p = IPrice(priceFeed);
@@ -277,7 +287,6 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         return TransferHelper.getUSDDecimals();
     }
 
-   
     function _callAddress(
         address _addr,
         bytes memory msgdata,

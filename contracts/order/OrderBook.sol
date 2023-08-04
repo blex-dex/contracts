@@ -27,14 +27,11 @@ contract OrderBook is IOrderBook, Ac {
     ) external initializer {
         isLong = _isLong;
         openStore = IOrderStore(_openStore);
-        openStore.initialize(_isLong);
-        closeStore = IOrderStore(_closeStore);
-        closeStore.initialize(_isLong);
-    }
+        try openStore.initialize(_isLong) {} catch {}
 
-    /*********************
-            查
-    ***********************/
+        closeStore = IOrderStore(_closeStore);
+        try closeStore.initialize(_isLong) {} catch {}
+    }
 
     function getExecutableOrdersByPrice(
         uint256 start,
@@ -51,7 +48,10 @@ contract OrderBook is IOrderBook, Ac {
         for (uint256 index; index < _len; ) {
             bytes32 key = keys[index];
             Order.Props memory _open = _store.orders(key);
-            if (_open.isMarkPriceValid(_oraclePrice) && key != bytes32(0)) {
+            if (
+                (_open.isMarkPriceValid(_oraclePrice) && key != bytes32(0)) ||
+                _open.isFromMarket(isOpen)
+            ) {
                 unchecked {
                     ++_listCount;
                 }
@@ -69,7 +69,10 @@ contract OrderBook is IOrderBook, Ac {
         for (uint256 index; index < _len; ) {
             bytes32 key = keys[index];
             Order.Props memory _open = _store.orders(key);
-            if (_open.isMarkPriceValid(_oraclePrice) && key != bytes32(0)) {
+            if (
+                (_open.isMarkPriceValid(_oraclePrice) && key != bytes32(0)) ||
+                _open.isFromMarket(isOpen)
+            ) {
                 _orders[_orderKeysIdx] = _open;
                 unchecked {
                     ++_orderKeysIdx;
@@ -108,9 +111,6 @@ contract OrderBook is IOrderBook, Ac {
         return _order;
     }
 
-    /*********************
-            增
-    ***********************/
     function add(
         MarketDataTypes.UpdateOrderInputs[] memory _vars
     ) external override onlyController returns (Order.Props[] memory _orders) {
@@ -146,9 +146,6 @@ contract OrderBook is IOrderBook, Ac {
         }
     }
 
-    /*********************
-            改
-    ***********************/
     function update(
         MarketDataTypes.UpdateOrderInputs memory _vars
     ) external override onlyController returns (Order.Props memory _order) {

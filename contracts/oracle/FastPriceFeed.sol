@@ -1,18 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./interfaces/IChainPriceFeed.sol";
 import {IMarket} from "../market/interfaces/IMarket.sol";
-// import {IOrderBook} from "../order/interface/IOrderBook.sol";
-// import {Order} from "../order/OrderStruct.sol";
 import "../ac/Ac.sol";
 import "../order/interface/IOrderStore.sol";
 import "../market/MarketDataTypes.sol";
 import {OrderLib} from "../order/OrderLib.sol";
 
 contract FastPriceFeed is Ac {
-    using SafeMath for uint256;
     using MarketDataTypes for MarketDataTypes.UpdatePositionInputs;
 
     // fit data in a uint256 slot to save gas costs
@@ -99,16 +95,20 @@ contract FastPriceFeed is Ac {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    function setPriceFeed(address _feed) external onlyAdmin {
+    function setPriceFeed(address _feed) external onlyInitOr(MANAGER_ROLE) {
         require(_feed != address(0), "invalid feed");
         chainPriceFeed = _feed;
     }
 
-    function setMaxTimeDeviation(uint256 _deviation) external onlyAdmin {
+    function setMaxTimeDeviation(
+        uint256 _deviation
+    ) external onlyInitOr(MANAGER_ROLE) {
         maxTimeDeviation = _deviation;
     }
 
-    function setPriceDuration(uint256 _duration) external onlyAdmin {
+    function setPriceDuration(
+        uint256 _duration
+    ) external onlyInitOr(MANAGER_ROLE) {
         require(
             _duration <= MAX_PRICE_DURATION,
             "FastPriceFeed: invalid priceDuration"
@@ -116,42 +116,52 @@ contract FastPriceFeed is Ac {
         priceDuration = _duration;
     }
 
-    function setMaxPriceUpdateDelay(uint256 _delay) external onlyAdmin {
+    function setMaxPriceUpdateDelay(
+        uint256 _delay
+    ) external onlyInitOr(MANAGER_ROLE) {
         maxPriceUpdateDelay = _delay;
     }
 
-    function setSpreadBasisPointsIfInactive(uint256 _point) external onlyAdmin {
+    function setSpreadBasisPointsIfInactive(
+        uint256 _point
+    ) external onlyInitOr(MANAGER_ROLE) {
         spreadBasisPointsIfInactive = _point;
     }
 
     function setSpreadBasisPointsIfChainError(
         uint256 _point
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         spreadBasisPointsIfChainError = _point;
     }
 
-    function setMinBlockInterval(uint256 _interval) external onlyAdmin {
+    function setMinBlockInterval(
+        uint256 _interval
+    ) external onlyInitOr(MANAGER_ROLE) {
         minBlockInterval = _interval;
     }
 
-    function setIsSpreadEnabled(bool _enabled) external onlyAdmin {
+    function setIsSpreadEnabled(
+        bool _enabled
+    ) external onlyInitOr(MANAGER_ROLE) {
         isSpreadEnablede = _enabled;
     }
 
-    function setLastUpdatedAt(uint256 _lastUpdatedAt) external onlyAdmin {
+    function setLastUpdatedAt(
+        uint256 _lastUpdatedAt
+    ) external onlyInitOr(MANAGER_ROLE) {
         lastUpdatedAt = _lastUpdatedAt;
     }
 
     function setMaxDeviationBasisPoints(
         uint256 _maxDeviationBasisPoints
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         maxDeviationBasisPoints = _maxDeviationBasisPoints;
     }
 
     function setMaxCumulativeDeltaDiffs(
         address[] memory _tokens,
         uint256[] memory _maxCumulativeDeltaDiffs
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         for (uint256 i = 0; i < _tokens.length; i++) {
             address token = _tokens[i];
             maxCumulativeDeltaDiffs[token] = _maxCumulativeDeltaDiffs[i];
@@ -160,14 +170,14 @@ contract FastPriceFeed is Ac {
 
     function setPriceDataInterval(
         uint256 _priceDataInterval
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         priceDataInterval = _priceDataInterval;
     }
 
     function setTokens(
         address[] memory _tokens,
         uint256[] memory _tokenPrecisions
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         require(
             _tokens.length == _tokenPrecisions.length,
             "FastPriceFeed: invalid lengths"
@@ -253,9 +263,8 @@ contract FastPriceFeed is Ac {
 
                     address token = tokens[i * 8 + j];
                     uint256 tokenPrecision = tokenPrecisions[i * 8 + j];
-                    uint256 adjustedPrice = price.mul(PRICE_PRECISION).div(
-                        tokenPrecision
-                    );
+                    uint256 adjustedPrice = (price * PRICE_PRECISION) /
+                        tokenPrecision;
 
                     _setPrice(token, adjustedPrice, _feed);
                 }
@@ -286,42 +295,34 @@ contract FastPriceFeed is Ac {
         uint256 _refPrice,
         bool _maximise
     ) external view returns (uint256) {
-        if (block.timestamp > lastUpdatedAt.add(maxPriceUpdateDelay)) {
+        if (block.timestamp > lastUpdatedAt + maxPriceUpdateDelay) {
             if (_maximise) {
                 return
-                    _refPrice
-                        .mul(
-                            BASIS_POINTS_DIVISOR.add(
-                                spreadBasisPointsIfChainError
-                            )
-                        )
-                        .div(BASIS_POINTS_DIVISOR);
+                    (_refPrice *
+                        (BASIS_POINTS_DIVISOR +
+                            spreadBasisPointsIfChainError)) /
+                    BASIS_POINTS_DIVISOR;
             }
 
             return
-                _refPrice
-                    .mul(
-                        BASIS_POINTS_DIVISOR.sub(spreadBasisPointsIfChainError)
-                    )
-                    .div(BASIS_POINTS_DIVISOR);
+                (_refPrice *
+                    (BASIS_POINTS_DIVISOR - spreadBasisPointsIfChainError)) /
+                (BASIS_POINTS_DIVISOR);
         }
 
-        if (block.timestamp > lastUpdatedAt.add(priceDuration)) {
+        if (block.timestamp > lastUpdatedAt + priceDuration) {
+            // 300
             if (_maximise) {
                 return
-                    _refPrice
-                        .mul(
-                            BASIS_POINTS_DIVISOR.add(
-                                spreadBasisPointsIfInactive
-                            )
-                        )
-                        .div(BASIS_POINTS_DIVISOR);
+                    (_refPrice *
+                        (BASIS_POINTS_DIVISOR + spreadBasisPointsIfInactive)) /
+                    BASIS_POINTS_DIVISOR;
             }
 
             return
-                _refPrice
-                    .mul(BASIS_POINTS_DIVISOR.sub(spreadBasisPointsIfInactive))
-                    .div(BASIS_POINTS_DIVISOR);
+                (_refPrice *
+                    (BASIS_POINTS_DIVISOR - spreadBasisPointsIfInactive)) /
+                BASIS_POINTS_DIVISOR;
         }
 
         uint256 fastPrice = prices[_token];
@@ -331,12 +332,10 @@ contract FastPriceFeed is Ac {
         //  ref price   fast price
         // 160248000000 - 160029000000 = 219000000
         uint256 diffBasisPoints = _refPrice > fastPrice
-            ? _refPrice.sub(fastPrice)
-            : fastPrice.sub(_refPrice);
+            ? _refPrice - fastPrice
+            : fastPrice - _refPrice;
         // 0.002
-        diffBasisPoints = diffBasisPoints.mul(BASIS_POINTS_DIVISOR).div(
-            _refPrice
-        );
+        diffBasisPoints = (diffBasisPoints * BASIS_POINTS_DIVISOR) / _refPrice;
 
         // create a spread between the _refPrice and the fastPrice if the maxDeviationBasisPoints is exceeded
         // or if watchers have flagged an issue with the fast price
@@ -369,7 +368,7 @@ contract FastPriceFeed is Ac {
         ) = getPriceData(_token);
         if (
             cumulativeFastDelta > cumulativeRefDelta &&
-            cumulativeFastDelta.sub(cumulativeRefDelta) >
+            cumulativeFastDelta - cumulativeRefDelta >
             maxCumulativeDeltaDiffs[_token]
         ) {
             // force a spread if the cumulative delta for the fast price feed exceeds the cumulative delta
@@ -412,9 +411,8 @@ contract FastPriceFeed is Ac {
 
                 address token = tokens[j];
                 uint256 tokenPrecision = tokenPrecisions[j];
-                uint256 adjustedPrice = price.mul(PRICE_PRECISION).div(
-                    tokenPrecision
-                );
+                uint256 adjustedPrice = (price * PRICE_PRECISION) /
+                    tokenPrecision;
 
                 _setPrice(token, adjustedPrice, _feed);
             }
@@ -470,36 +468,34 @@ contract FastPriceFeed is Ac {
 
             if (prevRefPrice > 0) {
                 uint256 refDeltaAmount = refPrice > prevRefPrice
-                    ? refPrice.sub(prevRefPrice)
-                    : prevRefPrice.sub(refPrice);
+                    ? refPrice - prevRefPrice
+                    : prevRefPrice - refPrice;
                 uint256 fastDeltaAmount = fastPrice > _price
-                    ? fastPrice.sub(_price)
-                    : _price.sub(fastPrice);
+                    ? fastPrice - _price
+                    : _price - fastPrice;
 
                 // reset cumulative delta values if it is a new time window
                 if (
-                    refTime.div(priceDataInterval) !=
-                    block.timestamp.div(priceDataInterval)
+                    refTime / priceDataInterval !=
+                    block.timestamp / priceDataInterval
                 ) {
                     cumulativeRefDelta = 0;
                     cumulativeFastDelta = 0;
                 }
 
-                cumulativeRefDelta = cumulativeRefDelta.add(
-                    refDeltaAmount.mul(CUMULATIVE_DELTA_PRECISION).div(
-                        prevRefPrice
-                    )
-                );
-                cumulativeFastDelta = cumulativeFastDelta.add(
-                    fastDeltaAmount.mul(CUMULATIVE_DELTA_PRECISION).div(
-                        fastPrice
-                    )
-                );
+                cumulativeRefDelta =
+                    cumulativeRefDelta +
+                    (refDeltaAmount * CUMULATIVE_DELTA_PRECISION) /
+                    prevRefPrice;
+                cumulativeFastDelta =
+                    cumulativeFastDelta +
+                    (fastDeltaAmount * CUMULATIVE_DELTA_PRECISION) /
+                    fastPrice;
             }
 
             if (
                 cumulativeFastDelta > cumulativeRefDelta &&
-                cumulativeFastDelta.sub(cumulativeRefDelta) >
+                cumulativeFastDelta - cumulativeRefDelta >
                 maxCumulativeDeltaDiffs[_token]
             ) {
                 emit MaxCumulativeDeltaDiffExceeded(
@@ -558,18 +554,18 @@ contract FastPriceFeed is Ac {
     function _setLastUpdatedValues(uint256 _timestamp) private returns (bool) {
         if (minBlockInterval > 0) {
             require(
-                block.number.sub(lastUpdatedBlock) >= minBlockInterval,
+                block.number - lastUpdatedBlock >= minBlockInterval,
                 "FastPriceFeed: minBlockInterval not yet passed"
             );
         }
 
         uint256 _maxTimeDeviation = maxTimeDeviation;
         require(
-            _timestamp > block.timestamp.sub(_maxTimeDeviation),
+            _timestamp > block.timestamp - _maxTimeDeviation,
             "FastPriceFeed: _timestamp below allowed range"
         );
         require(
-            _timestamp < block.timestamp.add(_maxTimeDeviation),
+            _timestamp < block.timestamp + _maxTimeDeviation,
             "FastPriceFeed: _timestamp exceeds allowed range"
         );
 

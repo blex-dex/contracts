@@ -57,11 +57,12 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
     // setmarket
     function setMarket(
         address market,
-        ICoreVault vault
-    ) external onlyRole(VAULT_MGR_ROLE) {
-        markets.add(market);
-        marketVaults[market] = vault;
-        vaultMarkets[vault] = market;
+        address vault
+    ) external onlyRole(MULTI_SIGN_ROLE) {
+        vault = address(coreVault);
+        require(markets.add(market));
+        marketVaults[market] = ICoreVault(vault);
+        vaultMarkets[ICoreVault(vault)] = market;
         vaults.add(address(vault));
         _grantRole(ROLE_CONTROLLER, market);
         emit MarketSetted(market, address(vault));
@@ -157,11 +158,6 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
     ) private {
         if (isBorrow) {
             uint256 pendingFundsUsed = totalFundsUsed + amount;
-            uint256 aum = getAUM();
-
-            require(aum > 0, "inlvalid aum");
-            require(pendingFundsUsed < aum, "not enough funds to borrow");
-
             fundsUsed[market] += amount;
             totalFundsUsed = pendingFundsUsed;
         } else {

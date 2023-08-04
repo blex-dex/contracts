@@ -131,16 +131,17 @@ contract MarketRouter is
         params.market = _inputs._market;
         params.sizeDelta = _inputs._sizeDelta;
         params.isLong = _inputs._isLong;
+
         (params.globalLongSizes, params.globalShortSizes) = getGlobalSize();
         (params.userLongSizes, params.userShortSizes) = getAccountSize(
-            msg.sender
+            _inputs._account
         );
         (params.marketLongSizes, params.marketShortSizes) = ipb
             .getMarketSizes();
         address _collateralToken = IMarket(_inputs._market).collateralToken();
 
-        params.usdBalance = TransferHelper.parseVaultAsset(
-            IVaultRouter(vaultRouter).getUSDBalance(),
+        params.aum = TransferHelper.parseVaultAsset(
+            IVaultRouter(vaultRouter).getAUM(),
             IERC20Metadata(_collateralToken).decimals()
         );
 
@@ -172,7 +173,7 @@ contract MarketRouter is
         if (isEnableMarketConvertToOrder && _inputs._sizeDelta > 0) {
             _updateOrderFromPosition(_inputs);
         } else {
-            require(markets.contains(_inputs._market), "MarketRouter:!market");
+            require(markets.contains(_inputs._market), "invalid market");
             require(_inputs.isValid(), "invalid params");
             IMarket im = IMarket(_inputs._market);
             address c = im.collateralToken();
@@ -210,6 +211,7 @@ contract MarketRouter is
         require(markets.contains(_vars._market), "invalid market");
         require(_vars.isValid(), "invalid params");
         _vars._order.account = msg.sender;
+        _vars._order.setIsFromMarket(_vars.isOpen, _vars.isFromMarket());
         if (_vars.isOpen && _vars.isCreate) {
             address c = IMarket(_vars._market).collateralToken();
             IERC20(c).safeTransferFrom(
@@ -403,7 +405,7 @@ contract MarketRouter is
 
         address _positionBook = address(IMarket(_market).positionBook());
         positionBooks.remove(_positionBook);
-        positionBooks.add(newA);
+        require(positionBooks.add(newA));
         pbs[_market] = newA;
     }
 
@@ -413,12 +415,15 @@ contract MarketRouter is
         isEnableMarketConvertToOrder = _isEnableMarketConvertToOrder;
     }
 
-    function addMarket(address _market) external onlyRole(MARKET_MGR_ROLE) {
+    function addMarket(
+        address _market,
+        address vault
+    ) external onlyInitOr(MARKET_MGR_ROLE) {
         require(_market != address(0));
         address _positionBook = address(IMarket(_market).positionBook());
 
-        markets.add(_market);
-        positionBooks.add(_positionBook);
+        require(markets.add(_market));
+        require(positionBooks.add(_positionBook));
         pbs[_market] = _positionBook;
     }
 

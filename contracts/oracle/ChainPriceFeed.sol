@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./interfaces/IPriceFeed.sol";
 import "../ac/Ac.sol";
 
 contract ChainPriceFeed is Ac {
-    using SafeMath for uint256;
-
     uint256 public constant PRICE_PRECISION = 10 ** 30;
     uint256 public sampleSpace = 3;
 
@@ -88,6 +85,6 @@ contract ChainPriceFeed is Ac {
         require(_price > 0, "PriceFeed: could not fetch price");
 
         uint256 _decimals = priceDecimals[_token];
-        return _price.mul(PRICE_PRECISION).div(10 ** _decimals);
+        return (_price * PRICE_PRECISION) / (10 ** _decimals);
     }
 }

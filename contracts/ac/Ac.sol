@@ -7,6 +7,8 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./AcUpgradable.sol";
 
 contract Ac is AcUpgradable {
+   
+
     constructor(address _f) Ownable() {
         AcUpgradable._initialize(_f);
     }

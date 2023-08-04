@@ -153,30 +153,14 @@ contract FundFee is Ownable, Ac {
     /**
      * @dev Retrieves the funding rate for a market based on the sizes of long and short positions.
      * @param market The address of the market.
-     * @param longSize The size of the long position.
-     * @param shortSize The size of the short position.
      * @param isLong Flag indicating whether the position is long.
      * @return The funding rate.
      */
     function getFundingRate(
         address market,
-        uint256 longSize,
-        uint256 shortSize,
         bool isLong
     ) external view returns (int256) {
-        int256 _rate = IFeeVault(feeVault).fundingRates(market, isLong);
-        if (_rate != 0) {
-            return _rate;
-        }
-
-        (int256 _longRate, int256 _shortRate) = _getFundingRate(
-            longSize,
-            shortSize
-        );
-        if (isLong) {
-            return _longRate;
-        }
-        return _shortRate;
+        return IFeeVault(feeVault).fundingRates(market, isLong);
     }
 
     /**
@@ -395,14 +379,15 @@ contract FundFee is Ownable, Ac {
         int256 nextShortRate,
         uint256 timestamp
     ) private {
-        IFeeVault(feeVault).updateGlobalFundingRate(
-            market,
-            longRate,
-            shortRate,
-            nextLongRate,
-            nextShortRate,
-            timestamp
-        );
+        return
+            IFeeVault(feeVault).updateGlobalFundingRate(
+                market,
+                longRate,
+                shortRate,
+                nextLongRate,
+                nextShortRate,
+                timestamp
+            );
     }
 
     /**
@@ -415,13 +400,10 @@ contract FundFee is Ownable, Ac {
             return totalSkip;
         }
 
-        // Iterate through the skip times array and calculate the total skip times.
-        for (uint256 i = 0; i < skipTimes.length; i++) {
+        for (uint i = 0; i < skipTimes.length; i++) {
             if (block.timestamp > skipTimes[i].end) {
                 totalSkip += (skipTimes[i].end - skipTimes[i].start);
             }
         }
-        // Return the total skip times accumulated.
-        return totalSkip;
     }
 }

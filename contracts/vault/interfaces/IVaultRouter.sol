@@ -11,7 +11,7 @@ interface IVaultRouter {
 
     function initialize(address _coreVault, address _feeRouter) external;
 
-    function setMarket(address market, ICoreVault vault) external;
+    function setMarket(address market, address vault) external;
 
     function borrowFromVault(uint256 amount) external;
 

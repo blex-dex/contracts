@@ -30,6 +30,8 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
     uint256 public constant FEE_RATE_PRECISION = Precision.FEE_RATE_PRECISION;
     uint256 public buyLpFee;
     uint256 public sellLpFee;
+    uint256 constant NUMBER_OF_DEAD_SHARES = 1000;
+
     event CoolDownDurationUpdated(uint256 duration);
     event LPFeeUpdated(bool isBuy, uint256 fee);
 
@@ -64,6 +66,8 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
 
         vaultRouter = IVaultRouter(_vaultRouter);
         _grantRole(ROLE_CONTROLLER, _vaultRouter);
+        _grantRole(FREEZER_ROLE, _vaultRouter);
+
         feeRouter = IFeeRouter(_feeRouter);
 
         cooldownDuration = 15 minutes;
@@ -76,6 +80,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
             _revokeRole(ROLE_CONTROLLER, address(vaultRouter)); //fix: CVB-05 | Old vault router is not removed from `ROLE_CONTROLLER` when setting new vault router
         vaultRouter = IVaultRouter(_vaultRouter);
         _grantRole(ROLE_CONTROLLER, _vaultRouter);
+        _grantRole(FREEZER_ROLE, _vaultRouter);
     }
 
     function setLpFee(bool isBuy, uint256 fee) public override onlyAdmin {
@@ -204,7 +209,6 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         feeRouter.collectFees(account, _asset, fees);
     }
 
-    uint256 constant NUMBER_OF_DEAD_SHARES = 1000;
 
     /**
      * @dev Internal function to handle the deposit of assets.

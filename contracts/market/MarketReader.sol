@@ -95,15 +95,7 @@ contract MarketReader is Ac, IMarketReader {
     ) external view returns (int256, int256) {
         IFeeRouter fr = IMarket(_market).feeRouter();
 
-        IPositionBook positionBook = IMarket(_market).positionBook();
-        (uint256 _longSize, uint256 _shortSize) = positionBook.getMarketSizes();
-
-        int256 nowRate = fr.getFundingRate(
-            _market,
-            _longSize,
-            _shortSize,
-            _isLong
-        );
+        int256 nowRate = fr.getFundingRate(_market, _isLong);
         int256 totalRate = fr.cumulativeFundingRates(_market, _isLong);
 
         return (nowRate, totalRate);
@@ -121,6 +113,10 @@ contract MarketReader is Ac, IMarketReader {
         address account,
         bool isLong
     ) external view returns (uint256) {
+        IVaultRouter _router = IVaultRouter(IMarket(market).vaultRouter());
+        uint256 _aum = _router.getAUM();
+        if (_aum <= 0) return 0;
+
         IPositionBook positionBook = IMarket(market).positionBook();
         address _globalValid = IMarket(market).globalValid();
 
@@ -139,12 +135,17 @@ contract MarketReader is Ac, IMarketReader {
 
         address _collateralToken = IMarket(market).collateralToken();
 
-        _params.usdBalance = TransferHelper.parseVaultAsset(
-            vaultRouter.getUSDBalance(),
+        _params.aum = TransferHelper.parseVaultAsset(
+            vaultRouter.getAUM(),
             IERC20Metadata(_collateralToken).decimals()
         );
 
         return IGlobalValid(_globalValid).getMaxIncreasePositionSize(_params);
+    }
+
+    function getMin(uint256 a, uint256 b) private pure returns (uint256) {
+        if (a < b) return a;
+        else return b;
     }
 
     /**

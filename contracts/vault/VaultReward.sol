@@ -170,6 +170,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
                 uint256 nextCumulativeReward = lpEarnedRewards[_account] +
                     accountReward;
 
+                /* 
                 averageStakedAmounts[_account] = averageStakedAmounts[_account]
                     .mul(lpEarnedRewards[_account])
                     .div(nextCumulativeReward)
@@ -177,7 +178,8 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
                         stakedAmount.mul(accountReward).div(
                             nextCumulativeReward
                         )
-                    );
+                    ); 
+                */
                 lpEarnedRewards[_account] = nextCumulativeReward;
             }
         }

@@ -157,8 +157,9 @@ library MarketDataTypes {
     }
 
     function isValid(
-        UpdatePositionInputs memory /* _params */
+        UpdatePositionInputs memory _params
     ) internal pure returns (bool) {
+        if (_params._account == address(0)) return false;
         return true;
     }
 

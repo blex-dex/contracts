@@ -44,6 +44,7 @@ contract MarketFactory is Ac, IMarketFactory {
             _outs[i] = Outs({
                 name: m.name,
                 addr: m.addr,
+                minPay: _conf.getMinPay(),
                 allowOpen: _conf.getAllowOpen(),
                 allowClose: _conf.getAllowClose()
             });
@@ -80,27 +81,9 @@ contract MarketFactory is Ac, IMarketFactory {
         }
     }
 
-    function grantPosKeeper(
-        address market,
-        address[] memory posKeepers
-    ) external onlyRole(MARKET_MGR_ROLE) {
-        for (uint i; i < posKeepers.length; ++i) {
-            Ac(market).grantAndRevoke(ROLE_POS_KEEPER, posKeepers[i]);
-        }
-    }
-
-    function marketAskForControllerRole(
-        address[] memory grantees,
-        address market
-    ) external onlyRole(MARKET_MGR_ROLE) {
-        for (uint i = 0; i < grantees.length; i++) {
-            Ac(grantees[i]).grantRole(ROLE_CONTROLLER, market);
-        }
-    }
-
     function create(
         MarketFactory.CreateInputs memory _inputs
-    ) external onlyRole(MARKET_MGR_ROLE) {
+    ) external onlyInitOr(MARKET_MGR_ROLE) {
         IMarketValid marketValid = IMarketValid(
             _inputs.addrs[MarketAddressIndex.ADDR_MV]
         );
@@ -153,50 +136,43 @@ contract MarketFactory is Ac, IMarketFactory {
 
         //         market router
         IMarketRouter(_inputs.addrs[MarketAddressIndex.ADDR_MR]).addMarket(
-            _inputs._marketAddress
+            _inputs._marketAddress,
+            address(0)
         );
 
         //         grant role - os -> ob
-        Ac(_inputs._openStoreLong).grantAndRevoke(
-            ROLE_CONTROLLER,
-            address(obookl)
-        );
+        //======================================
+        Ac(_inputs._openStoreLong).grantRole(ROLE_CONTROLLER, address(obookl));
 
-        Ac(_inputs._closeStoreLong).grantAndRevoke(
-            ROLE_CONTROLLER,
-            address(obookl)
-        );
-
-        Ac(_inputs._openStoreShort).grantAndRevoke(
-            ROLE_CONTROLLER,
-            address(obooks)
-        );
-        Ac(_inputs._closeStoreShort).grantAndRevoke(
+        Ac(_inputs._closeStoreLong).grantRole(ROLE_CONTROLLER, address(obookl));
+        Ac(_inputs._openStoreShort).grantRole(ROLE_CONTROLLER, address(obooks));
+        Ac(_inputs._closeStoreShort).grantRole(
             ROLE_CONTROLLER,
             address(obooks)
         );
 
-        //         grant role - ob -> market
-        Ac(_inputs.addrs[MarketAddressIndex.ADDR_OBL]).grantAndRevoke(
+        Ac(_inputs.addrs[MarketAddressIndex.ADDR_OBL]).grantRole(
             ROLE_CONTROLLER,
             _inputs._marketAddress
         );
-        Ac(_inputs.addrs[MarketAddressIndex.ADDR_OBS]).grantAndRevoke(
-            ROLE_CONTROLLER,
-            _inputs._marketAddress
-        );
-
-        //         grant role - position -> market
-        Ac(_inputs.addrs[MarketAddressIndex.ADDR_PB]).grantAndRevoke(
+        Ac(_inputs.addrs[MarketAddressIndex.ADDR_OBS]).grantRole(
             ROLE_CONTROLLER,
             _inputs._marketAddress
         );
 
-        //         grant role - market->market router
-        Ac(_inputs._marketAddress).grantAndRevoke(
+        Ac(_inputs.addrs[MarketAddressIndex.ADDR_PB]).grantRole(
+            ROLE_CONTROLLER,
+            _inputs._marketAddress
+        );
+
+        Ac(_inputs._marketAddress).grantRole(
             ROLE_CONTROLLER,
             _inputs.addrs[MarketAddressIndex.ADDR_MR]
         );
-       
+
+        Ac(_inputs.addrs[MarketAddressIndex.ADDR_FR]).grantRole(
+            ROLE_CONTROLLER,
+            _inputs._marketAddress
+        );
     }
 }

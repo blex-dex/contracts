@@ -13,6 +13,6 @@ library GlobalDataTypes {
         uint256 userShortSizes;
         uint256 marketLongSizes;
         uint256 marketShortSizes;
-        uint256 usdBalance;
+        uint256 aum;
     }
 }

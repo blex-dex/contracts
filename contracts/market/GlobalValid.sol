@@ -17,7 +17,9 @@ contract GlobalValid is Ac {
 
     constructor() Ac(msg.sender) {}
 
-    function setMaxSizeLimit(uint256 limit) external onlyRole(GLOBAL_MGR_ROLE) {
+    function setMaxSizeLimit(
+        uint256 limit
+    ) external onlyInitOr(GLOBAL_MGR_ROLE) {
         require(
             limit > 0 && limit <= BASIS_POINTS_DIVISOR,
             "GlobalValid:!params"
@@ -27,7 +29,7 @@ contract GlobalValid is Ac {
 
     function setMaxNetSizeLimit(
         uint256 limit
-    ) external onlyRole(GLOBAL_MGR_ROLE) {
+    ) external onlyInitOr(GLOBAL_MGR_ROLE) {
         require(
             limit > 0 && limit <= BASIS_POINTS_DIVISOR,
             "GlobalValid:!params"
@@ -37,7 +39,7 @@ contract GlobalValid is Ac {
 
     function setMaxUserNetSizeLimit(
         uint256 limit
-    ) external onlyRole(GLOBAL_MGR_ROLE) {
+    ) external onlyInitOr(GLOBAL_MGR_ROLE) {
         require(
             limit > 0 && limit <= BASIS_POINTS_DIVISOR,
             "GlobalValid:!params"
@@ -48,7 +50,7 @@ contract GlobalValid is Ac {
     function setMaxMarketSizeLimit(
         address market,
         uint256 limit
-    ) external onlyRole(GLOBAL_MGR_ROLE) {
+    ) external onlyInitOr(GLOBAL_MGR_ROLE) {
         require(market != address(0), "GlobalValid:!market");
         require(limit > 0, "GlobalValid:!size limit");
 
@@ -98,7 +100,7 @@ contract GlobalValid is Ac {
         uint256 _min = _getMaxUseableGlobalSize(
             params.globalLongSizes,
             params.globalShortSizes,
-            params.usdBalance,
+            params.aum,
             params.isLong
         );
         if (_min == 0) return 0;
@@ -106,7 +108,7 @@ contract GlobalValid is Ac {
         uint256 _tmp = _getMaxUseableNetSize(
             params.globalLongSizes,
             params.globalShortSizes,
-            params.usdBalance,
+            params.aum,
             params.isLong
         );
         if (_tmp == 0) return 0;
@@ -116,7 +118,7 @@ contract GlobalValid is Ac {
         _tmp = _getMaxUseableUserNetSize(
             params.userLongSizes,
             params.userShortSizes,
-            params.usdBalance,
+            params.aum,
             params.isLong
         );
         if (_tmp == 0) return 0;
@@ -138,18 +140,17 @@ contract GlobalValid is Ac {
      * @dev Calculates the maximum usable global position size based on the provided parameters.
      * @param longSize The current long position size.
      * @param shortSize The current short position size.
-     * @param usdBalance The USD balance of the account.
      * @param isLong A boolean indicating whether the position is long (true) or short (false).
      * @return The maximum usable global position size as a uint256 value.
      */
     function _getMaxUseableGlobalSize(
         uint256 longSize,
         uint256 shortSize,
-        uint256 usdBalance,
+        uint256 aum,
         bool isLong
     ) private view returns (uint256) {
         uint256 _size = isLong ? longSize : shortSize;
-        uint256 _limit = (usdBalance * maxSizeLimit) / BASIS_POINTS_DIVISOR;
+        uint256 _limit = (aum * maxSizeLimit) / BASIS_POINTS_DIVISOR;
         if (_size >= _limit) return 0;
         return (_limit - _size);
     }
@@ -158,18 +159,17 @@ contract GlobalValid is Ac {
      * @dev Calculates the maximum usable net position size based on the provided parameters.
      * @param longSize The current long position size.
      * @param shortSize The current short position size.
-     * @param usdBalance The USD balance of the account.
      * @return The maximum usable net position size as a uint256 value.
      */
     function _getMaxUseableNetSize(
         uint256 longSize,
         uint256 shortSize,
-        uint256 usdBalance,
+        uint256 aum,
         bool isLong
     ) private view returns (uint256) {
         uint256 _size = isLong ? longSize : shortSize;
 
-        uint256 _limit = (usdBalance * maxNetSizeLimit) / BASIS_POINTS_DIVISOR;
+        uint256 _limit = (aum * maxNetSizeLimit) / BASIS_POINTS_DIVISOR;
         _limit = isLong ? _limit + shortSize : _limit + longSize;
 
         if (_size >= _limit) return 0;
@@ -180,19 +180,17 @@ contract GlobalValid is Ac {
      * @dev Calculates the maximum usable net position size for the user based on the provided parameters.
      * @param longSize The user's current long position size.
      * @param shortSize The user's current short position size.
-     * @param usdBalance The USD balance of the user's account.
      * @return The maximum usable net position size for the user as a uint256 value.
      */
     function _getMaxUseableUserNetSize(
         uint256 longSize,
         uint256 shortSize,
-        uint256 usdBalance,
+        uint256 aum,
         bool isLong
     ) private view returns (uint256) {
         uint256 _size = isLong ? longSize : shortSize;
 
-        uint256 _limit = (usdBalance * maxUserNetSizeLimit) /
-            BASIS_POINTS_DIVISOR;
+        uint256 _limit = (aum * maxUserNetSizeLimit) / BASIS_POINTS_DIVISOR;
         _limit = isLong ? _limit + shortSize : _limit + longSize;
 
         if (_size >= _limit) return 0;
@@ -215,7 +213,6 @@ contract GlobalValid is Ac {
     ) private view returns (uint256) {
         uint256 _limit = maxMarketSizeLimit[market];
         uint256 _size = isLong ? longSize : shortSize;
-
         if (_size >= _limit) return 0;
 
         return (_limit - _size);

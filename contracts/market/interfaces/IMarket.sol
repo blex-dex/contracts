@@ -31,6 +31,8 @@ interface IMarketStorage {
     function positionStoreLong() external view returns (address); // slot 2
 
     function positionStoreShort() external view returns (address); // slot 2
+
+    function vaultRouter() external view returns (address); // slot 2
 }
 
 interface IMarket is IMarketStorage {

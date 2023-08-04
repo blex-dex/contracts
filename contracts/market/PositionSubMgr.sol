@@ -55,8 +55,8 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
 
         // Set a default slippage value if not provided
         if (_vars._slippage == 0) _vars._slippage = 30;
-        if (_vars._sizeDelta > 0)
-            _vars._oraclePrice = _getClosePrice(_vars._isLong);
+        // if (_vars._sizeDelta > 0)
+        _vars._oraclePrice = _getClosePrice(_vars._isLong);
         Position.Props memory _position = positionBook.getPosition(
             _vars._account,
             _vars._oraclePrice,
@@ -305,7 +305,14 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         IVaultRouter(vaultRouter).transferToVault(address(this), _amount);
     }
 
-    
+    function _approveToFeeVault(uint256 _a) private {
+        uint256 amount = TransferHelper.formatCollateral(
+            _a,
+            IERC20Decimals(collateralToken).decimals()
+        );
+        IERC20(collateralToken).approve(address(feeRouter), amount);
+    }
+
     function _decreaseTransaction(
         MarketDataTypes.UpdatePositionInputs memory _params,
         Position.Props memory _position,
@@ -389,7 +396,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         Order.Props[] memory ods = (
             _params._isLong ? orderBookLong : orderBookShort
         ).remove(order.getKey(), false);
-        require(ods[0].account != address(0), "PositionSubMgr:!account");
+        require(ods[0].account != address(0), "order account is zero");
 
         // 遍历要删除的订单, 并且emit事件
         for (uint i = 0; i < ods.length; i++) {
@@ -431,7 +438,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         MarketDataTypes.UpdatePositionInputs memory _params
     ) external {
         order.validOrderAccountAndID();
-        require(_params.isOpen == false, "PositionSubMgr:invalid isOpen");
+        require(_params.isOpen == false, "PositionSubMgr:invalid increase");
         validLiq(order.account, _params._isLong);
 
         decreasePositionFromOrder(order, _params);

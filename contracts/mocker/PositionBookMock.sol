@@ -11,4 +11,16 @@ contract PositionBookMock {
     function setPnl(int256 pnl) public {
         globalPnl = pnl;
     }
+
+
+     function increasePosition(
+        address _account,
+        uint256 _collateralDelta,
+        uint256 _sizeDelta,
+        uint256 _markPrice,
+        int256 _fr,
+        bool _isLong
+    ) external {
+
+    }
 }

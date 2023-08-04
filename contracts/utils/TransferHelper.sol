@@ -32,7 +32,7 @@ library TransferHelper {
 
     /**
      * @dev Formats the collateral amount by adjusting the number of decimal places.
-     * @param amount The original collateral amount.
+     * @param amount The original collateral amount. 18 decimals
      * @param collateralTokenDigits The number of decimal places for the collateral token.
      * @return The formatted collateral amount.
      */

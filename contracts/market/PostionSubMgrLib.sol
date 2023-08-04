@@ -27,9 +27,8 @@ library PositionSubMgrLib {
         Position.Props memory _position,
         int256 dPNL
     ) internal pure returns (int256) {
-        if (_position.collateral.toInt256() + dPNL <= 0) {
+        if (_position.collateral.toInt256() + dPNL <= 0)
             return _position.collateral.toInt256();
-        }
         return -1 * dPNL;
     }
 

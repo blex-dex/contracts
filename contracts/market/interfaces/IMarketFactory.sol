@@ -5,6 +5,7 @@ interface IMarketFactory {
     struct Outs {
         string name;
         address addr;
+        uint256 minPay;
         bool allowOpen;
         bool allowClose;
     }

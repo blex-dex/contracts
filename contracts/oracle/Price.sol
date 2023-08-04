@@ -1,16 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-
 import "./interfaces/IChainPriceFeed.sol";
 import "./interfaces/IGmxPriceFeed.sol";
 import "./interfaces/IFastPriceFeed.sol";
 import "../ac/Ac.sol";
 
 contract Price is Ac {
-    using SafeMath for uint256;
-
     uint256 public constant PRICE_PRECISION = 10 ** 30;
     uint256 public constant ONE_USD = PRICE_PRECISION;
     uint256 public constant BASIS_POINTS_DIVISOR = 10000;
@@ -45,9 +41,9 @@ contract Price is Ac {
         address _token,
         bool _isAdditive,
         uint256 _adjustmentBps
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         require(
-            lastAdjustmentTimings[_token].add(MAX_ADJUSTMENT_INTERVAL) <
+            lastAdjustmentTimings[_token] + MAX_ADJUSTMENT_INTERVAL <
                 block.timestamp,
             "PriceFeed: adjustment frequency exceeded"
         );
@@ -60,33 +56,39 @@ contract Price is Ac {
         lastAdjustmentTimings[_token] = block.timestamp;
     }
 
-    function setFastPriceEnabled(bool _isEnabled) external onlyAdmin {
+    function setFastPriceEnabled(
+        bool _isEnabled
+    ) external onlyInitOr(MANAGER_ROLE) {
         isFastPriceEnabled = _isEnabled;
     }
 
-    function setGmxPriceFeed(address feed) external onlyAdmin {
+    function setGmxPriceFeed(address feed) external onlyInitOr(MANAGER_ROLE) {
         require(feed != address(0), "invalid feed");
         gmxPriceFeed = feed;
     }
 
-    function setFastPriceFeed(address _feed) external onlyAdmin {
+    function setFastPriceFeed(address _feed) external onlyInitOr(MANAGER_ROLE) {
         require(_feed != address(0), "invalid feed");
         fastPriceFeed = _feed;
     }
 
-    function setChainPriceFeed(address _feed) external onlyAdmin {
+    function setChainPriceFeed(
+        address _feed
+    ) external onlyInitOr(MANAGER_ROLE) {
         require(_feed != address(0), "invalid feed");
         chainPriceFeed = _feed;
     }
 
-    function setIsGmxPriceEnabled(bool enable) external onlyAdmin {
+    function setIsGmxPriceEnabled(
+        bool enable
+    ) external onlyInitOr(MANAGER_ROLE) {
         isGmxPriceEnabled = enable;
     }
 
     function setSpreadBasisPoints(
         address _token,
         uint256 _spreadBasisPoints
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         require(
             _spreadBasisPoints <= MAX_SPREAD_BASIS_POINTS,
             "PriceFeed: invalid _spreadBasisPoints"
@@ -96,17 +98,20 @@ contract Price is Ac {
 
     function setSpreadThresholdBasisPoints(
         uint256 _spreadThresholdBasisPoints
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         spreadThresholdBasisPoints = _spreadThresholdBasisPoints;
     }
 
     function setMaxStrictPriceDeviation(
         uint256 _maxStrictPriceDeviation
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         maxStrictPriceDeviation = _maxStrictPriceDeviation;
     }
 
-    function setStableTokens(address _token, bool _stable) external onlyAdmin {
+    function setStableTokens(
+        address _token,
+        bool _stable
+    ) external onlyInitOr(MANAGER_ROLE) {
         strictStableTokens[_token] = _stable;
     }
 
@@ -121,14 +126,12 @@ contract Price is Ac {
         if (adjustmentBps > 0) {
             if (isAdjustmentAdditive[_token]) {
                 return
-                    price.mul(BASIS_POINTS_DIVISOR.add(adjustmentBps)).div(
-                        BASIS_POINTS_DIVISOR
-                    );
+                    (price * (BASIS_POINTS_DIVISOR + adjustmentBps)) /
+                    BASIS_POINTS_DIVISOR;
             }
             return
-                price.mul(BASIS_POINTS_DIVISOR.sub(adjustmentBps)).div(
-                    BASIS_POINTS_DIVISOR
-                );
+                (price * (BASIS_POINTS_DIVISOR - adjustmentBps)) /
+                BASIS_POINTS_DIVISOR;
         }
         return price;
     }
@@ -156,9 +159,7 @@ contract Price is Ac {
         }
 
         if (strictStableTokens[_token]) {
-            uint256 delta = price > ONE_USD
-                ? price.sub(ONE_USD)
-                : ONE_USD.sub(price);
+            uint256 delta = price > ONE_USD ? price - ONE_USD : ONE_USD - price;
             if (delta <= maxStrictPriceDeviation) {
                 return ONE_USD;
             }
@@ -180,14 +181,12 @@ contract Price is Ac {
 
         if (_maximise) {
             return
-                price.mul(BASIS_POINTS_DIVISOR.add(_spreadBasisPoints)).div(
-                    BASIS_POINTS_DIVISOR
-                );
+                (price * (BASIS_POINTS_DIVISOR + _spreadBasisPoints)) /
+                BASIS_POINTS_DIVISOR;
         }
         return
-            price.mul(BASIS_POINTS_DIVISOR.sub(_spreadBasisPoints)).div(
-                BASIS_POINTS_DIVISOR
-            );
+            (price * (BASIS_POINTS_DIVISOR - _spreadBasisPoints)) /
+            BASIS_POINTS_DIVISOR;
     }
 
     function getChainPrice(

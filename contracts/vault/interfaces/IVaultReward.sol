@@ -6,7 +6,10 @@ import "./ICoreVault.sol";
 
 interface IVaultReward {
     function updateRewards() external;
+
     function updateRewardsByAccount(address) external;
+
+    function setMarket(address market, address vault) external;
 
     function initialize(
         address _coreVault,

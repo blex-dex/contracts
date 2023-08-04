@@ -43,7 +43,7 @@ interface IPositionBook {
         bool isLong
     ) external view returns (int256);
 
-    function getMarketPNL(uint256 markPrice) external view returns (int256);
+    function getMarketPNL(uint256 longPrice, uint256 shortPrice) external view returns (int256);
 
     function increasePosition(
         address account,
@@ -65,7 +65,6 @@ interface IPositionBook {
     function decreaseCollateralFromCancelInvalidOrder(
         address account,
         uint256 collateralDelta,
-        int256 fundingRate,
         bool isLong
     ) external returns (uint256);
 

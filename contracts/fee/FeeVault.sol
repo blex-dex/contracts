@@ -3,17 +3,11 @@ pragma solidity ^0.8.17;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "../utils/EnumerableValues.sol";
 
 import "../ac/Ac.sol";
 
 contract FeeVault is Ac {
     using SafeERC20 for IERC20;
-    using EnumerableSet for EnumerableSet.AddressSet;
-
-    EnumerableSet.AddressSet internal markets;
-    mapping(address => int256) public marketFees; // market -> fee
-
 
     // cumulativeFundingRates tracks the funding rates based on utilization
     mapping(address => mapping(bool => int256)) public cumulativeFundingRates;
@@ -37,12 +31,6 @@ contract FeeVault is Ac {
 
     constructor() Ac(msg.sender) {}
 
-    function getGlobalFees() external view returns (int256 total) {
-        for (uint i = 0; i < markets.values().length; i++) {
-            total += marketFees[markets.at(i)];
-        }
-    }
-
     /**
      * @dev Allows an authorized role to withdraw tokens to a specified address.
      * @param token The address of the token to be withdrawn.
@@ -58,7 +46,7 @@ contract FeeVault is Ac {
         emit Withdraw(token, to, amount);
     }
 
-    
+
     /**
      * @dev Updates the global funding rates for a market.
      * @param market The address of the market.

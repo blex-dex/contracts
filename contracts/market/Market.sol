@@ -16,7 +16,6 @@ import {Order} from "../order/OrderStruct.sol";
 import {MarketDataTypes} from "./MarketDataTypes.sol";
 import {IERC20Decimals, TransferHelper} from "../utils/TransferHelper.sol";
 import "../ac/Ac.sol";
-import {StringsPlus} from "./../utils/Strings.sol";
 
 contract Market is MarketStorage, ReentrancyGuard, Ac {
     using MarketLib for uint16;
@@ -81,10 +80,6 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
             false
         );
 
-        if (
-            StringsPlus.equals(errorMessage, StringsPlus.POSITION_TRIGGER_ABOVE)
-        ) return;
-
         if (!suc) {
             bytes32[] memory keys = new bytes32[](1);
             keys[0] = exeOrder.getKey();
@@ -134,7 +129,6 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     }
 
     //==============================================
-    //        初始化
     //==============================================
 
     function initialize(

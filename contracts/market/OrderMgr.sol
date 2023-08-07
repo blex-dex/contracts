@@ -21,6 +21,7 @@ import {TransferHelper, IERC20Decimals} from "./../utils/TransferHelper.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./MarketStorage.sol";
 import "../ac/Ac.sol";
+import {StringsPlus} from "./../utils/Strings.sol";
 
 contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
     using SafeCast for int256;
@@ -48,6 +49,16 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
         vaultRouter = addrs[8];
         globalValid = addrs[9];
         orderMgr = addrs[10];
+    }
+
+    function _shouldDeleteOrder(
+        string memory errorMessage
+    ) internal pure returns (bool) {
+        if (
+            StringsPlus.equals(errorMessage, StringsPlus.POSITION_TRIGGER_ABOVE)
+        ) return false;
+
+        return true;
     }
 
     /**
@@ -192,6 +203,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
         require(_isIncrease.length == _isLong.length);
         for (uint i = 0; i < _orderKey.length; i++) {
             if (_orderKey[i] == bytes32(0)) continue;
+            if (false == _shouldDeleteOrder(reasons[i])) continue;
             IOrderBook ob = _isLong[i] ? orderBookLong : orderBookShort;
             if (
                 false ==

@@ -177,7 +177,6 @@ contract MarketValid is Ac, IMarketValidFuncs {
         // MVB-02 : Incorrect input for "validSize(' function
         validSize(0, _vars._order.size, true);
 
-        // 3. 保证金(杠杆)的校验
         validCollateralDelta(1, 0, _vars.pay(), 0, _vars._order.size, fees);
     }
 
@@ -287,7 +286,7 @@ contract MarketValid is Ac, IMarketValidFuncs {
     }
 
     function validSlippagePrice(
-        MarketDataTypes.UpdatePositionInputs memory _inputs // uint256 _price, // 开仓价格（usdt计价） // bool _isLong, // uint256 _slippage, // bool _isIncrease, // bool _isExec, // uint256 markPrice
+        MarketDataTypes.UpdatePositionInputs memory _inputs 
     ) public view override {
         if (_inputs._slippage > conf.getMaxSlippage()) {
             _inputs._slippage = conf.getMaxSlippage();

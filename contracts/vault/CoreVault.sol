@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 
-import {ERC20} from "./ERC20.sol";
-import {ERC4626} from "./ERC4626.sol";
+import {ERC20} from "../openzeppelin/ERC20.sol";
+import {ERC4626} from "../openzeppelin/ERC4626.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import {ICoreVault, IERC4626} from "./interfaces/ICoreVault.sol";

@@ -13,12 +13,14 @@ interface IERC20Decimals is IERC20 {
 library Precision {
     uint256 public constant BASIS_POINTS_DIVISOR = 100000000;
     uint256 public constant FEE_RATE_PRECISION_DECIMALS = 8;
+    uint256 public constant BOOSTER_PRICE_PRECISION_DECIMALS = 8;
+    uint256 public constant VAULR_REWARD_BASE_PRECISION = 1e30;
     uint256 public constant FEE_RATE_PRECISION =
         10 ** FEE_RATE_PRECISION_DECIMALS;
 }
 
 library TransferHelper {
-    uint8 public constant usdDecimals = 18; //数量精度
+    uint8 public constant usdDecimals = 18; 
 
     using SafeERC20 for IERC20;
 

@@ -29,7 +29,7 @@ library MarketConfigStruct {
     uint256 constant DECREASE_NUM_LIMIT_BIT_POSITION = 120;
     uint256 constant VALID_DECREASE_BIT_POSITION = 120 + 4;
 
-    uint256 constant DENOMINATOR_SLIPPAGE = 10 ** 4; // 分母
+    uint256 constant DENOMINATOR_SLIPPAGE = 10 ** 4; 
 
     function setMinSlippage(
         IMarketValid.Props memory self,

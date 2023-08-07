@@ -41,5 +41,5 @@ interface IOrderStore {
     // function orderTotalSize(address) external view returns (uint256) ;
     function getCount() external view returns (uint256);
 
-    function orderNum(address _a) external view returns (uint256); // 用户的order数量
+    function orderNum(address _a) external view returns (uint256); 
 }

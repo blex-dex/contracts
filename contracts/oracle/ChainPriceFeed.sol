@@ -22,7 +22,7 @@ contract ChainPriceFeed is Ac {
         address _token,
         address _feed,
         uint256 _decimal
-    ) external onlyAdmin {
+    ) external onlyInitOr(MANAGER_ROLE) {
         priceFeeds[_token] = _feed;
         priceDecimals[_token] = _decimal;
     }

@@ -246,7 +246,6 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
             address(this),
             _params._isLong
         );
-        // 5. 调用position.sol, 减仓
         IVaultRouter(vaultRouter).repayToVault(
             TransferHelper.formatCollateral(
                 _params._sizeDelta,
@@ -392,13 +391,11 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
             _params._isLong
         );
 
-        // 先删掉要执行的订单
         Order.Props[] memory ods = (
             _params._isLong ? orderBookLong : orderBookShort
         ).remove(order.getKey(), false);
         require(ods[0].account != address(0), "order account is zero");
 
-        // 遍历要删除的订单, 并且emit事件
         for (uint i = 0; i < ods.length; i++) {
             Order.Props memory od = ods[i];
             if (address(0) == od.account) continue;

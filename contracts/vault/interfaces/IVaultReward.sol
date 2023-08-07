@@ -11,6 +11,10 @@ interface IVaultReward {
 
     function setMarket(address market, address vault) external;
 
+    function tokensPerInterval() external view returns (uint256);
+
+    function coreVault() external returns (ICoreVault);
+
     function initialize(
         address _coreVault,
         address _vaultRouter,
@@ -31,7 +35,7 @@ interface IVaultReward {
         uint256 minAssetsOut
     ) external returns (uint256); // move
 
-    function calimLPReward() external;
+    function claimLPReward() external returns (uint256 tokenAmount);
 
     function getAPR() external returns (uint256);
 
@@ -41,7 +45,7 @@ interface IVaultReward {
 
     function getLPReward() external returns (uint256);
 
-    function pendingRewards() external returns (uint256);
+    function pendingRewards() external view returns (uint256);
 
     function getLPPrice() external returns (uint256); // move
 

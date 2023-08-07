@@ -3,8 +3,13 @@ pragma solidity ^0.8.17;
 
 import "./interfaces/IReferral.sol";
 import "./../ac/Ac.sol";
+import "../market/interfaces/IMarket.sol";
 import "../fee/interfaces/IFeeRouter.sol";
 import {MarketPositionCallBackIntl, MarketCallBackIntl} from "../market/interfaces/IMarketCallBackIntl.sol";
+
+interface IRewardDistributor {
+    function distribute(address account, uint256 amount, bool) external;
+}
 
 contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
     struct Tier {
@@ -181,11 +186,12 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
     }
 
     function updatePositionCallback(
-        MarketPositionCallBackIntl.UpdatePositionEvent memory _event
+        UpdatePositionEvent memory _event
     ) external override onlyController {
         (bytes32 referralCode, address referrer) = getTraderReferralInfo(
             _event.inputs._account
         );
+        bytes32 _referralCode = _event.inputs._refCode;
         if (referralCode == bytes32(0)) {
             referrer = codeOwners[_event.inputs._refCode];
             if (referrer == address(0)) return;
@@ -193,25 +199,50 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
                 _event.inputs._account,
                 _event.inputs._refCode
             );
-            referralCode = _event.inputs._refCode;
+            referralCode = _referralCode;
+        }
+        // call BPTRewardRewarder
+        if (rewarder != address(0)) {
+            try
+                IRewardDistributor(rewarder).distribute(
+                    _event.inputs._account,
+                    _event.inputs._sizeDelta,
+                    false
+                )
+            {} catch {}
+            if (referrer != address(0))
+                try
+                    IRewardDistributor(rewarder).distribute(
+                        referrer,
+                        _event.inputs._sizeDelta,
+                        true
+                    )
+                {} catch {}
         }
 
-        if (_event.inputs.isOpen)
+        if (_event.inputs.isOpen) {
             emit IncreasePositionReferral(
                 _event.inputs._account,
                 _event.inputs._sizeDelta,
-                uint256(_event.fees[uint8(IFeeRouter.FeeType.OpenFee)]),
-                referralCode,
+                IMarket(msg.sender).feeRouter().feeAndRates(
+                    msg.sender,
+                    uint8(IFeeRouter.FeeType.OpenFee)
+                ),
+                _event.inputs._refCode,
                 referrer
             );
-        else
+        } else {
             emit DecreasePositionReferral(
                 _event.inputs._account,
                 _event.inputs._sizeDelta,
-                uint256(_event.fees[uint8(IFeeRouter.FeeType.CloseFee)]),
-                referralCode,
+                IMarket(msg.sender).feeRouter().feeAndRates(
+                    msg.sender,
+                    uint8(IFeeRouter.FeeType.CloseFee)
+                ),
+                _event.inputs._refCode,
                 referrer
             );
+        }
     }
 
     function getHooksCalls()
@@ -227,6 +258,7 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
                 deleteOrder: false
             });
     }
+    address public rewarder;
 
-    uint256[50] private ______gap;
+    uint256[49] private ______gap;
 }

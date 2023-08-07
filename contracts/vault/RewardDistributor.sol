@@ -51,7 +51,7 @@ contract RewardDistributor is AcUpgradable {
      * @dev Updates the last distribution time to the current block timestamp.
      * Only the admin can call this function.
      */
-    function updateLastDistributionTime() external onlyAdmin {
+    function updateLastDistributionTime() external onlyRole(VAULT_MGR_ROLE) {
         lastDistributionTime = block.timestamp;
     }
 
@@ -64,10 +64,13 @@ contract RewardDistributor is AcUpgradable {
     function setTokensPerInterval(
         uint256 _amount
     ) external onlyRole(VAULT_MGR_ROLE) {
+        /* 
         require(
             lastDistributionTime != 0,
             "RewardDistributor: invalid lastDistributionTime"
         );
+        */
+        if (lastDistributionTime == 0) lastDistributionTime = block.timestamp;
         IVaultReward(rewardTracker).updateRewards();
         tokensPerInterval = _amount;
         emit TokensPerIntervalChange(_amount);

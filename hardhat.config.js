@@ -25,14 +25,6 @@ module.exports = {
       gas: 3000000,
       allowUnlimitedContractSize: true,
     },
-    
-    avalancheTest: {
-      url: "https://rpc.ankr.com/avalanche_fuji",
-      chainId: 43113,
-      accounts: [process.env.PRIVATE_KEY],
-      gas: 8000000,
-      gasPrice: 25000000000,
-    },
   },
   solidity: {
     version: "0.8.17",

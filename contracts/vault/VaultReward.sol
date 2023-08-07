@@ -107,14 +107,26 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
      * Finally, the `transferFromVault` function of the `vaultRouter` contract is called to transfer the rewards
      * from the market's vault to the LP's account.
      */
-    function claimLPReward() public nonReentrant {
-        require(coreVault.balanceOf(msg.sender) > 0, "youn't LP");
-        address _account = msg.sender;
+    function claimLPReward() public nonReentrant returns (uint256 tokenAmount) {
+        return _claimForAccount(msg.sender);
+    }
+
+    function claimForAccount(
+        address account
+    ) external onlyController returns (uint256 tokenAmount) {
+        _claimForAccount(account);
+    }
+
+    function _claimForAccount(
+        address _account
+    ) private returns (uint256 tokenAmount) {
+        //require(coreVault.balanceOf(_account) > 0, "youn't LP");
+        if (coreVault.balanceOf(_account) <= 0) return 0;
         updateRewardsByAccount(_account);
-        uint256 tokenAmount = claimableReward[_account];
+        tokenAmount = claimableReward[_account];
         claimableReward[_account] = 0;
-        IERC20(rewardToken()).safeTransfer(msg.sender, tokenAmount);
-        emit Harvest(msg.sender, tokenAmount);
+        IERC20(rewardToken()).safeTransfer(_account, tokenAmount);
+        emit Harvest(_account, tokenAmount);
     }
 
     /**
@@ -169,8 +181,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
             if (_claimableReward > 0 && stakedAmounts(_account) > 0) {
                 uint256 nextCumulativeReward = lpEarnedRewards[_account] +
                     accountReward;
-
-                /* 
+                
                 averageStakedAmounts[_account] = averageStakedAmounts[_account]
                     .mul(lpEarnedRewards[_account])
                     .div(nextCumulativeReward)
@@ -178,9 +189,8 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
                         stakedAmount.mul(accountReward).div(
                             nextCumulativeReward
                         )
-                    ); 
-                */
-                lpEarnedRewards[_account] = nextCumulativeReward;
+                    );
+                lpEarnedRewards[_account] = nextCumulativeReward; 
             }
         }
     }

@@ -73,8 +73,8 @@ interface IMarketValidFuncs {
     ) external view;
 
     function validateLiquidation(
-        int256 pnl, // 获取仓位的盈利状态, 盈利大小
-        int256 fees, // 不含清算费,包含资金费+交易手续费+执行费
+        int256 pnl, 
+        int256 fees, 
         int256 liquidateFee,
         int256 collateral,
         uint256 size,

@@ -77,6 +77,7 @@ const {
   performIndexAutoOrderMock,
 } = require("../../../../../scripts/am/autoOrderMock");
 const { BigNumber } = require("ethers");
+//39747921357501352218266896438948917
 
 describe("auto", async () => {
   let allContracts;

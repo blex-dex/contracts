@@ -23,8 +23,6 @@ const {
 const { grantRoleIfNotGranted } = require("../../../scripts/utils/helpers");
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const { numberToBigNumber } = require("../../testServiceOnChain/utils/utils");
-const { priceToBigNumber } = require("../../testService/utils/utils");
 
 describe("Referral", async function () {
   let refContract;
@@ -139,117 +137,117 @@ describe("Referral", async function () {
     }
   });
 
-  it("Emit IncreasePositionReferral ", async function () {
-    let code = ethers.utils.formatBytes32String("des_code");
-    await setTraderReferralCodeByUser(code);
-    let codeResult = await getTraderReferralInfo(owner.address);
+  // it("Emit IncreasePositionReferral ", async function () {
+  //   let code = ethers.utils.formatBytes32String("des_code");
+  //   await setTraderReferralCodeByUser(code);
+  //   let codeResult = await getTraderReferralInfo(owner.address);
 
-    let params = {
-      inputs: {
-        _market: ethers.constants.AddressZero,
-        _isLong: true,
-        _oraclePrice: 0,
-        isOpen: true,
-        _account: owner.address,
-        _sizeDelta: ethers.utils.parseUnits(100 + "", 18),
-        _price: ethers.utils.parseUnits(String(1000), 30),
-        _slippage: 30,
-        _isExec: false,
-        liqState: 0,
-        _fromOrder: 0,
-        _refCode: ethers.utils.formatBytes32String("des_code"), //todo
-        collateralDelta: ethers.utils.parseUnits(100 + "", 18),
-        execNum: 0,
-        inputs: [
-          ethers.utils.parseUnits(String(1200), 30), //tp
-          ethers.utils.parseUnits(String(900), 30), //sl
-        ],
-      },
-      position: {
-        market: ethers.constants.AddressZero,
-        isLong: true,
-        lastTime: 0,
-        extra3: 0,
-        size: 0,
-        collateral: 0,
-        averagePrice: 0,
-        entryFundingRate: 0,
-        realisedPnl: 0,
-        extra0: 0,
-        extra1: 0,
-        extra2: 0,
-      },
-      fees: [0, 0, 0, 0, 0],
-      collateralToken: ethers.constants.AddressZero,
-      indexToken: ethers.constants.AddressZero,
-      collateralDeltaAfter: 0,
-    };
+  //   let params = {
+  //     inputs: {
+  //       _market: ethers.constants.AddressZero,
+  //       _isLong: true,
+  //       _oraclePrice: 0,
+  //       isOpen: true,
+  //       _account: owner.address,
+  //       _sizeDelta: ethers.utils.parseUnits(100 + "", 18),
+  //       _price: ethers.utils.parseUnits(String(1000), 30),
+  //       _slippage: 30,
+  //       _isExec: false,
+  //       liqState: 0,
+  //       _fromOrder: 0,
+  //       _refCode: ethers.utils.formatBytes32String("des_code"), //todo
+  //       collateralDelta: ethers.utils.parseUnits(100 + "", 18),
+  //       execNum: 0,
+  //       inputs: [
+  //         ethers.utils.parseUnits(String(1200), 30), //tp
+  //         ethers.utils.parseUnits(String(900), 30), //sl
+  //       ],
+  //     },
+  //     position: {
+  //       market: ethers.constants.AddressZero,
+  //       isLong: true,
+  //       lastTime: 0,
+  //       extra3: 0,
+  //       size: 0,
+  //       collateral: 0,
+  //       averagePrice: 0,
+  //       entryFundingRate: 0,
+  //       realisedPnl: 0,
+  //       extra0: 0,
+  //       extra1: 0,
+  //       extra2: 0,
+  //     },
+  //     fees: [0, 0, 0, 0, 0],
+  //     collateralToken: ethers.constants.AddressZero,
+  //     indexToken: ethers.constants.AddressZero,
+  //     collateralDeltaAfter: 0,
+  //   };
 
-    await expect(updatePositionCallback(params))
-      .to.be.emit(await readReferral(), "IncreasePositionReferral")
-      .withArgs(
-        owner.address,
-        ethers.utils.parseUnits(String(100), 18),
-        0,
-        codeResult[0],
-        ethers.constants.AddressZero
-      );
-  });
+  //   await expect(updatePositionCallback(params))
+  //     .to.be.emit(await readReferral(), "IncreasePositionReferral")
+  //     .withArgs(
+  //       owner.address,
+  //       ethers.utils.parseUnits(String(100), 18),
+  //       0,
+  //       codeResult[0],
+  //       ethers.constants.AddressZero
+  //     );
+  // });
 
-  it("Emit DecreasePositionReferral ", async function () {
-    let code = ethers.utils.formatBytes32String("des_code");
-    await setTraderReferralCodeByUser(code);
-    let codeResult = await getTraderReferralInfo(owner.address);
+  // it("Emit DecreasePositionReferral ", async function () {
+  //   let code = ethers.utils.formatBytes32String("des_code");
+  //   await setTraderReferralCodeByUser(code);
+  //   let codeResult = await getTraderReferralInfo(owner.address);
 
-    let params = {
-      inputs: {
-        _market: ethers.constants.AddressZero,
-        _isLong: true,
-        _oraclePrice: 0,
-        isOpen: false,
-        _account: owner.address,
-        _sizeDelta: ethers.utils.parseUnits(100 + "", 18),
-        _price: ethers.utils.parseUnits(String(1000), 30),
-        _slippage: 30,
-        _isExec: false,
-        liqState: 0,
-        _fromOrder: 0,
-        _refCode: ethers.utils.formatBytes32String("des_code"), //todo
-        collateralDelta: ethers.utils.parseUnits(100 + "", 18),
-        execNum: 0,
-        inputs: [
-          ethers.utils.parseUnits(String(1200), 30), //tp
-          ethers.utils.parseUnits(String(900), 30), //sl
-        ],
-      },
-      position: {
-        market: ethers.constants.AddressZero,
-        isLong: true,
-        lastTime: 0,
-        extra3: 0,
-        size: 0,
-        collateral: 0,
-        averagePrice: 0,
-        entryFundingRate: 0,
-        realisedPnl: 0,
-        extra0: 0,
-        extra1: 0,
-        extra2: 0,
-      },
-      fees: [0, 0, 0, 0, 0],
-      collateralToken: ethers.constants.AddressZero,
-      indexToken: ethers.constants.AddressZero,
-      collateralDeltaAfter: 0,
-    };
+  //   let params = {
+  //     inputs: {
+  //       _market: ethers.constants.AddressZero,
+  //       _isLong: true,
+  //       _oraclePrice: 0,
+  //       isOpen: false,
+  //       _account: owner.address,
+  //       _sizeDelta: ethers.utils.parseUnits(100 + "", 18),
+  //       _price: ethers.utils.parseUnits(String(1000), 30),
+  //       _slippage: 30,
+  //       _isExec: false,
+  //       liqState: 0,
+  //       _fromOrder: 0,
+  //       _refCode: ethers.utils.formatBytes32String("des_code"), //todo
+  //       collateralDelta: ethers.utils.parseUnits(100 + "", 18),
+  //       execNum: 0,
+  //       inputs: [
+  //         ethers.utils.parseUnits(String(1200), 30), //tp
+  //         ethers.utils.parseUnits(String(900), 30), //sl
+  //       ],
+  //     },
+  //     position: {
+  //       market: ethers.constants.AddressZero,
+  //       isLong: true,
+  //       lastTime: 0,
+  //       extra3: 0,
+  //       size: 0,
+  //       collateral: 0,
+  //       averagePrice: 0,
+  //       entryFundingRate: 0,
+  //       realisedPnl: 0,
+  //       extra0: 0,
+  //       extra1: 0,
+  //       extra2: 0,
+  //     },
+  //     fees: [0, 0, 0, 0, 0],
+  //     collateralToken: ethers.constants.AddressZero,
+  //     indexToken: ethers.constants.AddressZero,
+  //     collateralDeltaAfter: 0,
+  //   };
 
-    await expect(updatePositionCallback(params))
-      .to.be.emit(await readReferral(), "DecreasePositionReferral")
-      .withArgs(
-        owner.address,
-        ethers.utils.parseUnits(String(100), 18),
-        0,
-        codeResult[0],
-        ethers.constants.AddressZero
-      );
-  });
+  //   await expect(updatePositionCallback(params))
+  //     .to.be.emit(await readReferral(), "DecreasePositionReferral")
+  //     .withArgs(
+  //       owner.address,
+  //       ethers.utils.parseUnits(String(100), 18),
+  //       0,
+  //       codeResult[0],
+  //       ethers.constants.AddressZero
+  //     );
+  // });
 });

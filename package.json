@@ -11,7 +11,10 @@
     "runamo": "npx hardhat run scripts/test/amo.js --network ",
     "runamc": "npx hardhat run scripts/test/amc.js --network ",
     "runamq": "npx hardhat run scripts/test/amliq.js --network ",
-    "price": "npx hardhat run scripts/test/setPrice.js --network "
+    "price": "npx hardhat run scripts/test/setPrice.js --network ",
+    "coverage": "yarn hardhat  coverage --testfiles ./test/testConver",
+    "deploy-localhost": "yarn hardhat run test/testService/deploy/deploy.js --network localhost",
+    "test-localhost": "yarn hardhat test  test/testService/market/**/**/*.js  --network localhost"
   },
   "devDependencies": {
     "@ethereum-waffle/provider": "^4.0.5",
@@ -32,7 +35,7 @@
     "ethers": "^5.7.2",
     "hardhat": "^2.12.6",
     "hardhat-gas-reporter": "^1.0.9",
-    "solidity-coverage": "^0.8.2",
+    "solidity-coverage": "^0.8.4",
     "typechain": "^8.1.1"
   },
   "dependencies": {
@@ -49,6 +52,7 @@
     "hardhat-etherscan": "^1.0.1",
     "hardhat-solidity-create2-deployer": "^1.0.2",
     "node-binance-api": "^0.13.1",
-    "solidity-create2-deployer": "^0.4.0"
+    "solidity-create2-deployer": "^0.4.0",
+    "winston": "^3.10.0"
   }
 }

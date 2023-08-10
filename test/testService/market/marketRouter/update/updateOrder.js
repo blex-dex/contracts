@@ -755,7 +755,7 @@ describe("UpdateOrder", async () => {
     });
     let orderID = await ordersIndex(owner.address, "1");
     if (orderID.eq(0)) {
-      orderID = BigNumber.from(0);
+      orderID = BigNumber.from(1);
     }
 
     //add trigger order
@@ -850,7 +850,6 @@ describe("UpdateOrder", async () => {
     }
     //cancel trigger order
     {
-
       let oraclePrice = await getPrice(allContracts.indexToken, true);
       //Get market balances before trading
       let beforeMarketAmount = await balanceOf(allContracts.market.address);

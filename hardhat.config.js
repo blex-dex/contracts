@@ -1,12 +1,14 @@
 /** @type import('hardhat/config').HardhatUserConfig */
+
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-waffle");
+require("solidity-coverage");
 
 try {
   if (process.env.UseTenderly == "True") {
     require("@tenderly/hardhat-tenderly");
   }
-} catch (error) { }
+} catch (error) {}
 
 require("dotenv").config();
 

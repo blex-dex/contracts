@@ -34,10 +34,10 @@ async function validSize({ user, price, isLong = true, size }) {
 
   logger.info(
     "   The user expects the current position to be " +
-    size.toString() +
-    "   The user's actual position is " +
-    position["size"].toString() +
-    reason
+      size.toString() +
+      "   The user's actual position is " +
+      position["size"].toString() +
+      reason
   );
   console.log(
     "  The user expects the current position to be",
@@ -82,13 +82,16 @@ async function validAvgPrice({ user, price, isLong = true, price0 }) {
 
   logger.info(
     "  The user expects the current average price to be" +
-    price0.toString() +
-    "  user actual average price" +
-    position["averagePrice"].toString() +
-    reason
+      price0.toString() +
+      "  user actual average price" +
+      position["averagePrice"].toString() +
+      reason
   );
 
-  expect(price0, "test case"]);
+  expect(price0, "validAvgPrice").within(
+    position["averagePrice"].sub(ERROR_ALLOW),
+    position["averagePrice"].add(ERROR_ALLOW)
+  );
 }
 
 async function checkCollateral({ user, price, isLong = true, coll }) {
@@ -112,10 +115,10 @@ async function checkCollateral({ user, price, isLong = true, coll }) {
 
   logger.info(
     "The user expects the current margin to be" +
-    coll.toString() +
-    "  User's actual margin" +
-    position["collateral"].toString() +
-    reason
+      coll.toString() +
+      "  User's actual margin" +
+      position["collateral"].toString() +
+      reason
   );
 
   expect(coll, " collateral  fail").within(
@@ -148,10 +151,10 @@ async function validPnl({ user, price, isLong = true, pnl }) {
   let reason = pnl.eq(position["realisedPnl"]) ? "pass" : "fail";
   logger.info(
     "  The user expects the current pnl to be" +
-    pnl.toString() +
-    "  User's actual margin" +
-    position["realisedPnl"].toString() +
-    reason
+      pnl.toString() +
+      "  User's actual margin" +
+      position["realisedPnl"].toString() +
+      reason
   );
 
   expect(pnl, "pnlcheckfail").within(
@@ -280,8 +283,8 @@ async function validTransfer({
 
       console.log(
         "test case" +
-        label +
-        "The actual amount received by the target contract is",
+          label +
+          "The actual amount received by the target contract is",
         event.args.value,
         " | expect Expected amount received",
         eventAmount,
@@ -292,12 +295,12 @@ async function validTransfer({
         : " checkfail ";
       logger.info(
         "test case" +
-        label +
-        " The actual amount received by the target contract is " +
-        event.args.value.toString() +
-        " | expect Expected amount received " +
-        eventAmount.toString() +
-        reason
+          label +
+          " The actual amount received by the target contract is " +
+          event.args.value.toString() +
+          " | expect Expected amount received " +
+          eventAmount.toString() +
+          reason
       );
 
       if (
@@ -372,11 +375,11 @@ function validBalanceChange(source, target, label) {
   let result = target.eq(source) ? " check pass " : " check fail ";
   logger.info(
     label +
-    " change in expected value " +
-    source.toString() +
-    " actual change " +
-    target.toString() +
-    result
+      " change in expected value " +
+      source.toString() +
+      " actual change " +
+      target.toString() +
+      result
   );
 
   console.log(

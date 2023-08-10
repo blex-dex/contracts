@@ -1,13 +1,13 @@
 const {
-	deployContract,
-	readDeployedContract,
-	handleTx,
-	writeContractAddresses,
-	readDeployedContract2,
-	deployContractAndReturnReceipt,
+  deployContract,
+  readDeployedContract,
+  handleTx,
+  writeContractAddresses,
+  readDeployedContract2,
+  deployContractAndReturnReceipt,
   fetchContractAddresses,
   getMarketIdBySymbol,
-  waitTx
+  waitTx,
 } = require("../utils/helpers");
 
 async function deployOrderStore(factoryAddr, writeJson = true, label) {
@@ -54,19 +54,19 @@ async function readOrderStoreContractFromMarketID({ marketID, label }) {
 }
 
 async function readOrderStoreContractFromAPI({ symbol, isLong, isOpen } = {}) {
-  if (isLong && isOpen) label = "0"
-  if (isLong && !isOpen) label = "1"
-  if (!isLong && isOpen) label = "2"
-  if (!isLong && !isOpen) label = "3"
-  const key = "OrderStore" + (label);
-  const datas = await fetchContractAddresses()
+  if (isLong && isOpen) label = "0";
+  if (isLong && !isOpen) label = "1";
+  if (!isLong && isOpen) label = "2";
+  if (!isLong && !isOpen) label = "3";
+  const key = "OrderStore" + label;
+  const datas = await fetchContractAddresses();
   for (let index = 0; index < datas.length; index++) {
     const element = datas[index];
-    const marketid = getMarketIdBySymbol(symbol)
+    const marketid = getMarketIdBySymbol(symbol);
     console.log(marketid);
     if (element.name == key && String(marketid) == String(element.marketID)) {
-      const contractFactory = await ethers.getContractFactory("OrderStore")
-      return await contractFactory.attach(element.address)
+      const contractFactory = await ethers.getContractFactory("OrderStore");
+      return await contractFactory.attach(element.address);
     }
   }
 }

@@ -1,4 +1,4 @@
-# Blex.io Perpetual Trading Platform   
+# Blex.io Perpetual Trading Platform
 
 Blex.io is a decentralized Perpetual Trading platform built on Ethereum blockchain technology. The platform allows users to trade various crypto derivative products. Its goal is to provide users with an efficient, low-cost, secure, and reliable trading environment.
 
@@ -13,7 +13,7 @@ The main features of the Blex.io Perpetual Trading Platform are:
 
 ## Smart Contracts
 
-The core smart contract of the Blex.io trading platform is the **Market** contract, which is responsible for creating and managing derivatives, processing trade orders, and settling trades. 
+The core smart contract of the Blex.io trading platform is the **Market** contract, which is responsible for creating and managing derivatives, processing trade orders, and settling trades.
 
 In addition to the **Market** contract, there are also the following contracts:
 
@@ -31,7 +31,9 @@ To deploy and test the Blex.io Perpetual Trading Platform, you can use the follo
     yarn install # Install all dependencies
     yarn localnode # Run a local node
     yarn local # Deploy the smart contracts to the local test node
-    yarn test # Run unit tests for the smart contracts·
+    yarn coverage # Run unit tests for the smart contracts·
+    yarn deploy-localhost # Deploy all contracts on localhost network
+    yarn test-localhost # Run unit tests on localhost network
 
 Before deploying and testing, make sure you have Node.js and Truffle framework installed locally.
 

@@ -8,8 +8,12 @@ const {
 } = require("../utils/helpers");
 
 async function deployOrderBook(factoryAddr, writeJson, isLong, symbol) {
-	const key = "orderBook" + (isLong ? "Long" : "Short");
-	const { contract: orderBook, receipt } = await deployContractAndReturnReceipt("OrderBook", [factoryAddr], key);
+  const key = "OrderBook" + (isLong ? "Long" : "Short");
+  const { contract: orderBook, receipt } = await deployContractAndReturnReceipt(
+    "OrderBook",
+    [factoryAddr],
+    key
+  );
 
   const result = {
     [key]: orderBook.address,
@@ -51,7 +55,7 @@ async function initializeOrderBook({
     orderBook.initialize(isLong, openStoreAddr, closeStoreAddr),
     "orderBook.initialize"
   );
-}a
+}
 
 async function getOpenStore(label) {
   const orderBook = await readOrderBookContract(label);

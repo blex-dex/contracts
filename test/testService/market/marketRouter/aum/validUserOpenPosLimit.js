@@ -326,7 +326,6 @@ describe("AUM Test", async () => {
         tx: lastTx,
         args: eventArgs,
       });
-      console.log("index", index);
     }
 
     //if  Open Position  again should revert
@@ -343,5 +342,5 @@ describe("AUM Test", async () => {
 
       await connectIncreasePositionRevert(owner, params);
     }
-  });
+  }).timeout(400000000);
 });

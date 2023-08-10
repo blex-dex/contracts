@@ -631,13 +631,16 @@ async function readServiceAllMarket() {
 
   //todo
   let positionBook = await readPositionBookContract();
+  console.log("readPositionAddMgrContract");
 
   let orderBookLong = await readOrderBook(true);
+  console.log("readPositionAddMgrContract");
   let orderBookShort = await readOrderBook(false);
 
   let marketVaild = await readMarketValidContract();
   let priceFeed = await readOracleContract();
   //readPositionAddMgrContract
+  console.log("readPositionAddMgrContract");
   let positionAddMgr = await readPositionAddMgrContract();
   let positionSubMgr = await readPositionSubMgrContract();
 
@@ -650,6 +653,7 @@ async function readServiceAllMarket() {
   let market = await readMarketContract();
   let marketReader = await readMarketReaderContract();
   let marketRouter = await readMarketRouterContract();
+  console.log("readPositionAddMgrContract");
 
   let autoOrderOpenLong = await readAutoOrderMock(true, true);
   let autoOrderOpenShort = await readAutoOrderMock(true, false);

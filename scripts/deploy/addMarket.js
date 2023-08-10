@@ -1,3 +1,4 @@
+const { Wallet } = require("ethers");
 const {
     deployOrConnect2, handleTx, grantRoleIfNotGranted, deployContract,
     isLocalHost
@@ -16,7 +17,7 @@ async function deployMarket({
     vaultRouter,
     collateralToken,
     globalValid,
-    name = "ETH/USD",
+    name = 'ETH/USD',
     _minSlippage = 1,
     _maxSlippage = 500,
     _minLeverage = 2,
@@ -26,96 +27,48 @@ async function deployMarket({
     _minCollateral = 5,
     _allowOpen = true,
     _allowClose = true,
-    _tokenDigits = 18,
+    _tokenDigits = 18
 } = {}) {
-    if (marketFactory == null) marketFactory = await deploy("MarketFactory", []);
 
-    if (marketRouter == null)
-        marketRouter = await deploy("MarketRouter", [marketFactory.address]);
+    let market
+    /* 
+    if (isLocalHost()) {
+        const marketLogic = await deploy(name, "MarketLogic", [marketFactory.address], "Market")
+        market = marketLogic
+    } else 
+    */
+    market = await deploy(name, "Market", [marketFactory.address])
 
-    if (priceFeed == null) priceFeed = await deploy("MockOracle", []);
+    const positionBook = await deploy(name, "PositionBook", [marketFactory.address])
+    const orderBookLong = await deploy(name, "OrderBook", [marketFactory.address], "orderBookLong")
+    const orderBookShort = await deploy(name, "OrderBook", [marketFactory.address], "orderBookShort")
+    const marketValid = await deploy(name, "MarketValid", [marketFactory.address])
 
-    if (positionAddMgr == null)
-        positionAddMgr = await deploy("PositionAddMgr", []);
-
-    if (globalValid == null) globalValid = await deploy("GlobalValid", []);
-
-    if (positionSubMgr == null)
-        positionSubMgr = await deploy("PositionSubMgr", []);
-
-    if (vaultRouter == null) vaultRouter = await deploy("VaultRouter", []);
-
-    if (collateralToken == null) collateralToken = await deploy("USDC", []);
-
-    if (feeRouter == null) feeRouter = await deploy("FeeRouter", []);
-
-    if (orderMgr == null) orderMgr = await deploy("OrderMgr", []);
-
-    let market = await deploy(name, "Market", [marketFactory.address]);
-
-    const positionBook = await deploy(name, "PositionBook", [
-        marketFactory.address,
-    ]);
-    const orderBookLong = await deploy(
-        name,
-        "OrderBook",
-        [marketFactory.address],
-        "orderBookLong"
-    );
-    const orderBookShort = await deploy(
-        name,
-        "OrderBook",
-        [marketFactory.address],
-        "orderBookShort"
-    );
-    const marketValid = await deploy(name, "MarketValid", [
-        marketFactory.address,
-    ]);
-
-    await grantRoleIfNotGranted(
-        marketValid,
-        "MARKET_MGR_ROLE",
-        marketFactory.address,
-        "marketValid.grant.marketFactory"
-    );
-
-    await grantRoleIfNotGranted(
-        marketRouter,
-        "MARKET_MGR_ROLE",
-        marketFactory.address,
-        "marketRouter.grant.marketFactory"
-    );
-
-    let osl = [];
+    let osl = []
     for (let index = 0; index < 4; index++) {
-        const os = await deploy(
-            name,
-            "OrderStore",
-            [marketFactory.address],
-            "OrderStore" + index
-        );
-        osl.push(os);
+        const os = await deploy(name, "OrderStore", [marketFactory.address], "OrderStore" + index)
+        osl.push(os)
     }
-    // console.log(collateralToken.address);
+
 
     const createInputs = {
         _name: name,
         _marketAddress: market.address, // Enter market address here
         addrs: [
-            positionBook.address, //0
-            orderBookLong.address, //1
-            orderBookShort.address, //2
-            marketValid.address, //3
-            priceFeed.address, //4
-            positionSubMgr.address, //5
-            positionAddMgr.address, //6
-            indexToken.address, //7
-            feeRouter.address, //8
-            marketRouter.address, //9
-            vaultRouter.address, //10
-            collateralToken.address, //11
-            globalValid.address, //12
-            orderMgr.address, //13
+            positionBook.address,//0
+            orderBookLong.address,//1
+            orderBookShort.address,//2
+            marketValid.address,//3
+            priceFeed.address,//4
+            positionSubMgr.address,//5
+            positionAddMgr.address,//6
+            indexToken,//7
+            feeRouter.address,//8
+            marketRouter.address,//9
+            vaultRouter.address,//10
+            collateralToken.address,//11
+            globalValid.address,//12
+            orderMgr.address//13
         ], // Enter array of addresses here
         _openStoreLong: osl[0].address, // Enter open store long address here
         _closeStoreLong: osl[1].address, // Enter close store long address here
@@ -130,7 +83,7 @@ async function deployMarket({
         _minCollateral: _minCollateral,
         _allowOpen: _allowOpen,
         _allowClose: _allowClose,
-        _tokenDigits: _tokenDigits,
+        _tokenDigits: _tokenDigits
     };
 
     console.log(createInputs);
@@ -138,54 +91,25 @@ async function deployMarket({
     const [wallet, user0, user1] = await ethers.getSigners();
     console.log(marketFactory.address);
     console.log(wallet.address);
-    await grantRoleIfNotGranted(
-        marketFactory,
-        "MARKET_MGR_ROLE",
-        wallet.address,
-        "marketFactory.grant.wallet"
-    );
-    await handleTx(marketFactory.create(createInputs), "marFac.create");
-    // await handleTx(marketFactory.marketAskForControllerRole(
-    //     [vaultRouter.address, feeRouter.address], market.address
-    // ), "marketAskForControllerRole")
-    await grantRoleIfNotGranted(
-        feeRouter,
-        "ROLE_CONTROLLER",
-        market.address,
-        "feeRouter.grant.market"
-    );
-
-    await grantRoleIfNotGranted(
-        feeRouter,
-        "MARKET_MGR_ROLE",
-        wallet.address,
-        "feeRouter.grant.wallet"
-    );
-
-    await grantRoleIfNotGranted(
-        vaultRouter,
-        "VAULT_MGR_ROLE",
-        wallet.address,
-        "vaultRouter.grant.wallet"
-    );
-
-    await grantRoleIfNotGranted(
-        globalValid,
-        "GLOBAL_MGR_ROLE",
-        wallet.address,
-        "globalValid.grant.wallet"
-    );
-
+    
+    await grantRoleIfNotGranted(vaultRouter, "VAULT_MGR_ROLE", marketRouter.address, "feeRouter.grant.market")
+    await handleTx(marketFactory.create(createInputs), "marFac.create")
+    
+    await grantRoleIfNotGranted(feeRouter, "ROLE_CONTROLLER", market.address, "feeRouter.grant.market")
+    
+    
     return {
         market: market,
         positionBook: positionBook,
         orderBookLong: orderBookLong,
         orderBookShort: orderBookShort,
         marketValid: marketValid,
-        osl: osl,
-    };
+        osl: osl
+    }
 }
 
 module.exports = {
-    deployMarket,
+    deployMarket
 };
+
+

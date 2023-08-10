@@ -1,17 +1,24 @@
 const {
   deployOrConnect,
   readDeployedContract,
+  writeContractAddresses,
   handleTx,
-  deployContract
+  deployContract,
 } = require("../utils/helpers");
 
-async function deployPositionBook() {
-  const book = await deployContract("PositionBookMocker", []);
+async function deployPositionBook(factoryAddr, writeJson = true) {
+  const book = await deployOrConnect("PositionBookMocker", [factoryAddr]);
+  const result = {
+    PositionBookMocker: book.address,
+  };
+  if (writeJson) writeContractAddresses(result);
+
   return book;
 }
 
 async function readPositionBookContract() {
   const book = await readDeployedContract("PositionBookMocker");
+
   return book;
 }
 
@@ -23,10 +30,7 @@ async function setFeeRouter(positionBook, feeRouter) {
 }
 
 async function setOracle(positionBook, oracleAddr) {
-  await handleTx(
-    positionBook.setOracle(oracleAddr),
-    "positionBook.setOracle"
-  );
+  await handleTx(positionBook.setOracle(oracleAddr), "positionBook.setOracle");
 }
 
 async function setPositionMarket(positionBook, positionMarketAddr) {
@@ -36,13 +40,27 @@ async function setPositionMarket(positionBook, positionMarketAddr) {
   );
 }
 
-async function increasePosition(positionBook, account, market, collateral, sizeDelta, markPrice, isLong) {
-    await handleTx(
-        positionBook.increasePosition(account, market, collateral, sizeDelta, markPrice, isLong),
-        "positionBook.increasePosition"
-    );
+async function increasePosition(
+  positionBook,
+  account,
+  market,
+  collateral,
+  sizeDelta,
+  markPrice,
+  isLong
+) {
+  await handleTx(
+    positionBook.increasePosition(
+      account,
+      market,
+      collateral,
+      sizeDelta,
+      markPrice,
+      isLong
+    ),
+    "positionBook.increasePosition"
+  );
 }
-
 
 module.exports = {
   deployPositionBook,

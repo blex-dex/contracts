@@ -1,4 +1,4 @@
-
+// import MarketTokenArtifact from "../artifacts/contracts/market/MarketToken.sol/Market.json";
 const {
     deployOrConnect: deployContract,
     handleTx,
@@ -21,10 +21,11 @@ async function deployMarketRouter({
     marketFactory,
     writeJson = true
 } = {}) {
-    const { implementation, proxy } = await deployUpgradeable("MarketRouter", "MarketRouter")
+    const { implementation, proxy, receipt } = await deployUpgradeable("MarketRouter", "MarketRouter")
     const result = {
         MarketRouter: proxy.address,
         ["MarketRouterImpl"]: implementation.address,
+        ["MarketRouter_block"]: receipt.blockNumber
     };
     const newContract = await getContractAt("MarketRouter", proxy.address)
     if (writeJson) writeContractAddresses(result);
@@ -94,6 +95,8 @@ async function deployAll({ deploy = deployContract, vaultRouter }) {
         marketFactory: marketFactory,
         vaultRouter: vaultRouter
     })
+
+    const orderRouter = await deployOrderRouter(marketFactory.address, true)
 
     return {
         marketRouter: marketRouter,

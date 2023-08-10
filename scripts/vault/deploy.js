@@ -7,17 +7,25 @@ const {
 const {
   deployVaultRouter,
   initialize: initVaultRouter,
+  getFeeRouter,
 } = require("./vaultRouter");
 const {
   deployRewardDistributor,
   initialize: initDistributor,
 } = require("./rewardDistributor");
 
-async function deployVault(feeRouterAddr, asset, name, symbol, writeJson) {
+async function deployVault(
+  feeRouterAddr,
+  asset,
+  name,
+  symbol,
+  writeJson = true
+) {
   const coreVault = await deployCoreVault(writeJson);
   const vaultReward = await deployVaultReward(writeJson);
   const vaultRouter = await deployVaultRouter(writeJson);
   const distributor = await deployRewardDistributor(writeJson);
+  await initVaultRouter(coreVault.address, feeRouterAddr);
 
   await initCoreVault({
     coreVault: coreVault,
@@ -26,7 +34,7 @@ async function deployVault(feeRouterAddr, asset, name, symbol, writeJson) {
     symbol,
     vaultRouterAddr: vaultRouter.address,
     feeRouterAddr,
-    vaultRewardAddr: vaultReward.address
+    vaultRewardAddr: vaultReward.address,
   });
   await initVaultReward(
     coreVault.address,
@@ -34,11 +42,18 @@ async function deployVault(feeRouterAddr, asset, name, symbol, writeJson) {
     feeRouterAddr,
     distributor.address
   );
-  await initVaultRouter(coreVault.address, feeRouterAddr);
-  await initDistributor(asset, vaultReward.address);
 
-  await grantRoleIfNotGranted(coreVault, "ROLE_CONTROLLER", vaultReward.address);
-  await grantRoleIfNotGranted(coreVault, "ROLE_CONTROLLER", vaultRouter.address);
+  await initDistributor(asset, vaultReward.address);
+  await grantRoleIfNotGranted(
+    coreVault,
+    "ROLE_CONTROLLER",
+    vaultReward.address
+  );
+  await grantRoleIfNotGranted(
+    coreVault,
+    "ROLE_CONTROLLER",
+    vaultRouter.address
+  );
 
   return {
     coreVault: coreVault,

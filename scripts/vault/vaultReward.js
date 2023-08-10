@@ -1,25 +1,25 @@
 const {
   deployOrConnect,
   readDeployedContract,
-  handleTx,
-  grantRoleIfNotGranted,
   writeContractAddresses,
   deployUpgradeable,
-  getContractAt
+  getContractAt,
+  handleTx,
 } = require("../utils/helpers");
 
 async function deployVaultReward(writeJson = true) {
-  const { implementation, proxy } = await deployUpgradeable(
+  const { implementation, proxy, receipt } = await deployUpgradeable(
     "VaultReward",
     "VaultReward"
-  )
+  );
   const result = {
     VaultReward: proxy.address,
     ["VaultRewardImpl"]: implementation.address,
+    ["VaultReward_block"]: receipt.blockNumber,
   };
   if (writeJson) writeContractAddresses(result);
 
-  return getContractAt("VaultReward", proxy.address)
+  return getContractAt("VaultReward", proxy.address);
 }
 
 async function readVaultRewardContract() {
@@ -64,35 +64,75 @@ async function initializeVaultReward(
   );
 }
 
+async function getFeeRouter() {
+  const reward = await readVaultRewardContract();
+  return await reward.feeRouter();
+}
+async function getCoreVault() {
+  const reward = await readVaultRewardContract();
+  return await reward.coreVault();
+}
+async function getVaultRouter() {
+  const reward = await readVaultRewardContract();
+  return await reward.vaultRouter();
+}
+
+async function getDistributor() {
+  const reward = await readVaultRewardContract();
+
+  return await reward.distributor();
+}
+
+async function getCumulativeRewardPerToken() {
+  const reward = await readVaultRewardContract();
+
+  return await reward.cumulativeRewardPerToken();
+}
+
 async function buy(vaultAddr, toAddr, amount, minSharesOut) {
   const reward = await readVaultRewardContract();
-  await handleTx(
+
+  return await handleTx(
     reward.buy(vaultAddr, toAddr, amount, minSharesOut),
-    "vaultReward.buy"
+    "reward.buy"
   );
 }
 
 async function sell(vaultAddr, toAddr, amount, minAssetsOut) {
   const reward = await readVaultRewardContract();
-  await handleTx(
-    reward.sell(vaultAddr, toAddr, amount, minAssetsOut),
-    "vaultReward.sell"
-  );
+  return await reward.sell(vaultAddr, toAddr, amount, minAssetsOut);
+  // await handleTx(
+  //   reward.sell(vaultAddr, toAddr, amount, minAssetsOut),
+  //   "vaultReward.sell"
+  // );
+}
+
+async function claimableReward(addr) {
+  const reward = await readVaultRewardContract();
+  return await reward.claimableReward(addr);
 }
 
 async function claimLPReward() {
   const reward = await readVaultRewardContract();
-  await handleTx(reward.claimLPReward(), "vaultReward.claimLPReward");
+  // await handleTx(reward.claimLPReward(), "vaultReward.claimLPReward");
+  return await reward.claimLPReward();
 }
 
 async function updateRewards() {
   const reward = await readVaultRewardContract();
-  await handleTx(reward.updateRewards(), "vaultReward.updateRewards");
+  // await handleTx(reward.updateRewards(), "vaultReward.updateRewards");
+  return await reward.updateRewards();
 }
 
 async function setAPR(apr) {
   const reward = await readVaultRewardContract();
-  await handleTx(reward.setAPR(apr), "vaultReward.setAPR");
+  //await handleTx(reward.setAPR(apr), "vaultReward.setAPR");
+  return await reward.setAPR(apr);
+}
+
+async function updateRewardsByAccount(owner) {
+  const reward = await readVaultRewardContract();
+  return await reward.updateRewardsByAccount(owner);
 }
 
 async function getLPReward() {
@@ -140,14 +180,14 @@ async function priceDecimals() {
   return await reward.priceDecimals();
 }
 
-async function getSellLpFee() {
+async function getSellLpFee(vault) {
   const reward = await readVaultRewardContract();
-  return await reward.sellLpFee();
+  return await reward.sellLpFee(vault);
 }
 
-async function getBuyLpFee() {
+async function getBuyLpFee(vault) {
   const reward = await readVaultRewardContract();
-  return await reward.buyLpFee();
+  return await reward.buyLpFee(vault);
 }
 
 async function getAPR() {
@@ -183,6 +223,12 @@ module.exports = {
   buy,
   sell,
   claimLPReward,
+  getFeeRouter,
+  getCoreVault,
+  getCumulativeRewardPerToken,
+  getVaultRouter,
+  getDistributor,
+  claimableReward,
   updateRewards,
   getLPReward,
   getLPPrice,
@@ -200,4 +246,6 @@ module.exports = {
   rewardToken,
   pendingRewards,
   claimable,
+  initialize,
+  updateRewardsByAccount,
 };

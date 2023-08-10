@@ -75,12 +75,19 @@ const {
 const {
 	deployOrderBook
 } = require("../order/deployAll.js");
+const { ethers } = require("hardhat");
+const { deployUSDC } = require("../vault/usdc.js");
+const { deployOracle } = require("../mock/oracle.js");
+const { deployFee } = require("../fee/deployFeeAll.js");
+const { deployVaultRouter } = require("../vault/vaultRouter.js");
+const { grantRoleIfNotGranted } = require("../utils/helpers.js");
 
 async function deployGlobalMarket(vaultRouterAddr, writeJson) {
 	const globalValid = await deployGlobalValid(writeJson);
 	const factory = await deployMarketFactory(writeJson);
+	//const market =await deployMarket(factory.address, writeJson);
 	const marketReader = await deployMarketReader(factory.address, writeJson);
-	const marketRouter = await deployMarketRouter(writeJson);
+	const marketRouter = await deployMarketRouter(factory.address,writeJson);
 	const orderMgr = await deployOrderMgr(writeJson);
 	const positionAddMgr = await deployPositionAddMgr(writeJson);
 	const positionSubMgr = await deployPositionSubMgr(writeJson);
@@ -138,27 +145,27 @@ async function createMarket(name, contracts, configs, writeJson) {
 
 	const createInputs = {
 		_name: name,
-		_marketAddress: market.address,
+		_marketAddress: market.address, // Enter market address here
 		addrs: [
-			positionBook.address,
-			orderBookLongContracts.orderBook.address,
-			orderBookShortContracts.orderBook.address,
-			marketValid.address,
-			contracts.oracle,
-			contracts.positionSubMgr,
-			contracts.positionAddMgr,
-			contracts.indexToken,
-			contracts.feeRouter,
-			contracts.marketRouter,
-			contracts.vaultRouter,
-			contracts.collateralToken,
-			contracts.globalValid,
-			contracts.orderMgr
-		],
-		_openStoreLong: orderBookLongContracts.orderStoreOpen.address,
-		_closeStoreLong: orderBookLongContracts.orderStoreClose.address,
-		_openStoreShort: orderBookShortContracts.orderStoreOpen.address,
-		_closeStoreShort: orderBookShortContracts.orderStoreClose.address,
+			positionBook.address,				// 0
+			orderBookLongContracts.orderBook.address, 	// 1
+			orderBookShortContracts.orderBook.address,	// 2
+			marketValid.address,			// 3
+			contracts.oracle,			// 4
+			contracts.positionSubMgr,		// 5
+			contracts.positionAddMgr,		// 6
+			contracts.indexToken,			// 7
+			contracts.feeRouter,			// 8
+			contracts.marketRouter,			// 9
+			contracts.vaultRouter,			// 10
+			contracts.collateralToken,		// 11
+			contracts.globalValid,			// 12
+			contracts.orderMgr			// 13
+		], // Enter array of addresses here
+		_openStoreLong: orderBookLongContracts.orderStoreOpen.address, 	   // Enter open store long address here
+		_closeStoreLong: orderBookLongContracts.orderStoreClose.address,   // Enter close store long address here
+		_openStoreShort: orderBookShortContracts.orderStoreOpen.address,   // Enter open store short address here
+		_closeStoreShort: orderBookShortContracts.orderStoreClose.address, // Enter close store short address here
 		_minSlippage: configs.minSlippage,
 		_maxSlippage: configs.maxSlippage,
 		_minLeverage: configs.minLeverage,
@@ -187,7 +194,72 @@ async function createMarket(name, contracts, configs, writeJson) {
 }
 
 
+
+
+async function createMarketPlace(writeJson){
+	const [owner,second,third]=await ethers.getSigners();
+	const globalValid= await deployGlobalValid(writeJson);
+	const usdc=await deployUSDC("USDC","USDC","1000000000000000000",writeJson);
+	const priceFeed= await deployOracle(writeJson);
+	const factory = await deployMarketFactory(writeJson);
+	const marketRouter = await deployMarketRouter(factory.address,writeJson);
+	const orderMgr = await deployOrderMgr(writeJson);
+	const positionAddMgr = await deployPositionAddMgr(writeJson);
+	const positionSubMgr = await deployPositionSubMgr(writeJson);
+	const marketValid = await deployMarketValid(factory.address, writeJson);
+	const positionBook = await deployPositionBook(factory.address, writeJson);
+	const orderBookLongContracts = await deployOrderBook(factory.address, true, writeJson);
+	const orderBookShortContracts = await deployOrderBook(factory.address, false, writeJson);
+	///isInit
+	const feeContracts=await deployFee(factory.address,true,true,writeJson);
+	const market=await deployMarket(factory.address,writeJson);
+	const vaultRouter=await deployVaultRouter(writeJson);
+	const addressjson = {
+		"ETH": "0x62CAe0FA2da220f43a51F86Db2EDb36DcA9A5A08",
+		"BTC": "0x6550bc2301936011c1334555e62A87705A81C12C"
+	  }	  
+
+	let addrs= [
+		positionBook.address,				
+		orderBookLongContracts.orderBook.address, 	
+		orderBookShortContracts.orderBook.address,	
+		marketValid.address,			
+		priceFeed.address,		
+		positionSubMgr.address,	
+		positionAddMgr.address,		
+		//indexToken.address,
+		'0x62CAe0FA2da220f43a51F86Db2EDb36DcA9A5A08',
+		feeContracts.feeRouter.address,	
+		marketRouter.address,	
+		vaultRouter.address	,		
+		usdc.address,
+		globalValid.address,			
+		orderMgr.address			
+	]
+	await initialize("ETH/USD",addrs);
+
+
+	return {
+		globalValid: globalValid,
+		priceFeed: priceFeed,
+		factory: factory,
+		marketRouter: marketRouter,
+		orderMgr: orderMgr,
+		positionAddMgr: positionAddMgr,
+		positionSubMgr: positionSubMgr,
+		marketValid: marketValid,
+		positionBook: positionBook,
+		orderBookLongContracts: orderBookLongContracts,
+		orderBookShortContracts: orderBookShortContracts,
+		feeContracts: feeContracts,
+		market: market,
+		vaultRouter: vaultRouter,
+	}
+}
+
+
 module.exports = {
 	deployGlobalMarket,
 	createMarket,
+	createMarketPlace,
 };

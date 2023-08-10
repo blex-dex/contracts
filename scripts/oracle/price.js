@@ -103,6 +103,10 @@ async function setStableTokens(token, stable) {
 		"oracle.setStableTokens"
 	);
 }
+async function getPricePrice(token,maximise){
+	const oracle = await readDeployedContract("Price");
+	return await oracle.getPrice(token,maximise);
+}
 
 module.exports = {
 	deployPrice,
@@ -117,4 +121,5 @@ module.exports = {
 	setSpreadThresholdBasisPoints,
 	setMaxStrictPriceDeviation,
 	setStableTokens,
+	getPricePrice,
 };

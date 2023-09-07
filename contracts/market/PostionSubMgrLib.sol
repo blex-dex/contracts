@@ -43,7 +43,7 @@ library PositionSubMgrLib {
         if (_position.collateral.toInt256() + dPNL - fees <= 0) return 0;
         if (_params.collateralDelta.toInt256() + dPNL - fees > 0)
             return _params.collateralDelta.toInt256() + dPNL - fees;
-        if (_params.collateralDelta.toInt256() + dPNL - fees < 0) return 0;
+        if (_params.collateralDelta.toInt256() + dPNL - fees <= 0) return 0;
         return _params.collateralDelta.toInt256() + dPNL;
     }
 

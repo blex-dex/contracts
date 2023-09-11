@@ -79,7 +79,9 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         vaultReward = _vaultReward;
     }
 
-    function setVaultRouter(address _vaultRouter) external override onlyManager {
+    function setVaultRouter(
+        address _vaultRouter
+    ) external override onlyManager {
         require(_vaultRouter != address(0), "!zero address");
 
         if (address(vaultRouter) != address(0)) {
@@ -96,7 +98,9 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         emit LPFeeUpdated(isBuy, fee);
     }
 
-    function setCooldownDuration(uint256 _duration) public override onlyManager {
+    function setCooldownDuration(
+        uint256 _duration
+    ) public override onlyManager {
         cooldownDuration = _duration;
         emit CoolDownDurationUpdated(_duration);
     }
@@ -272,7 +276,6 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         IVaultReward(vaultReward).updateRewardsByAccount(caller);
         uint256 s_assets = super._convertToAssets(shares, Math.Rounding.Down);
         bool exceeds_assets = s_assets > assets;
-
 
         uint256 _assets = exceeds_assets ? assets : s_assets;
 

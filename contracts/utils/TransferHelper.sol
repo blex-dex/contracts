@@ -3,12 +3,8 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/utils/math/SafeCast.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-
-interface IERC20Decimals is IERC20 {
-    function decimals() external view returns (uint8);
-}
 
 library Precision {
     uint256 public constant BASIS_POINTS_DIVISOR = 100000000;
@@ -20,9 +16,9 @@ library Precision {
 }
 
 library TransferHelper {
-    uint8 public constant usdDecimals = 18; 
+    uint8 public constant usdDecimals = 18;
 
-    using SafeERC20 for IERC20;
+    using SafeERC20 for IERC20Metadata;
 
     /**
      * @dev Retrieves the number of decimal places for USD.
@@ -92,14 +88,14 @@ library TransferHelper {
         // If the token amount is 0, return.
         if (_tokenAmount == 0) return;
         // Retrieve the token contract.
-        IERC20 coll = IERC20(tokenAddress);
+        IERC20Metadata coll = IERC20Metadata(tokenAddress);
         // Format the collateral amount based on the token's decimals and transfer the tokens.
         coll.safeTransferFrom(
             _from,
             _to,
             formatCollateral(
                 _tokenAmount,
-                IERC20Decimals(tokenAddress).decimals()
+                IERC20Metadata(tokenAddress).decimals()
             )
         );
     }
@@ -118,11 +114,11 @@ library TransferHelper {
         // If the token amount is 0, return.
         if (_tokenAmount == 0) return;
         // Retrieve the token contract.
-        IERC20 coll = IERC20(tokenAddress);
+        IERC20Metadata coll = IERC20Metadata(tokenAddress);
         // Format the collateral amount based on the token's decimals.
         _tokenAmount = formatCollateral(
             _tokenAmount,
-            IERC20Decimals(tokenAddress).decimals()
+            IERC20Metadata(tokenAddress).decimals()
         );
         // Transfer the tokens to the specified address.
         coll.safeTransfer(_to, _tokenAmount);

@@ -17,7 +17,9 @@ import {MarketPositionCallBackIntl, MarketOrderCallBackIntl} from "./interfaces/
 import {MarketDataTypes} from "./MarketDataTypes.sol";
 import {Position} from "../position/PositionStruct.sol";
 import {IReferral} from "../referral/interfaces/IReferral.sol";
-import {TransferHelper, IERC20Decimals} from "./../utils/TransferHelper.sol";
+import {TransferHelper} from "./../utils/TransferHelper.sol";
+import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./MarketStorage.sol";
 import "../ac/Ac.sol";
@@ -242,7 +244,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
         if (execFee > _cache.order.collateral) return 0;
         uint256 feeAmount = TransferHelper.formatCollateral(
             uint256(execFee),
-            IERC20Decimals(collateralToken).decimals()
+            IERC20Metadata(collateralToken).decimals()
         );
 
         if (_cache.isIncrease) {

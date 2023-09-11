@@ -22,7 +22,9 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.
 import "./interfaces/IMarketCallBackIntl.sol";
 import {IReferral} from "../referral/interfaces/IReferral.sol";
 import "./../position/PositionStruct.sol";
-import {TransferHelper, IERC20Decimals} from "./../utils/TransferHelper.sol";
+import {TransferHelper} from "./../utils/TransferHelper.sol";
+import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+
 import "../ac/Ac.sol";
 
 contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
@@ -249,7 +251,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         IVaultRouter(vaultRouter).repayToVault(
             TransferHelper.formatCollateral(
                 _params._sizeDelta,
-                IERC20Decimals(collateralToken).decimals()
+                IERC20Metadata(collateralToken).decimals()
             )
         );
 
@@ -307,7 +309,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
     function _approveToFeeVault(uint256 _a) private {
         uint256 amount = TransferHelper.formatCollateral(
             _a,
-            IERC20Decimals(collateralToken).decimals()
+            IERC20Metadata(collateralToken).decimals()
         );
         IERC20(collateralToken).approve(address(feeRouter), amount);
     }
@@ -332,7 +334,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         if (_transToFeeVault > 0) {
             uint256 amount = TransferHelper.formatCollateral(
                 _transToFeeVault.toUint256(),
-                IERC20Decimals(collateralToken).decimals()
+                IERC20Metadata(collateralToken).decimals()
             );
             IERC20(collateralToken).approve(address(feeRouter), amount);
         }

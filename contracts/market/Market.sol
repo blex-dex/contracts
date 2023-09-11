@@ -14,7 +14,9 @@ import {IMarketRouter} from "./interfaces/IMarketRouter.sol";
 import "./../position/PositionStruct.sol";
 import {Order} from "../order/OrderStruct.sol";
 import {MarketDataTypes} from "./MarketDataTypes.sol";
-import {IERC20Decimals, TransferHelper} from "../utils/TransferHelper.sol";
+import {TransferHelper} from "../utils/TransferHelper.sol";
+import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+
 import "../ac/Ac.sol";
 
 contract Market is MarketStorage, ReentrancyGuard, Ac {
@@ -156,7 +158,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         orderStores[true][false] = orderBookLong.closeStore();
         orderStores[false][true] = orderBookShort.openStore();
         orderStores[false][false] = orderBookShort.closeStore();
-        collateralTokenDigits = IERC20Decimals(collateralToken).decimals();
+        collateralTokenDigits = IERC20Metadata(collateralToken).decimals();
 
         positionStoreLong = positionBook.longStore();
         positionStoreShort = positionBook.shortStore();

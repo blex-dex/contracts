@@ -90,7 +90,6 @@ contract FastPriceFeed is Ac {
         maxPriceUpdateDelay = _maxPriceUpdateDelay;
         minBlockInterval = _minBlockInterval;
         maxDeviationBasisPoints = _maxDeviationBasisPoints;
-
     }
 
     function setPriceFeed(address _feed) external onlyInitOr(MANAGER_ROLE) {

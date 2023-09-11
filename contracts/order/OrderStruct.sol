@@ -147,7 +147,8 @@ library Order {
     }
 
     function getKey(Props memory order) internal pure returns (bytes32) {
-        return keccak256(abi.encodePacked(order.account, order.orderID));
+        return OrderLib.getKey(order.account, order.orderID);
+        // return keccak256(abi.encodePacked(order.account, order.orderID));
     }
 
     function updateTime(Order.Props memory _order) internal view {

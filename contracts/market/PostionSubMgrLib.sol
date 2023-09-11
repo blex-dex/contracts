@@ -13,12 +13,17 @@ library PositionSubMgrLib {
     function calculateTransToFeeVault(
         Position.Props memory _position,
         int256 dPNL,
-        int256 fees
+        int256 fees,
+        bool isCloseAll
     ) internal pure returns (int256) {
         if (fees > _position.collateral.toInt256() + dPNL) {
             if (_position.collateral.toInt256() + dPNL > 0)
                 return _position.collateral.toInt256() + dPNL;
-            else return 0;
+            else {
+                 require(isCloseAll,"PositionSubMgr:position under liq");
+                 return 0;
+            }
+               
         }
         return fees;
     }

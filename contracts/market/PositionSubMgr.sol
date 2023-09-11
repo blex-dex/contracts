@@ -328,8 +328,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         int256 _transToFeeVault = PositionSubMgrLib.calculateTransToFeeVault(
             _position,
             dPNL,
-            fees,
-            _position.size == _params._sizeDelta
+            fees
         );
         if (_transToFeeVault > 0) {
             uint256 amount = TransferHelper.formatCollateral(

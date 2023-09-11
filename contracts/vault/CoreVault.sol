@@ -79,10 +79,8 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         vaultReward = _vaultReward;
     }
 
-    function setVaultRouter(address _vaultRouter) external override onlyManager {
-        require(_vaultRouter != address(0), "!zero address");
-
-        if (address(vaultRouter) != address(0)) {
+    function setVaultRouter(address _vaultRouter) external override onlyAdmin {
+        if (address(vaultRouter) != address(0))
             _revokeRole(ROLE_CONTROLLER, address(vaultRouter)); //fix: CVB-05 | Old vault router is not removed from `ROLE_CONTROLLER` when setting new vault router
             _revokeRole(FREEZER_ROLE, address(vaultRouter)); //fix: CVB-05 | Old vault router is not removed from `ROLE_CONTROLLER` when setting new vault router
         }

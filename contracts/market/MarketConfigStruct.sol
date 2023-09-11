@@ -35,7 +35,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp > 16 ** 3) {
+        if (minSp >= 16 ** 3 - 1) {
             revert("sp too big");
         }
         self.data = (self.data & MIN_SLIPPAGE_MASK) | minSp;
@@ -51,7 +51,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp > 16 ** 3) {
+        if (minSp >= 16 ** 3 - 1) {
             revert("ms too big");
         }
         self.data =
@@ -69,7 +69,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp > 16 ** 3) {
+        if (minSp >= 16 ** 3 - 1) {
             revert("ml too big");
         }
         self.data =
@@ -87,7 +87,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp > 16 ** 3) {
+        if (minSp >= 16 ** 3 - 1) {
             revert("ml too big");
         }
         self.data =
@@ -105,7 +105,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp > 16 ** 3) {
+        if (minSp >= 16 ** 3 - 1) {
             revert("mp too big");
         }
 
@@ -126,7 +126,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp > 16 ** 3) {
+        if (minSp >= 16 ** 3 - 1) {
             revert("mc too big");
         }
         self.data =
@@ -146,7 +146,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp > 16 ** 3) {
+        if (minSp >= 16 ** 3 - 1) {
             revert("mc too big");
         }
         self.data =
@@ -168,7 +168,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp > 16 ** 8) {
+        if (minSp >= 16 ** 8-1) {
             revert("mta too big");
         }
         self.data =

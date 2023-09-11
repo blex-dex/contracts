@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity ^0.8.17;
+
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -82,6 +83,9 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         vaultReward = _vaultReward;
     }
 
+    event SetVaultRouter(address _vaultRouter);
+
+
     function setVaultRouter(
         address _vaultRouter
     ) external override onlyManager {
@@ -94,6 +98,8 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         vaultRouter = IVaultRouter(_vaultRouter);
         _grantRole(ROLE_CONTROLLER, _vaultRouter);
         _grantRole(FREEZER_ROLE, _vaultRouter);
+
+        emit SetVaultRouter(_vaultRouter);
     }
 
     function setLpFee(bool isBuy, uint256 fee) external override onlyManager {
@@ -101,7 +107,9 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         emit LPFeeUpdated(isBuy, fee);
     }
 
-    function setCooldownDuration(uint256 _duration) external override onlyManager {
+    function setCooldownDuration(
+        uint256 _duration
+    ) external override onlyManager {
         cooldownDuration = _duration;
         emit CoolDownDurationUpdated(_duration);
     }
@@ -124,10 +132,10 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
      * @return The total assets held in the contract.
      */
     function totalAssets()
-        public
-        view
-        override(ERC4626, IERC4626)
-        returns (uint256)
+    public
+    view
+    override(ERC4626, IERC4626)
+    returns (uint256)
     {
         return vaultRouter.getAUM();
     }
@@ -142,7 +150,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         bool isBuy,
         uint256 amount
     ) public view override returns (uint256) {
-       return (amount * getLPFee(isBuy)) / FEE_RATE_PRECISION;
+        return (amount * getLPFee(isBuy)) / FEE_RATE_PRECISION;
     }
 
     /**
@@ -295,7 +303,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
 
         emit WithdrawAsset(caller, receiver, _owner, assets, shares, cost);
     }
-  
+
     function setIsFreeze(bool f) external onlyFreezer {
         isFreeze = f;
         emit LogIsFreeze(f);

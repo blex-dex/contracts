@@ -32,9 +32,9 @@ contract MarketFactory is Ac {
     }
 
     function getMarkets()
-        external
-        view
-        returns (IMarketFactory.Outs[] memory _outs)
+    external
+    view
+    returns (IMarketFactory.Outs[] memory _outs)
     {
         IMarketFactory.Props[] memory _markets = markets;
         uint len = _markets.length;
@@ -63,6 +63,8 @@ contract MarketFactory is Ac {
         return markets[index];
     }
 
+    event Remove(address _addr);
+
     function remove(address _addr) external onlyRole(MARKET_MGR_ROLE) {
         for (uint i = 0; i < markets.length; i++) {
             if (markets[i].addr == _addr) {
@@ -75,10 +77,14 @@ contract MarketFactory is Ac {
                 );
                 mr.removeMarket(_addr);
                 markets.pop();
+
+                emit Remove(_addr);
                 break;
             }
         }
     }
+
+    event Create(IMarketFactory.CreateInputs _inputs);
 
     function create(
         IMarketFactory.CreateInputs memory _inputs
@@ -174,5 +180,7 @@ contract MarketFactory is Ac {
             _inputs._marketAddress
         );
         marketIndexes[_inputs._marketAddress] = markets.length;
+
+        emit Create(_inputs);
     }
 }

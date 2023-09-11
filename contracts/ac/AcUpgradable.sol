@@ -38,7 +38,8 @@ abstract contract AcUpgradable is AccessControl, Ownable, Initializable {
         bool isDefaultAdmin = hasRole(DEFAULT_ADMIN_ROLE, _msgSender());
         if (isDefaultAdmin) {
             //            if (block.timestamp - _initBlock >= 3600 * 24)
-            if (block.timestamp - _initBlock >= 1 days) revert("ac time passed");
+            if (block.timestamp - _initBlock >= 1 days)
+                revert("ac time passed");
         } else {
             _checkRole(_role, _msgSender());
         }

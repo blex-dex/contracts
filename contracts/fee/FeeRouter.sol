@@ -75,14 +75,22 @@ contract FeeRouter is Ac, IFeeRouter {
         fundFee = fundingFee;
     }
 
+    event SetFeeVault(address vault);
+
     function setFeeVault(address vault) external onlyManager {
         require(vault != address(0), "invalid fee vault");
         feeVault = vault;
+
+        emit SetFeeVault(vault);
     }
+
+    event SetFundFee(address fundingFee);
 
     function setFundFee(address fundingFee) external onlyManager {
         require(fundFee != address(0), "invalid fundFee");
         fundFee = fundingFee;
+
+        emit SetFundFee(fundingFee);
     }
 
     function setFeeAndRates(
@@ -279,11 +287,11 @@ contract FeeRouter is Ac, IFeeRouter {
 
         return
             IFundFee(fundFee).getFundingFee(
-                market,
-                sizeDelta,
-                entryFundingRate,
-                isLong
-            );
+            market,
+            sizeDelta,
+            entryFundingRate,
+            isLong
+        );
     }
 
     /**
@@ -310,7 +318,7 @@ contract FeeRouter is Ac, IFeeRouter {
         }
 
         uint256 _size = (sizeDelta * (FEE_RATE_PRECISION - _point)) /
-            FEE_RATE_PRECISION;
+                    FEE_RATE_PRECISION;
         return sizeDelta - _size;
     }
 

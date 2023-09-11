@@ -92,16 +92,25 @@ contract FastPriceFeed is Ac {
         maxDeviationBasisPoints = _maxDeviationBasisPoints;
     }
 
+    event SetPriceFeed(address _feed);
+
     function setPriceFeed(address _feed) external onlyInitOr(MANAGER_ROLE) {
         require(_feed != address(0), "invalid feed");
         chainPriceFeed = _feed;
+
+        emit SetPriceFeed(_feed);
     }
+
+    event SetMaxTimeDeviation(uint256 _deviation);
 
     function setMaxTimeDeviation(
         uint256 _deviation
     ) external onlyInitOr(MANAGER_ROLE) {
         maxTimeDeviation = _deviation;
+        emit SetMaxTimeDeviation(_deviation);
     }
+
+    event SetPriceDuration(uint256 _duration);
 
     function setPriceDuration(
         uint256 _duration
@@ -111,49 +120,80 @@ contract FastPriceFeed is Ac {
             "FastPriceFeed: invalid priceDuration"
         );
         priceDuration = _duration;
+
+        emit SetPriceDuration(_duration);
     }
+
+    event SetMaxPriceUpdateDelay(uint256 _delay);
 
     function setMaxPriceUpdateDelay(
         uint256 _delay
     ) external onlyInitOr(MANAGER_ROLE) {
         maxPriceUpdateDelay = _delay;
+
+        emit SetMaxPriceUpdateDelay(_delay);
     }
+
+    event SetSpreadBasisPointsIfInactive(uint256 _point);
 
     function setSpreadBasisPointsIfInactive(
         uint256 _point
     ) external onlyInitOr(MANAGER_ROLE) {
         spreadBasisPointsIfInactive = _point;
+
+        emit SetSpreadBasisPointsIfInactive(_point);
     }
+
+    event SetSpreadBasisPointsIfChainError(uint256 _point);
 
     function setSpreadBasisPointsIfChainError(
         uint256 _point
     ) external onlyInitOr(MANAGER_ROLE) {
         spreadBasisPointsIfChainError = _point;
+
+        emit SetSpreadBasisPointsIfChainError(_point);
     }
+
+    event SetMinBlockInterval(uint256 _interval);
 
     function setMinBlockInterval(
         uint256 _interval
     ) external onlyInitOr(MANAGER_ROLE) {
         minBlockInterval = _interval;
+
+        emit SetMinBlockInterval(_interval);
     }
+
+    event SetIsSpreadEnabled(bool _enabled);
 
     function setIsSpreadEnabled(
         bool _enabled
     ) external onlyInitOr(MANAGER_ROLE) {
         isSpreadEnablede = _enabled;
+
+        emit SetIsSpreadEnabled(_enabled);
     }
+
+    event SetLastUpdatedAt(uint256 _lastUpdatedAt);
 
     function setLastUpdatedAt(
         uint256 _lastUpdatedAt
     ) external onlyInitOr(MANAGER_ROLE) {
         lastUpdatedAt = _lastUpdatedAt;
+        emit SetLastUpdatedAt(_lastUpdatedAt);
     }
+
+    event SetMaxDeviationBasisPoints(uint256 _maxDeviationBasisPoints);
 
     function setMaxDeviationBasisPoints(
         uint256 _maxDeviationBasisPoints
     ) external onlyInitOr(MANAGER_ROLE) {
         maxDeviationBasisPoints = _maxDeviationBasisPoints;
+
+        emit SetMaxDeviationBasisPoints(_maxDeviationBasisPoints);
     }
+
+    event SetMaxCumulativeDeltaDiffs(address[] _tokens, uint256[] _maxCumulativeDeltaDiffs);
 
     function setMaxCumulativeDeltaDiffs(
         address[] memory _tokens,
@@ -163,13 +203,20 @@ contract FastPriceFeed is Ac {
             address token = _tokens[i];
             maxCumulativeDeltaDiffs[token] = _maxCumulativeDeltaDiffs[i];
         }
+        emit SetMaxCumulativeDeltaDiffs(_tokens, _maxCumulativeDeltaDiffs);
     }
+
+    event SetPriceDataInterval(uint256 _priceDataInterval);
 
     function setPriceDataInterval(
         uint256 _priceDataInterval
     ) external onlyInitOr(MANAGER_ROLE) {
         priceDataInterval = _priceDataInterval;
+
+        emit SetPriceDataInterval(_priceDataInterval);
     }
+
+    event SetTokens(address[] _tokens, uint256[] _tokenPrecisions);
 
     function setTokens(
         address[] memory _tokens,
@@ -181,7 +228,11 @@ contract FastPriceFeed is Ac {
         );
         tokens = _tokens;
         tokenPrecisions = _tokenPrecisions;
+
+        emit SetTokens(_tokens, _tokenPrecisions);
     }
+
+    event SetPrices(address[] _tokens, uint256[] _prices, uint256 _timestamp);
 
     function setPrices(
         address[] memory _tokens,
@@ -197,8 +248,13 @@ contract FastPriceFeed is Ac {
                 address token = _tokens[i];
                 _setPrice(token, _prices[i], _feed);
             }
+
+            emit SetPrices(_tokens, _prices, _timestamp);
         }
     }
+
+
+    event SetPricesAndExecute(address token, uint256 price, uint256 timestamp, IMarket.OrderExec[] orders);
 
     function setPricesAndExecute(
         address token,
@@ -235,7 +291,11 @@ contract FastPriceFeed is Ac {
 
             _market.execOrderKey(_order, _vars);
         }
+
+        emit SetPricesAndExecute(token, price, timestamp, orders);
     }
+
+    event SetCompactedPrices(uint256[] _priceBitArray, uint256 _timestamp);
 
     function setCompactedPrices(
         uint256[] memory _priceBitArray,
@@ -261,11 +321,13 @@ contract FastPriceFeed is Ac {
                     address token = tokens[i * 8 + j];
                     uint256 tokenPrecision = tokenPrecisions[i * 8 + j];
                     uint256 adjustedPrice = (price * PRICE_PRECISION) /
-                        tokenPrecision;
+                                tokenPrecision;
 
                     _setPrice(token, adjustedPrice, _feed);
                 }
             }
+
+            emit SetCompactedPrices(_priceBitArray, _timestamp);
         }
     }
 
@@ -388,6 +450,8 @@ contract FastPriceFeed is Ac {
         );
     }
 
+    event SetPricesWithBits(uint256 _priceBits, uint256 _timestamp);
+
     function _setPricesWithBits(
         uint256 _priceBits,
         uint256 _timestamp
@@ -401,7 +465,7 @@ contract FastPriceFeed is Ac {
             uint256[] memory _tokenPrecisions = tokenPrecisions;
             uint256 token_length = _tokens.length;
 
-            for (uint256 j; j < 8; ) {
+            for (uint256 j; j < 8;) {
                 if (j >= token_length) return;
 
                 uint256 startBit;
@@ -411,13 +475,15 @@ contract FastPriceFeed is Ac {
                 uint256 price = (_priceBits >> startBit) & BITMASK_32;
                 address token = _tokens[j];
                 uint256 adjustedPrice = (price * PRICE_PRECISION) /
-                    _tokenPrecisions[j];
+                                _tokenPrecisions[j];
 
                 _setPrice(token, adjustedPrice, _feed);
                 unchecked {
                     ++j;
                 }
             }
+
+            emit SetPricesWithBits(_priceBits, _timestamp);
         }
     }
 
@@ -518,6 +584,8 @@ contract FastPriceFeed is Ac {
         );
     }
 
+    event SetLastUpdatedValues(uint256 _timestamp, uint256 block);
+
     function _setLastUpdatedValues(uint256 _timestamp) private returns (bool) {
         if (minBlockInterval > 0) {
             require(
@@ -543,6 +611,8 @@ contract FastPriceFeed is Ac {
 
         lastUpdatedAt = _timestamp;
         lastUpdatedBlock = block.number;
+
+        emit SetLastUpdatedValues(_timestamp, block.number);
 
         return true;
     }

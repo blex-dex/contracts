@@ -37,6 +37,8 @@ contract Price is Ac {
 
     constructor() Ac(msg.sender) {}
 
+    event SetAdjustment(address _token, bool _isAdditive, uint256 _adjustmentBps, uint256 time);
+
     function setAdjustment(
         address _token,
         bool _isAdditive,
@@ -44,7 +46,7 @@ contract Price is Ac {
     ) external onlyInitOr(MANAGER_ROLE) {
         require(
             lastAdjustmentTimings[_token] + MAX_ADJUSTMENT_INTERVAL <
-                block.timestamp,
+            block.timestamp,
             "PriceFeed: adjustment frequency exceeded"
         );
         require(
@@ -54,36 +56,57 @@ contract Price is Ac {
         isAdjustmentAdditive[_token] = _isAdditive;
         adjustmentBasisPoints[_token] = _adjustmentBps;
         lastAdjustmentTimings[_token] = block.timestamp;
+
+        emit SetAdjustment(_token, _isAdditive, _adjustmentBps, block.timestamp);
     }
+
+    event SetFastPriceEnabled(bool _isEnabled);
 
     function setFastPriceEnabled(
         bool _isEnabled
     ) external onlyInitOr(MANAGER_ROLE) {
         isFastPriceEnabled = _isEnabled;
+
+        emit SetFastPriceEnabled(_isEnabled);
     }
+
+    event SetGmxPriceFeed(address feed);
 
     function setGmxPriceFeed(address feed) external onlyInitOr(MANAGER_ROLE) {
         require(feed != address(0), "invalid feed");
         gmxPriceFeed = feed;
+
+        emit SetGmxPriceFeed(feed);
     }
+
+    event SetFastPriceFeed(address _feed);
 
     function setFastPriceFeed(address _feed) external onlyInitOr(MANAGER_ROLE) {
         require(_feed != address(0), "invalid feed");
         fastPriceFeed = _feed;
+        emit SetFastPriceFeed(_feed);
     }
+
+    event SetChainPriceFeed(address _feed);
 
     function setChainPriceFeed(
         address _feed
     ) external onlyInitOr(MANAGER_ROLE) {
         require(_feed != address(0), "invalid feed");
         chainPriceFeed = _feed;
+        emit SetChainPriceFeed(_feed);
     }
+
+    event SetIsGmxPriceEnabled(bool enable);
 
     function setIsGmxPriceEnabled(
         bool enable
     ) external onlyInitOr(MANAGER_ROLE) {
         isGmxPriceEnabled = enable;
+        emit SetIsGmxPriceEnabled(enable);
     }
+
+    event SetSpreadBasisPoints(address _token, uint256 _spreadBasisPoints);
 
     function setSpreadBasisPoints(
         address _token,
@@ -94,19 +117,29 @@ contract Price is Ac {
             "PriceFeed: invalid _spreadBasisPoints"
         );
         spreadBasisPoints[_token] = _spreadBasisPoints;
+
+        emit SetSpreadBasisPoints(_token, _spreadBasisPoints);
     }
+
+    event SetMaxStrictPriceDeviation(uint256 _maxStrictPriceDeviation);
 
     function setMaxStrictPriceDeviation(
         uint256 _maxStrictPriceDeviation
     ) external onlyInitOr(MANAGER_ROLE) {
         maxStrictPriceDeviation = _maxStrictPriceDeviation;
+
+        emit SetMaxStrictPriceDeviation(_maxStrictPriceDeviation);
     }
+
+    event SetStableTokens(address _token, bool _stable);
 
     function setStableTokens(
         address _token,
         bool _stable
     ) external onlyInitOr(MANAGER_ROLE) {
         strictStableTokens[_token] = _stable;
+
+        emit SetStableTokens(_token, _stable);
     }
 
     function getPrice(
@@ -202,10 +235,10 @@ contract Price is Ac {
         }
         return
             IFastPriceFeed(fastPriceFeed).getPrice(
-                _token,
-                _referencePrice,
-                _maximise
-            );
+            _token,
+            _referencePrice,
+            _maximise
+        );
     }
 
     function getGmxPrice(
@@ -214,10 +247,10 @@ contract Price is Ac {
     ) public view returns (uint256) {
         return
             IGmxPriceFeed(gmxPriceFeed).getPrice(
-                _token,
-                _maximise,
-                false,
-                false
-            );
+            _token,
+            _maximise,
+            false,
+            false
+        );
     }
 }

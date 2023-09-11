@@ -49,8 +49,12 @@ contract RewardDistributor is AcUpgradable {
      * @dev Updates the last distribution time to the current block timestamp.
      * Only the admin can call this function.
      */
+    event UpdateLastDistributionTime(uint256 time);
+
     function updateLastDistributionTime() external onlyRole(VAULT_MGR_ROLE) {
         lastDistributionTime = block.timestamp;
+
+        emit UpdateLastDistributionTime(block.timestamp);
     }
 
     /**

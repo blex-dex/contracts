@@ -338,10 +338,13 @@ contract MarketValid is Ac, IMarketValidFuncs {
         conf = _conf;
     }
 
+    event SetConfData(uint256 _data);
     function setConfData(uint256 _data) external onlyInitOr(MARKET_MGR_ROLE) {
         IMarketValid.Props memory _conf = conf;
         _conf.data = _data;
         conf = _conf;
+
+        emit SetConfData(_data);
     }
 
     function validateLiquidation(

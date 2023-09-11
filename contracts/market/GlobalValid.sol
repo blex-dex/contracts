@@ -15,6 +15,8 @@ contract GlobalValid is Ac, IGlobalValid {
 
     constructor() Ac(msg.sender) {}
 
+    event SetMaxSizeLimit(uint256 limit);
+
     function setMaxSizeLimit(
         uint256 limit
     ) external onlyInitOr(GLOBAL_MGR_ROLE) {
@@ -23,7 +25,11 @@ contract GlobalValid is Ac, IGlobalValid {
             "setMaxSize !Params"
         );
         maxSizeLimit = limit;
+
+        emit SetMaxSizeLimit(limit);
     }
+
+    event SetMaxNetSizeLimit(uint256 limit);
 
     function setMaxNetSizeLimit(
         uint256 limit
@@ -33,7 +39,11 @@ contract GlobalValid is Ac, IGlobalValid {
             "setMaxNetSize !Params"
         );
         maxNetSizeLimit = limit;
+
+        emit SetMaxNetSizeLimit(limit);
     }
+
+    event SetMaxUserNetSizeLimit(uint256 limit);
 
     function setMaxUserNetSizeLimit(
         uint256 limit
@@ -43,7 +53,11 @@ contract GlobalValid is Ac, IGlobalValid {
             "setMaxUserNetSize !Params "
         );
         maxUserNetSizeLimit = limit;
+
+        emit SetMaxUserNetSizeLimit(limit);
     }
+
+    event SetMaxMarketSizeLimit(address market, uint256 limit);
 
     function setMaxMarketSizeLimit(
         address market,
@@ -53,6 +67,8 @@ contract GlobalValid is Ac, IGlobalValid {
         require(limit > 0, "GlobalValid:!size limit");
 
         maxMarketSizeLimit[market] = limit;
+
+        emit SetMaxMarketSizeLimit(market, limit);
     }
 
     /**

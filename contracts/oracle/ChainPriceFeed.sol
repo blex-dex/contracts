@@ -13,10 +13,16 @@ contract ChainPriceFeed is Ac {
 
     constructor() Ac(msg.sender) {}
 
+    event SetSampleSpace(uint256 _times);
+
     function setSampleSpace(uint256 _times) external onlyManager {
         require(_times > 0, "PriceFeed: invalid _priceSampleSpace");
         sampleSpace = _times;
+
+        emit SetSampleSpace(_times);
     }
+
+    event SetPriceFeed(address _token, address _feed, uint256 _decimal);
 
     function setPriceFeed(
         address _token,
@@ -25,6 +31,8 @@ contract ChainPriceFeed is Ac {
     ) external onlyInitOr(MANAGER_ROLE) {
         priceFeeds[_token] = IPriceFeed(_feed);
         priceDecimals[_token] = _decimal;
+
+        emit SetPriceFeed(_token, _feed, _decimal);
     }
 
     function getLatestPrice(address token) public view returns (uint256) {

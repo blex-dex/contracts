@@ -169,13 +169,19 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         plugins.push(marketRouter);
     }
 
+    event AddPlugin(address _addr);
+
     function addPlugin(address _addr) external onlyInitOr(MANAGER_ROLE) {
         address[] memory _plugins = plugins;
         for (uint i = 0; i < _plugins.length; i++)
             if (_plugins[i] == _addr) revert("Market:same address");
 
         plugins.push(_addr);
+
+        emit AddPlugin(_addr);
     }
+
+    event RemovePlugin(address _addr);
 
     function removePlugin(address _addr) external onlyManager {
         for (uint i = 0; i < plugins.length; i++) {
@@ -184,11 +190,15 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
                 plugins[i] = plugins[plugins.length - 1];
                 // Remove the last element
                 plugins.pop();
+
+                emit RemovePlugin(_addr);
                 // Exit the loop
                 break;
             }
         }
     }
+
+    event SetOrderBooks(address obl, address obs);
 
     function setOrderBooks(
         address obl,
@@ -198,6 +208,8 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         require(obs != address(0), "obs zero");
         _setOrderBook(true, obl);
         _setOrderBook(false, obs);
+
+        emit SetOrderBooks(obl, obs);
     }
 
     function _setOrderBook(bool isLong, address ob) private {
@@ -219,6 +231,8 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         }
     }
 
+    event SetPositionBook(address pb);
+
     function setPositionBook(address pb) external onlyRole(MARKET_MGR_ROLE) {
         require(pb != address(0), "zero");
         require(
@@ -231,7 +245,11 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         );
         IMarketRouter(marketRouter).updatePositionBook(pb);
         positionBook = IPositionBook(pb);
+
+        emit SetPositionBook(pb);
     }
+
+    event SetMarketValid(address _newMv);
 
     function setMarketValid(address _newMv) external onlyRole(MARKET_MGR_ROLE) {
         require(_newMv != address(0), "zero");
@@ -241,8 +259,12 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
                 marketValid.conf().data
             );
         }
-        marketValid = IMarketValid(_newMv);
+        marketValid = _newMv;
+
+        emit SetMarketValid(_newMv);
     }
+
+    event SetPositionMgr(address _m, bool add);
 
     function setPositionMgr(
         address _m,
@@ -252,11 +274,17 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
 
         if (add) positionAddMgr = _m;
         else positionSubMgr = _m;
+
+        emit SetPositionMgr(_m, add);
     }
+
+    event SetOrderMgr(address _m);
 
     function setOrderMgr(address _m) external onlyRole(MARKET_MGR_ROLE) {
         require(_m != address(0), "zero");
         orderMgr = _m;
+
+        emit SetOrderMgr(_m);
     }
 
 

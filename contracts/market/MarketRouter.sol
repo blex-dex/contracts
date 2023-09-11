@@ -397,7 +397,7 @@ contract MarketRouter is
     //==============================
     // INIT & SETTER
     //==============================
-
+    event UpdatePositionBook(address newA);
     modifier onlyMarket() {
         require(markets.contains(msg.sender), "invalid market");
         _;
@@ -412,14 +412,20 @@ contract MarketRouter is
         positionBooks.remove(_positionBook);
         require(positionBooks.add(newA));
         pbs[_market] = newA;
+
+        emit UpdatePositionBook(newA);
     }
 
+    event SetIsEnableMarketConvertToOrder(bool _isEnableMarketConvertToOrder);
     function setIsEnableMarketConvertToOrder(
         bool _isEnableMarketConvertToOrder
     ) external onlyRole(MARKET_MGR_ROLE) {
         isEnableMarketConvertToOrder = _isEnableMarketConvertToOrder;
+
+        emit SetIsEnableMarketConvertToOrder(_isEnableMarketConvertToOrder);
     }
 
+    event AddMarket(address _market, address vault);
     function addMarket(
         address _market,
         address vault
@@ -430,14 +436,19 @@ contract MarketRouter is
         require(markets.add(_market));
         require(positionBooks.add(_positionBook));
         pbs[_market] = _positionBook;
+
+        emit AddMarket(_market, vault);
     }
 
+    event RemoveMarket(address _market);
     function removeMarket(address _market) external onlyRole(MARKET_MGR_ROLE) {
         address _positionBook = address(IMarket(_market).positionBook());
 
         markets.remove(_market);
         positionBooks.remove(_positionBook);
         pbs[_market] = address(0);
+
+        emit RemoveMarket(_market);
     }
 
     // ====================================

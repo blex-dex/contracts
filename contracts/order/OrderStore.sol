@@ -31,6 +31,8 @@ contract OrderStore is Ac {
      * @dev Called by `OrderBook`.Adds an order to the order store.
      * @param order The order to be added.
      */
+    event Add(Order.Props order);
+
     function add(Order.Props memory order) external onlyController {
         order.updateTime();
         bytes32 key = order.getKey();
@@ -38,16 +40,22 @@ contract OrderStore is Ac {
         orderKeys.add(key);
         orderNum[order.account] += 1;
         ordersByAccount[order.account].add(order.getKey());
+
+        emit Add(order);
     }
 
     /**
      * @dev Called by `OrderBook`.Sets an order in the order store.
      * @param order The order to be set.
      */
+    event Set(Order.Props order);
+
     function set(Order.Props memory order) external onlyController {
         bytes32 key = order.getKey();
         order.updateTime();
         orders[key] = order;
+
+        emit Set(order);
     }
 
     /**
@@ -63,6 +71,7 @@ contract OrderStore is Ac {
         }
     }
 
+    event Remove(Order.Props order);
     /**
      * @dev Internal function to remove an order from the order store.
      * @param key The key of the order to be removed.
@@ -74,6 +83,8 @@ contract OrderStore is Ac {
         delete orders[key];
         orderKeys.remove(key);
         ordersByAccount[_order.account].remove(key);
+
+        emit Remove(_order);
     }
 
     /**
@@ -93,6 +104,7 @@ contract OrderStore is Ac {
         }
     }
 
+    event DelByAccount(Order.Props[] orders);
     /**
      * @dev Called by `OrderBook`.Removes all orders associated with an account from the order store.
      * @param account The account address.
@@ -107,7 +119,7 @@ contract OrderStore is Ac {
 
         _orders = new Order.Props[](orderCount);
         uint256 readIdx;
-        for (uint256 i = 0; i < len && readIdx < orderCount; ) {
+        for (uint256 i = 0; i < len && readIdx < orderCount;) {
             bytes32 _orderKey = _ordersKeys[i];
             if (orderKeys.contains(_orderKey)) {
                 Order.Props memory _order = _remove(_orderKey);
@@ -123,6 +135,8 @@ contract OrderStore is Ac {
 
         // Delete the ordersByAccount mapping for the specified account
         delete ordersByAccount[account];
+
+        emit DelByAccount(_orders);
     }
 
     /**
@@ -139,7 +153,7 @@ contract OrderStore is Ac {
         _orders = new Order.Props[](orderCount);
         uint256 readIdx;
         uint256 len = _ordersKeys.length;
-        for (uint256 i = 0; i < len && readIdx < orderCount; ) {
+        for (uint256 i = 0; i < len && readIdx < orderCount;) {
             bytes32 _orderKey = _ordersKeys[i];
             if (orderKeys.contains(_orderKey)) {
                 Order.Props memory _order = orders[_orderKey];

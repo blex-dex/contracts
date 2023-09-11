@@ -137,6 +137,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
 
     event LogUpdatePool(uint256 supply, uint256 cumulativeRewardPerToken);
 
+    event UpdateRewardsByAccount(address _account, uint256 accountReward, uint256 _cumulativeRewardPerToken, uint256 averageStakedAmount);
     /**
      * @dev This function is used to update rewards.
      * @notice function can only be called without reentry.
@@ -176,19 +177,23 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
                 _account
             ] = _cumulativeRewardPerToken;
 
-            if (_claimableReward > 0 && stakedAmounts(_account) > 0) {
+            if (_claimableReward > 0 && stakedAmount > 0) {
                 uint256 nextCumulativeReward = lpEarnedRewards[_account] +
                     accountReward;
 
-                averageStakedAmounts[_account] = averageStakedAmounts[_account]
+                // reuse supply as averageStakedAmount to avoid `stack too deep`
+                supply = averageStakedAmounts[_account]
                     .mul(lpEarnedRewards[_account])
                     .div(nextCumulativeReward)
                     .add(
-                        stakedAmount.mul(accountReward).div(
-                            nextCumulativeReward
-                        )
-                    );
+                    stakedAmount.mul(accountReward).div(
+                        nextCumulativeReward
+                    )
+                );
+                averageStakedAmounts[_account] = supply;
                 lpEarnedRewards[_account] = nextCumulativeReward;
+
+                emit UpdateRewardsByAccount(_account, accountReward, _cumulativeRewardPerToken, supply);
             }
         }
     }

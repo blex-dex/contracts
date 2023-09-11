@@ -400,43 +400,12 @@ contract FastPriceFeed is Ac {
         if (shouldUpdate) {
             address _feed = chainPriceFeed;
 
-            uint256 tokenCount = tokens.length;
-            for (uint256 j; j < 8; ) {
-                if (j >= tokenCount) return;
-
-                uint256 startBit = 32 * j;
-                uint256 price = (_priceBits >> startBit) & BITMASK_32;
-
-                address token = tokens[j];
-                uint256 tokenPrecision = tokenPrecisions[j];
-                uint256 adjustedPrice = (price * PRICE_PRECISION) /
-                    tokenPrecision;
-
-                _setPrice(token, adjustedPrice, _feed);
-                unchecked {
-                    ++j;
-                }
-            }
-        }
-    }
-
-    function _setPricesWithBits_2(
-        uint256 _priceBits,
-        uint256 _timestamp
-    ) private {
-        bool shouldUpdate = _setLastUpdatedValues(_timestamp);
-
-        if (shouldUpdate) {
-            address _feed = chainPriceFeed;
-
             address[] memory _tokens = tokens;
             uint256[] memory _tokenPrecisions = tokenPrecisions;
             uint256 token_length = _tokens.length;
 
             for (uint256 j; j < 8; ) {
-                if (j >= token_length) {
-                    return;
-                }
+                if (j >= token_length) return;
 
                 uint256 startBit;
                 unchecked {
@@ -449,7 +418,7 @@ contract FastPriceFeed is Ac {
 
                 _setPrice(token, adjustedPrice, _feed);
                 unchecked {
-                    j++;
+                    ++j;
                 }
             }
         }

@@ -96,12 +96,6 @@ contract Price is Ac {
         spreadBasisPoints[_token] = _spreadBasisPoints;
     }
 
-    function setSpreadThresholdBasisPoints(
-        uint256 _spreadThresholdBasisPoints
-    ) external onlyInitOr(MANAGER_ROLE) {
-        spreadThresholdBasisPoints = _spreadThresholdBasisPoints;
-    }
-
     function setMaxStrictPriceDeviation(
         uint256 _maxStrictPriceDeviation
     ) external onlyInitOr(MANAGER_ROLE) {

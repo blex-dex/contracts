@@ -400,11 +400,9 @@ contract FastPriceFeed is Ac {
         if (shouldUpdate) {
             address _feed = chainPriceFeed;
 
-            for (uint256 j = 0; j < 8; j++) {
-                uint256 index = j;
-                if (index >= tokens.length) {
-                    return;
-                }
+            uint256 tokenCount = tokens.length;
+            for (uint256 j; j < 8; ) {
+                if (j >= tokenCount) return;
 
                 uint256 startBit = 32 * j;
                 uint256 price = (_priceBits >> startBit) & BITMASK_32;
@@ -415,6 +413,9 @@ contract FastPriceFeed is Ac {
                     tokenPrecision;
 
                 _setPrice(token, adjustedPrice, _feed);
+                unchecked {
+                    ++j;
+                }
             }
         }
     }

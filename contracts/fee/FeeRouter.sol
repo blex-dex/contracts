@@ -88,12 +88,16 @@ contract FeeRouter is Ac, IFeeRouter {
         address market,
         uint256[] memory rates
     ) external onlyInitOr(MARKET_MGR_ROLE) {
-        require(rates.length > 0, "invalid params");
+        require(
+            rates.length > 0 && rates.length <= uint(type(FeeType).max) + 1,
+            "invalid params"
+        );
 
         for (uint8 i = 0; i < rates.length; i++) {
-            uint256 _old = rates[i];
-            feeAndRates[market][i] = rates[i];
-            emit UpdateFeeAndRates(market, i, _old, rates[i]);
+            uint256 old = feeAndRates[market][i];
+            uint256 rate = rates[i];
+            feeAndRates[market][i] = rate;
+            emit UpdateFeeAndRates(market, i, old, rate);
         }
     }
 
@@ -299,6 +303,7 @@ contract FeeRouter is Ac, IFeeRouter {
             return 0;
         }
 
+        require(kind <= uint(type(FeeType).max), "invalid FeeType");
         uint256 _point = feeAndRates[market][kind];
         if (_point == 0) {
             _point = 100000;

@@ -39,6 +39,17 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
      * @param addrs new contracts address list
      */
     function setContracts(address[] memory addrs) external {
+        require(addrs[0] != address(0), "!0 zero address");
+        require(addrs[1] != address(0), "!1 zero address");
+        require(addrs[2] != address(0), "!2 zero address");
+        require(addrs[3] != address(0), "!3 zero address");
+        require(addrs[5] != address(0), "!5 zero address");
+        require(addrs[6] != address(0), "!6 zero address");
+        require(addrs[7] != address(0), "!7 zero address");
+        require(addrs[8] != address(0), "!8 zero address");
+        require(addrs[9] != address(0), "!9 zero address");
+        require(addrs[10] != address(0), "!10 zero address");
+
         positionBook = IPositionBook(addrs[0]);
         orderBookLong = IOrderBook(addrs[1]);
         orderBookShort = IOrderBook(addrs[2]);

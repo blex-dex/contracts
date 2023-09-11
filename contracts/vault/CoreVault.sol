@@ -60,6 +60,11 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         address _feeRouter,
         address _vaultReward
     ) external initializer {
+        require(_asset != address(0), "!zero address");
+        require(_vaultRouter != address(0), "!zero address");
+        require(_feeRouter != address(0), "!zero address");
+        require(_vaultReward != address(0), "!zero address");
+
         ERC20._initialize(_name, _symbol);
         ERC4626._initialize(IERC20(_asset));
         AcUpgradable._initialize(msg.sender);
@@ -76,6 +81,8 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
     }
 
     function setVaultRouter(address _vaultRouter) external override onlyAdmin {
+        require(_vaultRouter != address(0), "!zero address");
+
         if (address(vaultRouter) != address(0))
             _revokeRole(ROLE_CONTROLLER, address(vaultRouter)); //fix: CVB-05 | Old vault router is not removed from `ROLE_CONTROLLER` when setting new vault router
         vaultRouter = IVaultRouter(_vaultRouter);

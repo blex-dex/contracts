@@ -64,6 +64,8 @@ contract FeeVault is Ac {
         int256 nextShortRate,
         uint256 timestamp
     ) external onlyController {
+        require(market != address(0), "!zero address");
+
         cumulativeFundingRates[market][true] += nextLongRate;
         fundingRates[market][true] = longRate;
 

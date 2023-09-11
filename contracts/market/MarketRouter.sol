@@ -96,6 +96,10 @@ contract MarketRouter is
         address _gv,
         address vr
     ) external initializer {
+        require(_f != address(0), "!zero address");
+        require(_gv != address(0), "!zero address");
+        require(vr != address(0), "!zero address");
+
         AcUpgradable._initialize(_f);
         gv = _gv;
         vaultRouter = vr;

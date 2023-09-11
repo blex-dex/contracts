@@ -59,6 +59,8 @@ contract AcUpgradable is AccessControl, Ownable, Initializable {
     }
 
     function transferAdmin(address to) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(to != address(0), "!zero address");
+
         _setupRole(DEFAULT_ADMIN_ROLE, to);
         _transferOwnership(to);
         _revokeRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -93,6 +95,8 @@ contract AcUpgradable is AccessControl, Ownable, Initializable {
         address _account
     ) external onlyRole(MARKET_MGR_ROLE) {
         require(supportMarketRoleGrantControllerRole());
+        require(_account != address(0), "!zero address");
+
         _grantRole(ROLE_CONTROLLER, _account);
     }
 

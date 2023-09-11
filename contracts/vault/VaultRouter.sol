@@ -1,5 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
+
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -37,6 +38,8 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
     }
 
     function setIsFreeze(bool f, uint256 freezeType) external onlyFreezer {
+        require(freezeType < 3, "!freezeType");
+
         if (freezeType == 0) coreVault.setIsFreeze(f);
         else if (freezeType == 1) isFreezeTransfer = f;
         else if (freezeType == 2) isFreezeAccouting = f;

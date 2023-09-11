@@ -91,8 +91,6 @@ contract FastPriceFeed is Ac {
         minBlockInterval = _minBlockInterval;
         maxDeviationBasisPoints = _maxDeviationBasisPoints;
 
-        // Grant the minter role to a specified account
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
     function setPriceFeed(address _feed) external onlyInitOr(MANAGER_ROLE) {

@@ -185,7 +185,7 @@ contract FundFee is Ownable, Ac {
             market,
             isLong
         );
-        int256 _divisor = int256(FEE_RATE_PRECISION);
+        int256 _divisor = FEE_RATE_PRECISION.toInt256();
 
         return _getFundingFee(size, entryFundingRate, _cumRates) / _divisor;
     }
@@ -298,7 +298,7 @@ contract FundFee is Ownable, Ac {
             return 0;
         }
         // Calculate the funding fee by multiplying the position size with the rate.
-        return int256(size) * _rate;
+        return size.toInt256() * _rate;
     }
 
     /**
@@ -351,9 +351,9 @@ contract FundFee is Ownable, Ac {
         }
 
         uint256 _skipTimes = _getSkipTimes();
-        int256 _intervals = int256(
+        int256 _intervals = (
             (_getTimeStamp() - _lastTime - _skipTimes) / MIN_FUNDING_INTERVAL
-        );
+        ).toInt256();
 
         // Calculate the next long and short rates based on the intervals.
         int256 _longRates = _longRate * _intervals;

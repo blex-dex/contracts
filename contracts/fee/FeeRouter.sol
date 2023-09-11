@@ -234,19 +234,19 @@ contract FeeRouter is Ac, IFeeRouter {
 
         // open position
         if (params.isOpen) {
-            fees[uint8(FeeType.OpenFee)] = int256(
+            fees[uint8(FeeType.OpenFee)] = (
                 _getFee(_market, params._sizeDelta, uint8(FeeType.OpenFee))
-            );
+            ).toInt256();
         } else {
             // close position
-            fees[uint8(FeeType.CloseFee)] = int256(
+            fees[uint8(FeeType.CloseFee)] = (
                 _getFee(_market, params._sizeDelta, uint8(FeeType.CloseFee))
-            );
+            ).toInt256();
 
             // liquidate position
             if (params.liqState == 1) {
                 uint256 _fee = feeAndRates[_market][uint8(FeeType.LiqFee)];
-                fees[uint8(FeeType.LiqFee)] = int256(_fee);
+                fees[uint8(FeeType.LiqFee)] = _fee.toInt256();
             }
         }
         if (params.execNum > 0) {
@@ -254,7 +254,7 @@ contract FeeRouter is Ac, IFeeRouter {
             uint256 _fee = feeAndRates[_market][uint8(FeeType.ExecFee)];
             _fee = _fee * params.execNum;
 
-            fees[uint8(FeeType.ExecFee)] = int256(_fee);
+            fees[uint8(FeeType.ExecFee)] = _fee.toInt256();
         }
         return fees;
     }

@@ -49,6 +49,7 @@ library Position {
             ? position.averagePrice - price
             : price - position.averagePrice;
         uint256 _pnl = (position.size * _priceDelta) / position.averagePrice;
+        require(_pnl <= uint256(type(int256).max), "SafeCast: value doesn't fit in an int256");
 
         bool _hasProfit;
 

@@ -59,7 +59,6 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
         address market,
         address vault
     ) external onlyRole(MULTI_SIGN_ROLE) {
-        vault = address(coreVault);
         require(markets.add(market));
         marketVaults[market] = ICoreVault(vault);
         vaultMarkets[ICoreVault(vault)] = market;

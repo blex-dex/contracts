@@ -76,7 +76,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         feeRouter = IFeeRouter(_feeRouter);
 
         cooldownDuration = 15 minutes;
-        sellLpFee = (1 * FEE_RATE_PRECISION) / 100;
+        sellLpFee = FEE_RATE_PRECISION / 100;
         vaultReward = _vaultReward;
     }
 

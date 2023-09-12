@@ -286,7 +286,7 @@ contract MarketValid is Ac, IMarketValidFuncs {
     }
 
     function validSlippagePrice(
-        MarketDataTypes.UpdatePositionInputs memory _inputs 
+        MarketDataTypes.UpdatePositionInputs memory _inputs
     ) public view override {
         if (_inputs._slippage > conf.getMaxSlippage()) {
             _inputs._slippage = conf.getMaxSlippage();
@@ -337,7 +337,6 @@ contract MarketValid is Ac, IMarketValidFuncs {
         _conf.setMinCollateral(_minCollateral);
         _conf.setAllowOpen(_allowOpen);
         _conf.setAllowClose(_allowClose);
-        //_conf.setDecimals(_tokenDigits);
         _conf.setDecimals(uint256(TransferHelper.getUSDDecimals()));
         conf = _conf;
     }

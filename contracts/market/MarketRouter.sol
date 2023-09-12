@@ -244,7 +244,6 @@ contract MarketRouter is
         Order.Props memory _order;
         if (false == _inputs.isOpen) {
             _order.setIsKeepLev(_inputs.isKeepLev());
-            // _vars.collateralDelta = _inputs.collateralDelta;
         } else {
             _vars.setPay(_inputs.collateralDelta);
             _order.setTakeprofit(_inputs.tp());

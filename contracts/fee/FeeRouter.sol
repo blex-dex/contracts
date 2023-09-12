@@ -146,7 +146,6 @@ contract FeeRouter is Ac, IFeeRouter {
         }
 
         IERC20(token).safeTransferFrom(msg.sender, feeVault, _amount);
-        // IFeeVault(feeVault).increaseFees(msg.sender, account, fees);
 
         emit UpdateFee(account, msg.sender, fees, _amount);
     }

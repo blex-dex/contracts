@@ -259,11 +259,6 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         return IMarketValid(marketValid);
     }
 
-    /* function setPriceFeed(address _a) external onlyRole(MARKET_MGR_ROLE) {
-        require(_a != address(0));
-        priceFeed = _a;
-    } */
-
     function getPrice(bool _isMax) private view returns (uint256) {
         IPrice _p = IPrice(priceFeed);
         return _p.getPrice(indexToken, _isMax);

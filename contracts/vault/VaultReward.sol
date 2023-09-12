@@ -119,7 +119,6 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
     function _claimForAccount(
         address _account
     ) private returns (uint256 tokenAmount) {
-        //require(coreVault.balanceOf(_account) > 0, "youn't LP");
         if (coreVault.balanceOf(_account) <= 0) return 0;
         updateRewardsByAccount(_account);
         tokenAmount = claimableReward[_account];

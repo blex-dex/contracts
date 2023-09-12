@@ -284,7 +284,6 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
                     collateralToken,
                     _fees
                 );
-                //TransferHelper.transferOut(collateralToken, feeVault, execFee);
             }
         }
 

@@ -19,8 +19,6 @@ contract RewardDistributor is AcUpgradable {
     event Distribute(uint256 amount);
     event TokensPerIntervalChange(uint256 amount);
 
-    // constructor() Ac(msg.sender) {}
-
     function initialize(
         address _rewardToken,
         address _rewardTracker
@@ -64,12 +62,6 @@ contract RewardDistributor is AcUpgradable {
     function setTokensPerInterval(
         uint256 _amount
     ) external onlyRole(VAULT_MGR_ROLE) {
-        /*
-        require(
-            lastDistributionTime != 0,
-            "RewardDistributor: invalid lastDistributionTime"
-        );
-        */
         if (lastDistributionTime == 0) lastDistributionTime = block.timestamp;
         IVaultReward(rewardTracker).updateRewards();
         tokensPerInterval = _amount;

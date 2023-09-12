@@ -6,7 +6,7 @@ import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import "../ac/Ac.sol";
 import {IFeeVault} from "./interfaces/IFeeVault.sol";
 
-contract FundFee is Ownable, Ac {
+contract FundFee is Ac {
     using SafeCast for uint256;
 
     address public blankSlot;

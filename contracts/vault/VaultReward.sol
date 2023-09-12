@@ -11,7 +11,6 @@ import {ICoreVault, IERC4626} from "./interfaces/ICoreVault.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {AcUpgradable} from "../ac/AcUpgradable.sol";
-import "hardhat/console.sol";
 
 contract VaultReward is AcUpgradable, ReentrancyGuard {
     using SafeMath for uint256;

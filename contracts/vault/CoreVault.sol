@@ -11,7 +11,6 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import {ICoreVault, IERC4626} from "./interfaces/ICoreVault.sol";
 import {IVaultRouter} from "./interfaces/IVaultRouter.sol";
-import "hardhat/console.sol";
 import {Precision, TransferHelper} from "../utils/TransferHelper.sol";
 import {AcUpgradable} from "../ac/AcUpgradable.sol";
 import {IFeeRouter} from "../fee/interfaces/IFeeRouter.sol";
@@ -275,8 +274,6 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         uint256 s_assets = super._convertToAssets(shares, Math.Rounding.Down);
         bool exceeds_assets = s_assets > assets;
 
-        console.log("assets", assets);
-        console.log("s_assets", s_assets);
 
         uint256 _assets = exceeds_assets ? assets : s_assets;
 

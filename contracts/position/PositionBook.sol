@@ -22,8 +22,6 @@ contract PositionBook is Ac {
     constructor(address factoty) Ac(factoty) {
         longStore = new PositionStore(factoty, true);
         shortStore = new PositionStore(factoty, false);
-
-        _grantRole(MANAGER_ROLE, msg.sender);
     }
 
     function initialize(address marketAddr) external initializer {

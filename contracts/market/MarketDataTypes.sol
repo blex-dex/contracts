@@ -174,7 +174,6 @@ library MarketDataTypes {
                 //close: order to order id
                 if (_params._order.extra2 > 0) return false;
             }
-        } else {
         }
         return true;
     }

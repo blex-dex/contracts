@@ -173,10 +173,9 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         plugins.push(_addr);
     }
 
-    function removePlugin(address _addr) external onlyManager {
-        address[] memory _plugins = plugins;
-        for (uint i = 0; i < _plugins.length; i++)
-            if (_plugins[i] == _addr) {
+    function removePlugin(address _addr) external onlyAdmin {
+        for (uint i = 0; i < plugins.length; i++) {
+            if (plugins[i] == _addr) {
                 // Replace the element to remove with the last element
                 plugins[i] = _plugins[_plugins.length - 1];
                 // Remove the last element
@@ -184,6 +183,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
                 // Exit the loop
                 break;
             }
+        }
     }
 
     function setOrderBooks(

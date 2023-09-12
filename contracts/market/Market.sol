@@ -226,7 +226,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
             positionBook.shortStore() == IPositionBook(pb).shortStore(),
             "invalid store"
         );
-        IMarketRouter(marketRouter).updatePositionBook(pb); 
+        IMarketRouter(marketRouter).updatePositionBook(pb);
         positionBook = IPositionBook(pb);
     }
 
@@ -303,12 +303,6 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
                     _errorMessage = defaultRevertMsg;
             }
             if (raise) revert(_errorMessage);
-        }
-    }
-
-    function _validSender(address _account) private view {
-        if (_account != msg.sender) {
-            require(hasRole(ROLE_CONTROLLER, msg.sender), "invalid controller");
         }
     }
 }

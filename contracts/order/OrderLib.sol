@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.17;
 pragma experimental ABIEncoderV2;
-import "../order/OrderStruct.sol";
 
 library OrderLib {
     function getKey(

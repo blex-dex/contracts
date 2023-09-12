@@ -27,7 +27,7 @@ library MarketConfigStruct {
     uint256 constant ALLOW_OPEN_BIT_POSITION = 3 * 4 * 6 + 4 * 8 + 4;
     uint256 constant DECIMALS_BIT_POSITION = 3 * 4 * 6 + 4 * 8 + 4 + 4;
     uint256 constant DECREASE_NUM_LIMIT_BIT_POSITION = 120;
-    uint256 constant VALID_DECREASE_BIT_POSITION = 120 + 4;
+    uint256 constant VALID_DECREASE_BIT_POSITION = 120 + 4 * 3;
 
     uint256 constant DENOMINATOR_SLIPPAGE = 10 ** 4;
 

@@ -6,7 +6,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {IVaultReward} from "./interfaces/IVaultReward.sol";
-import "../ac/AcUpgradable.sol";
+import {AcUpgradable} from "../ac/AcUpgradable.sol";
 
 contract RewardDistributor is AcUpgradable {
     using SafeERC20 for IERC20;

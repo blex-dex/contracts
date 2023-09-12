@@ -166,25 +166,24 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     }
 
     function addPlugin(address _addr) external onlyInitOr(MANAGER_ROLE) {
-        for (uint i = 0; i < plugins.length; i++) {
-            if (plugins[i] == _addr) {
-                revert("Market:same address");
-            }
-        }
+        address[] memory _plugins = plugins;
+        for (uint i = 0; i < _plugins.length; i++)
+            if (_plugins[i] == _addr) revert("Market:same address");
+
         plugins.push(_addr);
     }
 
     function removePlugin(address _addr) external onlyAdmin {
-        for (uint i = 0; i < plugins.length; i++) {
-            if (plugins[i] == _addr) {
+        address[] memory _plugins = plugins;
+        for (uint i = 0; i < _plugins.length; i++)
+            if (_plugins[i] == _addr) {
                 // Replace the element to remove with the last element
-                plugins[i] = plugins[plugins.length - 1];
+                plugins[i] = _plugins[_plugins.length - 1];
                 // Remove the last element
                 plugins.pop();
                 // Exit the loop
                 break;
             }
-        }
     }
 
     function setOrderBooks(

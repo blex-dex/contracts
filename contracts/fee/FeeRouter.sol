@@ -315,15 +315,9 @@ contract FeeRouter is Ac, IFeeRouter {
     }
 
     function _isMarket(address _market) private view returns (bool) {
-        IMarketFactory.Outs[] memory _markets = IMarketFactory(factory)
-            .getMarkets();
-        uint _cnt = _markets.length;
-
-        for (uint i = 0; i < _cnt; i++) {
-            if (_market == _markets[i].addr) {
-                return (_markets[i].allowOpen || _markets[i].allowClose);
-            }
-        }
-        return false;
+        IMarketFactory.Props memory _marketProps = IMarketFactory(factory)
+            .getMarket(_market);
+        return (_marketProps.inputs._allowOpen ||
+            _marketProps.inputs._allowClose);
     }
 }

@@ -10,6 +10,11 @@ contract MockMarketFactory is IMarketFactory {
 
     Props[] public markets;
 
+
+    function getMarket(
+        address _marketAddr
+    ) external view returns (Props memory) {}
+
     function getMarkets() external view returns (Outs[] memory _outs) {
         Props[] memory _markets = markets;
         uint len = _markets.length;

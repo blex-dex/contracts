@@ -217,7 +217,6 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         feeRouter.collectFees(account, _asset, fees);
     }
 
-
     /**
      * @dev Internal function to handle the deposit of assets.
      * @param caller The address of the caller.

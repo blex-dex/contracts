@@ -37,5 +37,8 @@ interface IMarketFactory {
     }
 
     function getMarkets() external view returns (Outs[] memory _outs);
-    
+
+    function getMarket(
+        address _marketAddr
+    ) external view returns (Props memory);
 }

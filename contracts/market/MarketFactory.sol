@@ -12,10 +12,11 @@ import {MarketConfigStruct} from "./MarketConfigStruct.sol";
 import {IMarketRouter} from "./interfaces/IMarketRouter.sol";
 import "./../position/interfaces/IPositionBook.sol";
 
-contract MarketFactory is Ac, IMarketFactory {
+contract MarketFactory is Ac {
     using MarketConfigStruct for IMarketValid.Props;
 
-    Props[] public markets;
+    IMarketFactory.Props[] public markets;
+    mapping(address => uint256) public marketIndexes;
 
     event Create(
         address indexed market,
@@ -30,18 +31,22 @@ contract MarketFactory is Ac, IMarketFactory {
         return markets.length;
     }
 
-    function getMarkets() external view override returns (Outs[] memory _outs) {
-        Props[] memory _markets = markets;
+    function getMarkets()
+        external
+        view
+        returns (IMarketFactory.Outs[] memory _outs)
+    {
+        IMarketFactory.Props[] memory _markets = markets;
         uint len = _markets.length;
-        _outs = new Outs[](len);
+        _outs = new IMarketFactory.Outs[](len);
         for (uint i = 0; i < len; i++) {
-            Props memory m = _markets[i];
+            IMarketFactory.Props memory m = _markets[i];
             address _newMarketAddr = m.addr;
             IMarketValid.Props memory _conf = IMarketValid(
                 IMarket(_newMarketAddr).marketValid()
             ).conf();
 
-            _outs[i] = Outs({
+            _outs[i] = IMarketFactory.Outs({
                 name: m.name,
                 addr: m.addr,
                 minPay: _conf.getMinPay(),
@@ -53,15 +58,9 @@ contract MarketFactory is Ac, IMarketFactory {
 
     function getMarket(
         address _marketAddr
-    ) external view returns (Props memory) {
-        Props[] memory _markets = markets;
-        for (uint i = 0; i < _markets.length; i++) {
-            Props memory _market = _markets[i];
-            if (_market.addr == _marketAddr) {
-                return _markets[i];
-            }
-        }
-        revert("market not found");
+    ) external view returns (IMarketFactory.Props memory) {
+        uint256 index = marketIndexes[_marketAddr] - 1;
+        return markets[index];
     }
 
     function remove(address _addr) external onlyRole(MARKET_MGR_ROLE) {
@@ -82,7 +81,7 @@ contract MarketFactory is Ac, IMarketFactory {
     }
 
     function create(
-        MarketFactory.CreateInputs memory _inputs
+        IMarketFactory.CreateInputs memory _inputs
     ) external onlyInitOr(MARKET_MGR_ROLE) {
         IMarketValid marketValid = IMarketValid(
             _inputs.addrs[MarketAddressIndex.ADDR_MV]
@@ -129,7 +128,7 @@ contract MarketFactory is Ac, IMarketFactory {
             _inputs.addrs,
             _inputs._name
         );
-        Props memory _prop;
+        IMarketFactory.Props memory _prop;
         _prop.name = _inputs._name;
         _prop.addr = _inputs._marketAddress;
         markets.push(_prop);
@@ -174,5 +173,6 @@ contract MarketFactory is Ac, IMarketFactory {
             ROLE_CONTROLLER,
             _inputs._marketAddress
         );
+        marketIndexes[_inputs._marketAddress] = markets.length;
     }
 }

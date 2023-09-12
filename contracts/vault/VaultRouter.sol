@@ -127,7 +127,6 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
     function borrowFromVault(uint256 amount) external onlyMarket {
         require(false == isFreezeAccouting, "VaultRouter:freeze");
 
-        require(markets.contains(msg.sender), "VaultRouter:!market");
         updateFundsUsed(msg.sender, amount, true);
     }
 

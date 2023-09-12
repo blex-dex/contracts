@@ -85,6 +85,8 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
 
         if (address(vaultRouter) != address(0))
             _revokeRole(ROLE_CONTROLLER, address(vaultRouter)); //fix: CVB-05 | Old vault router is not removed from `ROLE_CONTROLLER` when setting new vault router
+            _revokeRole(FREEZER_ROLE, address(vaultRouter)); //fix: CVB-05 | Old vault router is not removed from `ROLE_CONTROLLER` when setting new vault router
+        }
         vaultRouter = IVaultRouter(_vaultRouter);
         _grantRole(ROLE_CONTROLLER, _vaultRouter);
         _grantRole(FREEZER_ROLE, _vaultRouter);

@@ -6,7 +6,6 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {IVaultReward} from "./interfaces/IVaultReward.sol";
-import "../ac/Ac.sol";
 
 contract RewardDistributor is AcUpgradable {
     using SafeERC20 for IERC20;
@@ -64,7 +63,7 @@ contract RewardDistributor is AcUpgradable {
     function setTokensPerInterval(
         uint256 _amount
     ) external onlyRole(VAULT_MGR_ROLE) {
-        /* 
+        /*
         require(
             lastDistributionTime != 0,
             "RewardDistributor: invalid lastDistributionTime"

@@ -187,9 +187,8 @@ contract Price is Ac {
         address _token,
         bool _maximise
     ) public view returns (uint256) {
-        if (chainPriceFeed == address(0)) {
-            return 0;
-        }
+        require(chainPriceFeed != address(0), "chainPriceFeed zero");
+
         return IChainPriceFeed(chainPriceFeed).getPrice(_token, _maximise);
     }
 

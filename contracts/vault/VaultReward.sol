@@ -72,7 +72,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
             address(this),
             amount
         );
-        IERC20(_token).approve(address(coreVault), amount);
+        IERC20(_token).approve(address(vault), amount);
         if ((sharesOut = vault.deposit(amount, to)) < minSharesOut)
             revert("MinSharesError");
     }
@@ -181,7 +181,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
             if (_claimableReward > 0 && stakedAmounts(_account) > 0) {
                 uint256 nextCumulativeReward = lpEarnedRewards[_account] +
                     accountReward;
-                
+
                 averageStakedAmounts[_account] = averageStakedAmounts[_account]
                     .mul(lpEarnedRewards[_account])
                     .div(nextCumulativeReward)
@@ -190,7 +190,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
                             nextCumulativeReward
                         )
                     );
-                lpEarnedRewards[_account] = nextCumulativeReward; 
+                lpEarnedRewards[_account] = nextCumulativeReward;
             }
         }
     }

@@ -43,6 +43,7 @@ contract PositionStore is Ac {
         positionBook = msg.sender;
         isLong = islong;
         _grantRole(ROLE_CONTROLLER, msg.sender);
+        _disableInitializers();
     }
 
     function setPositionBook(address pb) external onlyAdmin {

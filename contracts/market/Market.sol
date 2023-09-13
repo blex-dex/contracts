@@ -173,7 +173,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         plugins.push(_addr);
     }
 
-    function removePlugin(address _addr) external onlyAdmin {
+    function removePlugin(address _addr) external onlyManager {
         for (uint i = 0; i < plugins.length; i++) {
             if (plugins[i] == _addr) {
                 // Replace the element to remove with the last element

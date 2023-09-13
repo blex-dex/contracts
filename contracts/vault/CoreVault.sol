@@ -79,7 +79,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         vaultReward = _vaultReward;
     }
 
-    function setVaultRouter(address _vaultRouter) external override onlyAdmin {
+    function setVaultRouter(address _vaultRouter) external override onlyManager {
         require(_vaultRouter != address(0), "!zero address");
 
         if (address(vaultRouter) != address(0)) {

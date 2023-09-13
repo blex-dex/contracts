@@ -79,7 +79,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         vaultReward = _vaultReward;
     }
 
-    function setVaultRouter(address _vaultRouter) external override onlyAdmin {
+    function setVaultRouter(address _vaultRouter) external override onlyManager {
         require(_vaultRouter != address(0), "!zero address");
 
         if (address(vaultRouter) != address(0)) {
@@ -91,12 +91,12 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         _grantRole(FREEZER_ROLE, _vaultRouter);
     }
 
-    function setLpFee(bool isBuy, uint256 fee) public override onlyAdmin {
+    function setLpFee(bool isBuy, uint256 fee) public override onlyManager {
         isBuy ? buyLpFee = fee : sellLpFee = fee;
         emit LPFeeUpdated(isBuy, fee);
     }
 
-    function setCooldownDuration(uint256 _duration) public override onlyAdmin {
+    function setCooldownDuration(uint256 _duration) public override onlyManager {
         cooldownDuration = _duration;
         emit CoolDownDurationUpdated(_duration);
     }

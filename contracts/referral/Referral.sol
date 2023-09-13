@@ -70,7 +70,7 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
         uint256 _tierId,
         uint256 _totalRebate,
         uint256 _discountShare
-    ) external onlyAdmin {
+    ) external onlyManager {
         require(_totalRebate <= BASIS_POINTS, "Referral: invalid totalRebate");
         require(
             _discountShare <= BASIS_POINTS,
@@ -87,7 +87,7 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
     function setReferrerTier(
         address _referrer,
         uint256 _tierId
-    ) external onlyAdmin {
+    ) external onlyManager {
         referrerTiers[_referrer] = _tierId;
         emit SetReferrerTier(_referrer, _tierId);
     }
@@ -95,7 +95,7 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
     function setReferrerDiscountShare(
         address _account,
         uint256 _discountShare
-    ) external onlyAdmin {
+    ) external onlyManager {
         require(
             _discountShare <= BASIS_POINTS,
             "Referral: invalid discountShare"
@@ -108,7 +108,7 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
     function setTraderReferralCode(
         address _account,
         bytes32 _code
-    ) external onlyAdmin {
+    ) external onlyManager {
         _setTraderReferralCode(_account, _code);
     }
 
@@ -149,7 +149,7 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
     function govSetCodeOwner(
         bytes32 _code,
         address _newAccount
-    ) external onlyAdmin {
+    ) external onlyManager {
         require(_code != bytes32(0), "Referral: invalid _code");
 
         codeOwners[_code] = _newAccount;

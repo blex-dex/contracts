@@ -13,7 +13,7 @@ contract ChainPriceFeed is Ac {
 
     constructor() Ac(msg.sender) {}
 
-    function setSampleSpace(uint256 _times) external onlyAdmin {
+    function setSampleSpace(uint256 _times) external onlyManager {
         require(_times > 0, "PriceFeed: invalid _priceSampleSpace");
         sampleSpace = _times;
     }

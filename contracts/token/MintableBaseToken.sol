@@ -22,7 +22,7 @@ contract MintableBaseToken is BaseToken, IMintable {
     function setMinter(
         address _minter,
         bool _isActive
-    ) external override onlyAdmin {
+    ) external override onlyManager {
         isMinter[_minter] = _isActive;
     }
 

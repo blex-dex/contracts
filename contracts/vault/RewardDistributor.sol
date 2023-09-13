@@ -43,7 +43,7 @@ contract RewardDistributor is AcUpgradable {
         address _token,
         address _account,
         uint256 _amount
-    ) external onlyAdmin {
+    ) external onlyManager {
         IERC20(_token).safeTransfer(_account, _amount);
     }
 

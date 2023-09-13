@@ -74,12 +74,12 @@ contract FeeRouter is Ac, IFeeRouter {
         fundFee = fundingFee;
     }
 
-    function setFeeVault(address vault) external onlyAdmin {
+    function setFeeVault(address vault) external onlyManager {
         require(vault != address(0), "invalid fee vault");
         feeVault = vault;
     }
 
-    function setFundFee(address fundingFee) external onlyAdmin {
+    function setFundFee(address fundingFee) external onlyManager {
         require(fundFee != address(0), "invalid fundFee");
         fundFee = fundingFee;
     }

@@ -43,7 +43,7 @@ contract FundFee is Ac {
         _grantRole(MANAGER_ROLE, msg.sender);
     }
 
-    function setMinRateLimit(uint256 limit) external onlyAdmin {
+    function setMinRateLimit(uint256 limit) external onlyManager {
         require(limit > 0, "invalid limit");
 
         uint256 _oldLimit = minRateLimit;
@@ -52,7 +52,7 @@ contract FundFee is Ac {
         emit UpdateMinRateLimit(_oldLimit, limit);
     }
 
-    function setMinorityFRate(uint256 rate) external onlyAdmin {
+    function setMinorityFRate(uint256 rate) external onlyManager {
         uint256 _old = minorityFRate;
         minorityFRate = rate;
 
@@ -62,7 +62,7 @@ contract FundFee is Ac {
     function setFundingInterval(
         address[] memory markets,
         uint256[] memory intervals
-    ) external onlyAdmin {
+    ) external onlyManager {
         require(markets.length == intervals.length, "invalid params");
 
         uint256 interval;
@@ -85,7 +85,7 @@ contract FundFee is Ac {
      * @param start The start timestamp of the skip time interval.
      * @param end The end timestamp of the skip time interval.
      */
-    function addSkipTime(uint256 start, uint256 end) external onlyAdmin {
+    function addSkipTime(uint256 start, uint256 end) external onlyManager {
         require(end >= start, "invalid params");
 
         SkipTime memory _skipTime;

@@ -52,22 +52,22 @@ contract BaseToken is IERC20, Ac {
     function setInfo(
         string memory _name,
         string memory _symbol
-    ) external onlyAdmin {
+    ) external onlyManager {
         name = _name;
         symbol = _symbol;
     }
 
     function setYieldTrackers(
         address[] memory _yieldTrackers
-    ) external onlyAdmin {
+    ) external onlyManager {
         yieldTrackers = _yieldTrackers;
     }
 
-    function addAdmin(address _account) external onlyAdmin {
+    function addAdmin(address _account) external onlyManager {
         admins[_account] = true;
     }
 
-    function removeAdmin(address _account) external onlyAdmin {
+    function removeAdmin(address _account) external onlyManager {
         admins[_account] = false;
     }
 
@@ -76,21 +76,21 @@ contract BaseToken is IERC20, Ac {
         address _token,
         address _account,
         uint256 _amount
-    ) external onlyAdmin {
+    ) external onlyManager {
         IERC20(_token).safeTransfer(_account, _amount);
     }
 
     function setInPrivateTransferMode(
         bool _inPrivateTransferMode
-    ) external onlyAdmin {
+    ) external onlyManager {
         inPrivateTransferMode = _inPrivateTransferMode;
     }
 
-    function setHandler(address _handler, bool _isActive) external onlyAdmin {
+    function setHandler(address _handler, bool _isActive) external onlyManager {
         isHandler[_handler] = _isActive;
     }
 
-    function addNonStakingAccount(address _account) external onlyAdmin {
+    function addNonStakingAccount(address _account) external onlyManager {
         require(
             !nonStakingAccounts[_account],
             "BaseToken: _account already marked"
@@ -100,7 +100,7 @@ contract BaseToken is IERC20, Ac {
         nonStakingSupply = nonStakingSupply + balances[_account];
     }
 
-    function removeNonStakingAccount(address _account) external onlyAdmin {
+    function removeNonStakingAccount(address _account) external onlyManager {
         require(nonStakingAccounts[_account], "BaseToken: _account not marked");
         _updateRewards(_account);
         nonStakingAccounts[_account] = false;
@@ -110,7 +110,7 @@ contract BaseToken is IERC20, Ac {
     function recoverClaim(
         address _account,
         address _receiver
-    ) external onlyAdmin {
+    ) external onlyManager {
         for (uint256 i = 0; i < yieldTrackers.length; i++) {
             address yieldTracker = yieldTrackers[i];
             IYieldTracker(yieldTracker).claim(_account, _receiver);

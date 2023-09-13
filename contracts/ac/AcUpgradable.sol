@@ -66,7 +66,7 @@ contract AcUpgradable is AccessControl, Ownable, Initializable {
         _revokeRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    modifier onlyAdmin() {
+    modifier onlyManager() {
         _checkRole(MANAGER_ROLE);
         _;
     }

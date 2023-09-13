@@ -25,11 +25,6 @@ contract AcUpgradable is AccessControl, Ownable, Initializable {
     bytes32 internal constant VAULT_MGR_ROLE = keccak256("VAULT_MGR_ROLE");
     bytes32 internal constant FREEZER_ROLE = keccak256("FREEZER_ROLE");
 
-    // 0x59c7a9ef9a56707d87d116a5d27496afee2604c70b902ac2c4dbdcb68f36f2ea
-    bytes32 internal constant FEE_DISTRIBUTOR_ROLE =
-        keccak256("FEE_DISTRIBUTOR_ROLE");
-    // 0xf21b97e3e053faeacb5e76d16d9daf713b69d060518bccb2c9ee13a7f9cfc49f
-    bytes32 internal constant FEE_MGR_ROLE = keccak256("FEE_MGR_ROLE");
     // 0xf7650eb8b2f3fb3c9b995a8ee2fc3c04ed07f1c4efe01998177b109698c67517
     bytes32 internal constant PRICE_UPDATE_ROLE =
         keccak256("PRICE_UPDATE_ROLE");

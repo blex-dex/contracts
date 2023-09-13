@@ -142,11 +142,6 @@ contract MarketReader is Ac, IMarketReader {
         return IGlobalValid(_globalValid).getMaxIncreasePositionSize(_params);
     }
 
-    function getMin(uint256 a, uint256 b) private pure returns (uint256) {
-        if (a < b) return a;
-        else return b;
-    }
-
     /**
      * @dev Retrieves information about a market, including its validation parameters, market parameters, and fee parameters.
      * @param _marketAddr Address of the market to retrieve information about.

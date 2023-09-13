@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity ^0.8.17;
 
-import "./GlobalDataTypes.sol";
 import "../ac/Ac.sol";
+import "./interfaces/IGlobalValid.sol";
 
-contract GlobalValid is Ac {
+contract GlobalValid is Ac, IGlobalValid {
     uint256 public constant BASIS_POINTS_DIVISOR = 10000;
 
     uint256 public maxSizeLimit = 10000;
@@ -61,7 +61,7 @@ contract GlobalValid is Ac {
      * @return A boolean indicating whether the position should be increased.
      */
     function isIncreasePosition(
-        GlobalDataTypes.ValidParams memory params
+        ValidParams memory params
     ) external view returns (bool) {
         if (params.sizeDelta == 0) {
             return true;
@@ -82,7 +82,7 @@ contract GlobalValid is Ac {
      * @return The maximum increase in position size as a uint256 value.
      */
     function getMaxIncreasePositionSize(
-        GlobalDataTypes.ValidParams memory params
+        ValidParams memory params
     ) external view returns (uint256) {
         return _getMaxIncreasePositionSize(params);
     }
@@ -93,7 +93,7 @@ contract GlobalValid is Ac {
      * @return The maximum increase in position size as a uint256 value.
      */
     function _getMaxIncreasePositionSize(
-        GlobalDataTypes.ValidParams memory params
+        ValidParams memory params
     ) private view returns (uint256) {
         uint256 _min = _getMaxUseableGlobalSize(
             params.globalLongSizes,

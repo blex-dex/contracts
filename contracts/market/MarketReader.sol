@@ -5,7 +5,6 @@ pragma experimental ABIEncoderV2;
 import {IMarket} from "./interfaces/IMarket.sol";
 import {IMarketRouter} from "./interfaces/IMarketRouter.sol";
 import {IGlobalValid} from "./interfaces/IGlobalValid.sol";
-import "./GlobalDataTypes.sol";
 import {IMarketValid} from "./interfaces/IMarketValid.sol";
 import {MarketConfigStruct} from "./MarketConfigStruct.sol";
 import {IPositionBook} from "../position/interfaces/IPositionBook.sol";
@@ -120,7 +119,7 @@ contract MarketReader is Ac, IMarketReader {
         IPositionBook positionBook = IMarket(market).positionBook();
         address _globalValid = IMarket(market).globalValid();
 
-        GlobalDataTypes.ValidParams memory _params;
+        IGlobalValid.ValidParams memory _params;
 
         _params.market = market;
         _params.isLong = isLong;

@@ -131,7 +131,7 @@ contract MarketRouter is
         MarketDataTypes.UpdatePositionInputs memory _inputs
     ) public view {
         IPositionBook ipb = IPositionBook(pbs[_inputs._market]);
-        GlobalDataTypes.ValidParams memory params;
+        IGlobalValid.ValidParams memory params;
         params.market = _inputs._market;
         params.sizeDelta = _inputs._sizeDelta;
         params.isLong = _inputs._isLong;

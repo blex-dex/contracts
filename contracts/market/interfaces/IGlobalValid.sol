@@ -1,9 +1,20 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity ^0.8.17;
 
-import "../GlobalDataTypes.sol";
-
 interface IGlobalValid {
+    struct ValidParams {
+        address market;
+        uint256 sizeDelta;
+        bool isLong;
+        uint256 globalLongSizes;
+        uint256 globalShortSizes;
+        uint256 userLongSizes;
+        uint256 userShortSizes;
+        uint256 marketLongSizes;
+        uint256 marketShortSizes;
+        uint256 aum;
+    }
+
     function BASIS_POINTS_DIVISOR() external view returns (uint256);
 
     function maxSizeLimit() external view returns (uint256);
@@ -23,10 +34,10 @@ interface IGlobalValid {
     function setMaxMarketSizeLimit(address market, uint256 limit) external;
 
     function isIncreasePosition(
-        GlobalDataTypes.ValidParams memory params
+        ValidParams memory params
     ) external view returns (bool);
 
     function getMaxIncreasePositionSize(
-        GlobalDataTypes.ValidParams memory params
+        ValidParams memory params
     ) external view returns (uint256);
 }

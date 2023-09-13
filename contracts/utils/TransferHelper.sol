@@ -16,7 +16,7 @@ library Precision {
 }
 
 library TransferHelper {
-    uint8 public constant usdDecimals = 18;
+    uint8 public constant USD_DECIMALS = 18;
 
     using SafeERC20 for IERC20Metadata;
 
@@ -25,7 +25,7 @@ library TransferHelper {
      * @return The number of decimal places for USD.
      */
     function getUSDDecimals() internal pure returns (uint8) {
-        return usdDecimals;
+        return USD_DECIMALS;
     }
 
     /**
@@ -40,7 +40,7 @@ library TransferHelper {
     ) internal pure returns (uint256) {
         return
             (amount * (10 ** uint256(collateralTokenDigits))) /
-            (10 ** usdDecimals);
+            (10 ** USD_DECIMALS);
     }
 
     /**
@@ -53,7 +53,7 @@ library TransferHelper {
         uint256 amount,
         uint8 originDigits
     ) internal pure returns (uint256) {
-        return (amount * (10 ** uint256(usdDecimals))) / (10 ** originDigits);
+        return (amount * (10 ** uint256(USD_DECIMALS))) / (10 ** originDigits);
     }
 
     /**
@@ -69,7 +69,7 @@ library TransferHelper {
     ) internal pure returns (int256) {
         return
             (amount * int256(10 ** uint256(collateralTokenDigits))) /
-            int256(10 ** uint256(usdDecimals));
+            int256(10 ** uint256(USD_DECIMALS));
     }
 
     /**

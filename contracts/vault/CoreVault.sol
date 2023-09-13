@@ -197,7 +197,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
      * @param fee The amount of the fee to transfer.
      * @param isBuy Boolean indicating whether it's a buy transaction.
      */
-    function _transFeeTofeeVault(
+    function _transFeeToFeeVault(
         address account,
         address _asset,
         uint256 fee,
@@ -244,7 +244,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
             shares -= NUMBER_OF_DEAD_SHARES;
         }
         super._deposit(caller, receiver, _assets, shares);
-        _transFeeTofeeVault(receiver, address(asset()), cost, true);
+        _transFeeToFeeVault(receiver, address(asset()), cost, true);
 
         emit DepositAsset(caller, receiver, assets, shares, cost);
     }
@@ -286,7 +286,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         );
 
         uint256 cost = exceeds_assets ? s_assets - assets : assets - s_assets;
-        _transFeeTofeeVault(_owner, address(asset()), cost, false); //ok!
+        _transFeeToFeeVault(_owner, address(asset()), cost, false); //ok!
 
         emit WithdrawAsset(caller, receiver, _owner, assets, shares, cost);
     }

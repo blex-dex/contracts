@@ -112,7 +112,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
 
         MarketLib.afterUpdateOrder(
             _vars,
-            pluginGasLimit,
+            PLUGIN_GAS_LIMIT,
             plugins,
             collateralToken,
             address(this)
@@ -305,7 +305,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
                 _cache.reasonStr,
                 int256(0)
             ),
-            pluginGasLimit,
+            PLUGIN_GAS_LIMIT,
             plugins,
             collateralToken,
             address(this)

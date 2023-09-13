@@ -79,7 +79,7 @@ contract BNFT is ERC721, VaultRewardBase {
         receiveToken = IERC4626(vault).asset();
         price = 1200 * 10 ** IERC20Metadata(receiveToken).decimals();
         refVolPct = (5 * PRECISION) / 100;
-        volumePerReward = 10000 * 10 ** TransferHelper.usdDecimals;
+        volumePerReward = 10000 * 10 ** TransferHelper.USD_DECIMALS;
     }
 
     function setPrice(uint256 _p) external onlyRole(VAULT_MGR_ROLE) {

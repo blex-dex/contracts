@@ -19,15 +19,15 @@ contract Booster is ReentrancyGuard, AcUpgradable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    address public esToken; 
-    address public pairToken; 
-    address public claimableToken; 
+    address public esToken;
+    address public pairToken;
+    address public claimableToken;
 
     uint256 public startDate;
     uint256 public dailyEstokenLimit;
     uint256 public constant priceDecimals =
         Precision.BOOSTER_PRICE_PRECISION_DECIMALS;
-    uint256 public esTokenPrice; 
+    uint256 public esTokenPrice;
     uint256 public cumulativeReward;
     event Boost(address indexed account, uint256 amount0, uint256 amount1);
     string public symbol;
@@ -47,18 +47,18 @@ contract Booster is ReentrancyGuard, AcUpgradable {
         esToken = _esToken;
         pairToken = _pairToken;
         claimableToken = _claimableToken;
-        
+
         startDate = _startTime;
-        dailyEstokenLimit = 5000 * 10 ** TransferHelper.usdDecimals;
-        esTokenPrice = 365 * 10 ** priceDecimals; 
+        dailyEstokenLimit = 5000 * 10 ** TransferHelper.USD_DECIMALS;
+        esTokenPrice = 365 * 10 ** priceDecimals;
     }
 
-    
+
     function boost(uint256 _amount) external nonReentrant {
         _boost(msg.sender, _amount);
     }
 
-    
+
     function boostForAccount(
         address _account,
         uint256 _amount
@@ -95,14 +95,14 @@ contract Booster is ReentrancyGuard, AcUpgradable {
         require(_amount > 0, "Vester: invalid _amount");
         require(_amount <= claimable(), "today limit reached");
 
-        
+
         IERC20(esToken).safeTransferFrom(_account, address(this), _amount);
 
-        
+
         uint256 amount1 = (_amount * esTokenPrice) / (10 ** priceDecimals);
 
         IERC20(pairToken).safeTransferFrom(_account, address(this), amount1);
-        
+
         IMintable(claimableToken).mint(_account, _amount);
         cumulativeReward += _amount;
         emit Boost(_account, _amount, amount1);

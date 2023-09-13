@@ -199,7 +199,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
                         "",
                         0
                     ),
-                    pluginGasLimit,
+                    PLUGIN_GAS_LIMIT,
                     plugins,
                     collateralToken,
                     address(this)
@@ -287,7 +287,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
                         : (_position.collateral - newCollateralUnsigned)
                 )
             ),
-            pluginGasLimit,
+            PLUGIN_GAS_LIMIT,
             plugins,
             collateralToken,
             address(this)
@@ -417,7 +417,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
                             _position.size.toInt256()
                         : int256(0)
                 ),
-                pluginGasLimit,
+                PLUGIN_GAS_LIMIT,
                 plugins,
                 collateralToken,
                 address(this)

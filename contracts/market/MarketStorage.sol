@@ -10,6 +10,8 @@ import {IFeeRouter} from "../fee/interfaces/IFeeRouter.sol";
 import {MarketValid} from "./MarketValid.sol";
 
 contract MarketStorage is IMarketStorage {
+    uint256 public constant PLUGIN_GAS_LIMIT = 666666; // 66w
+
     address public override marketValid;
     address public override globalValid;
     address public override indexToken;
@@ -40,7 +42,6 @@ contract MarketStorage is IMarketStorage {
 
     string public name;
     address[] public plugins;
-    uint256 public constant pluginGasLimit = 666666; // 66w
 
     uint8 public collateralTokenDigits;
 

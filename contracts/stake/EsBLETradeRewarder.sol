@@ -27,7 +27,7 @@ contract EsBLETradeRewarder is AcUpgradable, ITradePlugin {
     mapping(address => User) public users;
     uint256 public thresholdA;
     uint256 public thresholdB;
-    uint256 public constant sizeDecimals = TransferHelper.usdDecimals;
+    uint256 public constant sizeDecimals = TransferHelper.USD_DECIMALS;
     address public rewardToken;
     address public esVault;
     ITradeVolume public tradeVolumeContract;

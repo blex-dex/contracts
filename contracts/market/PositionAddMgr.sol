@@ -116,7 +116,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
                     _order: _order,
                     inputs: inputs
                 }),
-                pluginGasLimit,
+                PLUGIN_GAS_LIMIT,
                 plugins,
                 collateralToken,
                 address(this)
@@ -217,7 +217,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
                 indexToken,
                 collD
             ),
-            pluginGasLimit,
+            PLUGIN_GAS_LIMIT,
             plugins,
             collateralToken,
             address(this)
@@ -301,7 +301,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
                 "",
                 int256(0)
             ),
-            pluginGasLimit,
+            PLUGIN_GAS_LIMIT,
             plugins,
             collateralToken,
             address(this)

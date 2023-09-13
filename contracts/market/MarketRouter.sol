@@ -402,7 +402,7 @@ contract MarketRouter is
     function updatePositionBook(
         address newA
     ) external onlyRole(MARKET_MGR_ROLE) {
-        require(newA != address(0));
+        require(newA != address(0), "zero");
         address _market = msg.sender;
         require(markets.contains(msg.sender), "invalid market");
         positionBooks.remove(address(IMarket(_market).positionBook()));

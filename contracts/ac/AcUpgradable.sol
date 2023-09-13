@@ -94,7 +94,7 @@ contract AcUpgradable is AccessControl, Ownable, Initializable {
     function grantControllerRoleByMarketManager(
         address _account
     ) external onlyRole(MARKET_MGR_ROLE) {
-        require(supportMarketRoleGrantControllerRole());
+        require(supportMarketRoleGrantControllerRole(), "unsupported");
         require(_account != address(0), "!zero address");
 
         _grantRole(ROLE_CONTROLLER, _account);

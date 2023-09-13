@@ -30,7 +30,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     }
 
     receive() external payable {
-        revert();
+        revert("unacceptable");
     }
 
     function increasePositionWithOrders(
@@ -190,8 +190,8 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         address obl,
         address obs
     ) external onlyRole(MARKET_MGR_ROLE) {
-        require(obl != address(0));
-        require(obs != address(0));
+        require(obl != address(0), "obl zero");
+        require(obs != address(0), "obs zero");
         _setOrderBook(true, obl);
         _setOrderBook(false, obs);
     }
@@ -216,7 +216,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     }
 
     function setPositionBook(address pb) external onlyRole(MARKET_MGR_ROLE) {
-        require(pb != address(0));
+        require(pb != address(0), "zero");
         require(
             positionBook.longStore() == IPositionBook(pb).longStore(),
             "invalid store"
@@ -230,7 +230,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     }
 
     function setMarketValid(address _newMv) external onlyRole(MARKET_MGR_ROLE) {
-        require(_newMv != address(0));
+        require(_newMv != address(0), "zero");
 
         if (marketValid != address(0)) {
             IMarketValid(_newMv).setConfData(
@@ -244,14 +244,14 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         address _m,
         bool add
     ) external onlyRole(MARKET_MGR_ROLE) {
-        require(_m != address(0));
+        require(_m != address(0), "zero");
 
         if (add) positionAddMgr = _m;
         else positionSubMgr = _m;
     }
 
     function setOrderMgr(address _m) external onlyRole(MARKET_MGR_ROLE) {
-        require(_m != address(0));
+        require(_m != address(0), "zero");
         orderMgr = _m;
     }
 

@@ -26,8 +26,8 @@ contract RewardDistributor is AcUpgradable {
         address _rewardTracker
     ) external initializer {
         AcUpgradable._initialize(msg.sender);
-        require(_rewardToken != address(0));
-        require(_rewardTracker != address(0));
+        require(_rewardToken != address(0), "zero");
+        require(_rewardTracker != address(0), "zero");
         rewardToken = _rewardToken;
         rewardTracker = _rewardTracker;
     }

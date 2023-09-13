@@ -29,13 +29,19 @@ library MarketConfigStruct {
     uint256 constant DECREASE_NUM_LIMIT_BIT_POSITION = 120;
     uint256 constant VALID_DECREASE_BIT_POSITION = 120 + 4 * 3;
 
-    uint256 constant DENOMINATOR_SLIPPAGE = 10 ** 4;
+    uint256 private constant DENOMINATOR_SLIPPAGE = 10 ** 4;
+    uint256 private constant MAX_SLIPPAGE_LIMIT = 16 ** 3 - 1;
+    uint256 private constant MAX_TRADE_AMOUNT_LIMIT = 16 ** 8 - 1;
+    uint256 private constant DEFAULT_DECIMALS_RATE = 10;
+    uint256 private constant DEFAULT_ALLOW_VALUE = 1;
+    uint256 private constant DEFAULT_NOT_ALLOW_VALUE = 0;
+    uint256 private constant DEFAULT_DECR_ORDER_LIMIT = 10;
 
     function setMinSlippage(
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp >= 16 ** 3 - 1) {
+        if (minSp > MAX_SLIPPAGE_LIMIT) {
             revert("sp too big");
         }
         self.data = (self.data & MIN_SLIPPAGE_MASK) | minSp;
@@ -51,7 +57,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp >= 16 ** 3 - 1) {
+        if (minSp > MAX_SLIPPAGE_LIMIT) {
             revert("ms too big");
         }
         self.data =
@@ -69,7 +75,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp >= 16 ** 3 - 1) {
+        if (minSp > MAX_SLIPPAGE_LIMIT) {
             revert("ml too big");
         }
         self.data =
@@ -87,7 +93,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp >= 16 ** 3 - 1) {
+        if (minSp > MAX_SLIPPAGE_LIMIT) {
             revert("ml too big");
         }
         self.data =
@@ -105,7 +111,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp >= 16 ** 3 - 1) {
+        if (minSp > MAX_SLIPPAGE_LIMIT) {
             revert("mp too big");
         }
 
@@ -126,7 +132,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp >= 16 ** 3 - 1) {
+        if (minSp > MAX_SLIPPAGE_LIMIT) {
             revert("mc too big");
         }
         self.data =
@@ -146,7 +152,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp >= 16 ** 3 - 1) {
+        if (minSp > MAX_SLIPPAGE_LIMIT) {
             revert("mc too big");
         }
         self.data =
@@ -160,7 +166,7 @@ library MarketConfigStruct {
         ret = ((self.data & ~DECREASE_NUM_LIMIT_MASK) >>
             DECREASE_NUM_LIMIT_BIT_POSITION);
         if (ret == 0) {
-            ret = 10;
+            ret = DEFAULT_DECR_ORDER_LIMIT;
         }
     }
 
@@ -168,7 +174,7 @@ library MarketConfigStruct {
         IMarketValid.Props memory self,
         uint256 minSp
     ) internal pure {
-        if (minSp >= 16 ** 8-1) {
+        if (minSp > MAX_TRADE_AMOUNT_LIMIT) {
             revert("mta too big");
         }
         self.data =
@@ -190,7 +196,8 @@ library MarketConfigStruct {
     ) internal pure {
         self.data =
             (self.data & ALLOW_CLOSE_MASK) |
-            (uint256(allow ? 1 : 0) << ALLOW_CLOSE_BIT_POSITION);
+            (uint256(allow ? DEFAULT_ALLOW_VALUE : DEFAULT_NOT_ALLOW_VALUE) <<
+                ALLOW_CLOSE_BIT_POSITION);
     }
 
     function getEnableValidDecrease(
@@ -205,7 +212,8 @@ library MarketConfigStruct {
     ) internal pure {
         self.data =
             (self.data & VALID_DECREASE_MASK) |
-            (uint256(allow ? 1 : 0) << VALID_DECREASE_BIT_POSITION);
+            (uint256(allow ? DEFAULT_ALLOW_VALUE : DEFAULT_NOT_ALLOW_VALUE) <<
+                VALID_DECREASE_BIT_POSITION);
     }
 
     function getAllowClose(
@@ -220,7 +228,8 @@ library MarketConfigStruct {
     ) internal pure {
         self.data =
             (self.data & ALLOW_OPEN_MASK) |
-            (uint256(allow ? 1 : 0) << ALLOW_OPEN_BIT_POSITION);
+            (uint256(allow ? DEFAULT_ALLOW_VALUE : DEFAULT_NOT_ALLOW_VALUE) <<
+                ALLOW_OPEN_BIT_POSITION);
     }
 
     function getAllowOpen(

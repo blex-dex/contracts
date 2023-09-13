@@ -12,8 +12,8 @@ contract PositionBook is Ac {
     using Position for Position.Props;
     using SafeCast for uint256;
     using SafeCast for int256;
-
-    address public market;
+    uint256 public constant MIN_GLOBAL_AVG_PRICE = 100;
+    address public market;    
 
     PositionStore public longStore;
 
@@ -469,7 +469,7 @@ contract PositionBook is Ac {
                 sizeDelta,
                 markPrice
             );
-            require(_averagePrice > 100, "pb:invalid global position");
+            require(_averagePrice > MIN_GLOBAL_AVG_PRICE, "pb:invalid global position");
             _position.averagePrice = _averagePrice;
             _position.size += sizeDelta;
             _position.collateral = (_position.collateral.toInt256() +

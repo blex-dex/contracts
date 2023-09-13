@@ -31,6 +31,8 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
     uint256 public sellLpFee;
     uint256 constant NUMBER_OF_DEAD_SHARES = 1000;
 
+    uint256 constant DEFAULT_SELL_LP_FEE_RATE = 100;
+
     event CoolDownDurationUpdated(uint256 duration);
     event LPFeeUpdated(bool isBuy, uint256 fee);
 
@@ -75,7 +77,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         feeRouter = IFeeRouter(_feeRouter);
 
         cooldownDuration = 15 minutes;
-        sellLpFee = FEE_RATE_PRECISION / 100;
+        sellLpFee = FEE_RATE_PRECISION / DEFAULT_SELL_LP_FEE_RATE;
         vaultReward = _vaultReward;
     }
 
@@ -209,10 +211,15 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
     ) private {
         if (fee == 0) return;
 
-        uint8 kind = (isBuy ? 5 : 6);
-        int256[] memory fees = new int256[](kind + 1);
+        int256[] memory fees = new int256[](uint8(IFeeRouter.FeeType.Counter));
         IERC20(_asset).approve(address(feeRouter), fee);
-        fees[kind] = int256(
+        fees[
+            uint8(
+                isBuy
+                    ? IFeeRouter.FeeType.BuyLpFee
+                    : IFeeRouter.FeeType.SellLpFee
+            )
+        ] = int256(
             TransferHelper.parseVaultAsset(
                 fee,
                 IERC20Metadata(_asset).decimals()

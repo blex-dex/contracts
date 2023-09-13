@@ -27,6 +27,7 @@ contract FeeRouter is Ac, IFeeRouter {
     address public factory;
 
     uint256 public constant FEE_RATE_PRECISION = Precision.FEE_RATE_PRECISION;
+    uint256 public constant DEFAULT_MIN_RATE=100000;
 
     // market's feeRate and fee
     mapping(address => mapping(uint8 => uint256)) public feeAndRates;
@@ -305,7 +306,7 @@ contract FeeRouter is Ac, IFeeRouter {
         require(kind <= uint(type(FeeType).max), "invalid FeeType");
         uint256 _point = feeAndRates[market][kind];
         if (_point == 0) {
-            _point = 100000;
+            _point = DEFAULT_MIN_RATE;
         }
 
         uint256 _size = (sizeDelta * (FEE_RATE_PRECISION - _point)) /

@@ -8,6 +8,8 @@ interface IFeeRouter {
         FundFee,
         ExecFee,
         LiqFee,
+        BuyLpFee,
+        SellLpFee,
         Counter
     }
 

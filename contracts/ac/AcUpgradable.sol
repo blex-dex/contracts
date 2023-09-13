@@ -42,9 +42,8 @@ contract AcUpgradable is AccessControl, Ownable, Initializable {
     modifier onlyInitOr(bytes32 _role) {
         bool isDefaultAdmin = hasRole(DEFAULT_ADMIN_ROLE, _msgSender());
         if (isDefaultAdmin) {
-//            if (block.timestamp - initBlock >= 3600 * 24)
-            if (block.timestamp - initBlock >= 1 days)
-                revert("ac time passed");
+            //            if (block.timestamp - initBlock >= 3600 * 24)
+            if (block.timestamp - initBlock >= 1 days) revert("ac time passed");
         } else {
             _checkRole(_role, _msgSender());
         }
@@ -108,5 +107,12 @@ contract AcUpgradable is AccessControl, Ownable, Initializable {
         returns (bool)
     {
         return false;
+    }
+
+    function renounceRole(
+        bytes32 /* role */,
+        address /* account */
+    ) public virtual override {
+        revert();
     }
 }

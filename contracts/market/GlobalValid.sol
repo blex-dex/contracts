@@ -20,7 +20,7 @@ contract GlobalValid is Ac, IGlobalValid {
     ) external onlyInitOr(GLOBAL_MGR_ROLE) {
         require(
             limit > 0 && limit <= BASIS_POINTS_DIVISOR,
-            "GlobalValid:!params"
+            "setMaxSize !Params"
         );
         maxSizeLimit = limit;
     }
@@ -30,7 +30,7 @@ contract GlobalValid is Ac, IGlobalValid {
     ) external onlyInitOr(GLOBAL_MGR_ROLE) {
         require(
             limit > 0 && limit <= BASIS_POINTS_DIVISOR,
-            "GlobalValid:!params"
+            "setMaxNetSize !Params"
         );
         maxNetSizeLimit = limit;
     }
@@ -40,7 +40,7 @@ contract GlobalValid is Ac, IGlobalValid {
     ) external onlyInitOr(GLOBAL_MGR_ROLE) {
         require(
             limit > 0 && limit <= BASIS_POINTS_DIVISOR,
-            "GlobalValid:!params"
+            "setMaxUserNetSize !Params "
         );
         maxUserNetSizeLimit = limit;
     }

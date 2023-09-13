@@ -88,7 +88,7 @@ contract AcUpgradable is AccessControl, Ownable, Initializable {
     }
 
     modifier onlyUpdater() {
-        require(hasRole(PRICE_UPDATE_ROLE, msg.sender));
+        _checkRole(PRICE_UPDATE_ROLE);
         _;
     }
 

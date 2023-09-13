@@ -5,6 +5,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import "../ac/Ac.sol";
 import {IFeeVault} from "./interfaces/IFeeVault.sol";
+import {Precision} from '../utils/TransferHelper.sol';
 
 contract FundFee is Ac {
     using SafeCast for uint256;
@@ -14,7 +15,7 @@ contract FundFee is Ac {
     address public immutable feeVault;
 
     uint256 public constant MIN_FUNDING_INTERVAL = 1 hours;
-    uint256 public constant FEE_RATE_PRECISION = 100000000;
+    uint256 public constant FEE_RATE_PRECISION = Precision.FEE_RATE_PRECISION;
     uint256 public constant BASIS_INTERVAL_HOU = 24;
     uint256 public constant DEFAULT_RATE_DIVISOR = 100;
 

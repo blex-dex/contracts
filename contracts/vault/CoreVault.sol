@@ -144,11 +144,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         bool isBuy,
         uint256 amount
     ) public view override returns (uint256) {
-        if (isBuy) {
-            return (amount * (buyLpFee)) / FEE_RATE_PRECISION;
-        } else {
-            return (amount * (sellLpFee)) / FEE_RATE_PRECISION;
-        }
+       return (amount * getLPFee(isBuy)) / FEE_RATE_PRECISION;
     }
 
     /**

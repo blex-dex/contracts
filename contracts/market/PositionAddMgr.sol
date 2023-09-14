@@ -274,7 +274,6 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         MarketDataTypes.UpdatePositionInputs memory _params
     ) private {
         _params._oraclePrice = _getPrice(_params._isLong);
-        require(order.account != address(0), "PositionAddMgr:!account");
         IMarketRouter(marketRouter).validateIncreasePosition(_params);
         (_params._isLong ? orderBookLong : orderBookShort).remove(
             order.getKey(),

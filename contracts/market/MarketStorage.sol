@@ -9,7 +9,7 @@ import {IFeeVault} from "../fee/interfaces/IFeeVault.sol";
 import {IFeeRouter} from "../fee/interfaces/IFeeRouter.sol";
 import {MarketValid} from "./MarketValid.sol";
 
-contract MarketStorage is IMarketStorage {
+abstract contract MarketStorage is IMarketStorage {
     uint256 public constant PLUGIN_GAS_LIMIT = 666666; // 66w
 
     address public override marketValid;

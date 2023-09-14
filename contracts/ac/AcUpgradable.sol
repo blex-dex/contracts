@@ -5,7 +5,7 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract AcUpgradable is AccessControl, Ownable, Initializable {
+abstract contract AcUpgradable is AccessControl, Ownable, Initializable {
     // 0xcb58d6d985142a614029cdf01861b4fe094d5919a47e69b8310dc4093d9d6ad0
     bytes32 internal constant ROLE_CONTROLLER = keccak256("ROLE_CONTROLLER");
     // 0x241ecf16d79d0f8dbfb92cbc07fe17840425976cf0667f022fe9877caa831b08

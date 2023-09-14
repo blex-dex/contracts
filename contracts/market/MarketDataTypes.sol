@@ -168,11 +168,11 @@ library MarketDataTypes {
     ) internal pure returns (bool) {
         if (_params._oraclePrice > 0) return false;
 
-        if (false == _params.isOpen) {
-            if (_params.isCreate) {
-                if (_params._order.getFromOrder() > 0) return false;
-                //close: order to order id
-                if (_params._order.extra2 > 0) return false;
+        if (!_params.isOpen && _params.isCreate) {
+            if (
+                _params._order.getFromOrder() > 0 || _params._order.extra2 > 0
+            ) {
+                return false;
             }
         }
         return true;

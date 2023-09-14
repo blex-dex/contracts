@@ -244,9 +244,6 @@ contract MarketValid is Ac, IMarketValidFuncs {
             "Max orders:config limit"
         );
 
-        // Validate the size of the position for a decrease order
-        validSize(_size, _sizeDelta, false);
-
         if (conf.getEnableValidDecrease())
             validCollateralDelta(
                 3,

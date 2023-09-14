@@ -134,6 +134,17 @@ contract GlobalValid is Ac, IGlobalValid {
         return _min;
     }
 
+    function _calcAvailableSize(
+        uint256 longSize,
+        uint256 shortSize,
+        uint256 limit,
+        bool isLong
+    )private pure returns(uint256){
+        uint256 size = isLong ? longSize : shortSize;
+        if (size >= limit) return 0;
+        return limit - size;
+    }
+
     /**
      * @dev Calculates the maximum usable global position size based on the provided parameters.
      * @param longSize The current long position size.
@@ -147,10 +158,8 @@ contract GlobalValid is Ac, IGlobalValid {
         uint256 aum,
         bool isLong
     ) private view returns (uint256) {
-        uint256 _size = isLong ? longSize : shortSize;
         uint256 _limit = (aum * maxSizeLimit) / BASIS_POINTS_DIVISOR;
-        if (_size >= _limit) return 0;
-        return (_limit - _size);
+        return _calcAvailableSize(longSize, shortSize, _limit, isLong);  
     }
 
     /**
@@ -165,13 +174,8 @@ contract GlobalValid is Ac, IGlobalValid {
         uint256 aum,
         bool isLong
     ) private view returns (uint256) {
-        uint256 _size = isLong ? longSize : shortSize;
-
         uint256 _limit = (aum * maxNetSizeLimit) / BASIS_POINTS_DIVISOR;
-        _limit = isLong ? _limit + shortSize : _limit + longSize;
-
-        if (_size >= _limit) return 0;
-        return (_limit - _size);
+        return _calcAvailableSize(longSize, shortSize, _limit, isLong);  
     }
 
     /**
@@ -186,13 +190,9 @@ contract GlobalValid is Ac, IGlobalValid {
         uint256 aum,
         bool isLong
     ) private view returns (uint256) {
-        uint256 _size = isLong ? longSize : shortSize;
-
         uint256 _limit = (aum * maxUserNetSizeLimit) / BASIS_POINTS_DIVISOR;
         _limit = isLong ? _limit + shortSize : _limit + longSize;
-
-        if (_size >= _limit) return 0;
-        return (_limit - _size);
+        return _calcAvailableSize(longSize, shortSize, _limit, isLong);  
     }
 
     /**
@@ -210,9 +210,6 @@ contract GlobalValid is Ac, IGlobalValid {
         uint256 shortSize
     ) private view returns (uint256) {
         uint256 _limit = maxMarketSizeLimit[market];
-        uint256 _size = isLong ? longSize : shortSize;
-        if (_size >= _limit) return 0;
-
-        return (_limit - _size);
+        return _calcAvailableSize(longSize, shortSize, _limit, isLong);  
     }
 }

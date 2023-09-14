@@ -54,7 +54,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
         MarketDataTypes.UpdateOrderInputs memory _vars
     ) external {
         if (_vars.isOpen && _vars.isCreate) {
-            _valid().validPay(_vars.pay());
+            marketValid.validPay(_vars.pay());
         }
 
         _vars._oraclePrice = _getPrice(_vars._isLong == _vars.isOpen);
@@ -71,7 +71,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
 
         IOrderBook ob = _vars._isLong ? orderBookLong : orderBookShort;
         if (_vars.isCreate && _vars.isOpen) {
-            _valid().validIncreaseOrder(_vars, feeRouter.getOrderFees(_vars));
+            marketValid.validIncreaseOrder(_vars, feeRouter.getOrderFees(_vars));
 
             _vars._order.collateral = _vars.pay().toUint128();
         } else if (_vars.isCreate && !_vars.isOpen) {
@@ -89,7 +89,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
                 )
                 .toUint128();
 
-            _valid().validDecreaseOrder(
+            marketValid.validDecreaseOrder(
                 _position.collateral,
                 uint256(_vars._order.collateral),
                 _position.size,
@@ -306,9 +306,5 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
             collateralToken,
             address(this)
         );
-    }
-
-    function _valid() internal view returns (IMarketValid) {
-        return IMarketValid(marketValid);
     }
 }

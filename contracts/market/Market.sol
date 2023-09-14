@@ -146,7 +146,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         positionBook = IPositionBook(addrs[0]);
         orderBookLong = IOrderBook(addrs[1]);
         orderBookShort = IOrderBook(addrs[2]);
-        marketValid = addrs[3];
+        marketValid = IMarketValid(addrs[3]);
         priceFeed = addrs[4];
         positionSubMgr = addrs[5];
         positionAddMgr = addrs[6];
@@ -236,12 +236,12 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     function setMarketValid(address _newMv) external onlyRole(MARKET_MGR_ROLE) {
         require(_newMv != address(0), "zero");
 
-        if (marketValid != address(0)) {
+        if (address(marketValid) != address(0)) {
             IMarketValid(_newMv).setConfData(
-                IMarketValid(marketValid).conf().data
+                marketValid.conf().data
             );
         }
-        marketValid = _newMv;
+        marketValid = IMarketValid(_newMv);
     }
 
     function setPositionMgr(
@@ -259,9 +259,6 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         orderMgr = _m;
     }
 
-    function _valid() private view returns (IMarketValid) {
-        return IMarketValid(marketValid);
-    }
 
     function getPrice(bool _isMax) private view returns (uint256) {
         IPrice _p = IPrice(priceFeed);

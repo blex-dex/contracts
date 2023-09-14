@@ -88,8 +88,7 @@ contract AutoLiquidateBase is Ownable {
     }
 
     function _isLiquidate(address account) private view returns (bool) {
-        address _valid = IMarket(market).marketValid();
-        uint256 _state = IMarketValid(_valid).isLiquidate(
+        uint256 _state =  IMarket(market).marketValid().isLiquidate(
             account,
             market,
             isLong,

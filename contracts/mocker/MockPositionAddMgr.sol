@@ -8,6 +8,8 @@ import {IFeeRouter} from "../fee/interfaces/IFeeRouter.sol";
 
 import {IOrderStore} from "../order/interface/IOrderStore.sol";
 import {IOrderBook} from "../order/interface/IOrderBook.sol";
+import {IMarketValid} from "../market/interfaces/IMarketValid.sol";
+
 
 contract MockPositionAddMgr is PositionAddMgr {
     function setMarketRouter(address mr) external {
@@ -23,7 +25,7 @@ contract MockPositionAddMgr is PositionAddMgr {
     }
 
     function setMarketValid(address _newMv) external {
-        marketValid = _newMv;
+        marketValid = IMarketValid(_newMv);
     }
 
     function setVaultRouter(address vr) external {

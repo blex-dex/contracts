@@ -162,8 +162,7 @@ contract MarketReader is Ac, IMarketReader {
     {
         IMarket _market = IMarket(_marketAddr);
         IFeeRouter fr = _market.feeRouter();
-        address marketValid = _market.marketValid();
-        IMarketValid.Props memory _conf = IMarketValid(marketValid).conf();
+        IMarketValid.Props memory _conf =_market.marketValid().conf();
         validOuts = ValidOuts(
             _conf.getMinSlippage(),
             _conf.getMaxSlippage(),

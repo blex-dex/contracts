@@ -8,9 +8,10 @@ import "../../order/OrderStruct.sol";
 import {MarketDataTypes} from "../MarketDataTypes.sol";
 import "./../../position/PositionStruct.sol";
 import {IOrderStore} from "../../order/interface/IOrderStore.sol";
+import {IMarketValid} from "./IMarketValid.sol";
 
 interface IMarketStorage {
-    function marketValid() external view returns (address);
+    function marketValid() external view returns (IMarketValid);
 
     function globalValid() external view returns (address);
 

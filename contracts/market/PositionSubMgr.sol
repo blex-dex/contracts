@@ -131,7 +131,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
 
         // Determine the liquidation state using the 'isLiquidate' function from the '_valid' contract
         _vars.liqState = uint8(
-            _valid().isLiquidate(
+            marketValid.isLiquidate(
                 _account,
                 address(this),
                 _isLong,
@@ -210,7 +210,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
 
         int256[] memory _fees = feeRouter.getFees(_params, _position);
 
-        IMarketValid mv = _valid();
+        IMarketValid mv = marketValid;
         if (_params._sizeDelta == 0) {
             mv.validCollateralDelta(
                 4,
@@ -265,7 +265,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
             _params._isLong
         );
 
-        _valid().validLev(result.size, result.collateral);
+        marketValid.validLev(result.size, result.collateral);
 
         if (
             (_params.liqState != 1 || _params.liqState != 2) &&
@@ -428,9 +428,6 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         _decreasePosition(_params, _position);
     }
 
-    function _valid() internal view returns (IMarketValid) {
-        return IMarketValid(marketValid);
-    }
 
     function execOrderKey(
         Order.Props memory order,
@@ -445,7 +442,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
 
     function validLiq(address acc, bool _isLong) private view {
         require(
-            _valid().isLiquidate(
+            marketValid.isLiquidate(
                 acc,
                 address(this),
                 _isLong,

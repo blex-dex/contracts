@@ -7,18 +7,19 @@ import {IPositionBook} from "../position/interfaces/IPositionBook.sol";
 import {IPositionStore} from "../position/interfaces/IPositionStore.sol";
 import {IFeeVault} from "../fee/interfaces/IFeeVault.sol";
 import {IFeeRouter} from "../fee/interfaces/IFeeRouter.sol";
-import {MarketValid} from "./MarketValid.sol";
+import {IMarketValid} from "./interfaces/IMarketValid.sol";
 
 abstract contract MarketStorage is IMarketStorage {
     uint256 public constant PLUGIN_GAS_LIMIT = 666666; // 66w
 
-    address public override marketValid;
+   
     address public override globalValid;
     address public override indexToken;
     IPositionBook public override positionBook;
     address public override collateralToken;
     IOrderBook public override orderBookLong;
     IOrderBook public override orderBookShort;
+    IMarketValid public override marketValid;
 
     mapping(bool => mapping(bool => IOrderStore)) orderStores;
 

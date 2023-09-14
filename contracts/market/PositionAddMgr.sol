@@ -50,7 +50,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
             if (_inputs._isExec) return;
             else revert("PositionAddMgr:invalid params");
         }
-        _valid().validPay(_inputs.collateralDelta);
+        marketValid.validPay(_inputs.collateralDelta);
 
         if (_inputs._slippage == 0 && 0 == _inputs._fromOrder) {
             _inputs._slippage = 30;
@@ -165,7 +165,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         }
 
         //Position.Props
-        _valid().validLev(result.size, result.collateral);
+        marketValid.validLev(result.size, result.collateral);
     }
 
     /**
@@ -184,9 +184,9 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         int256 _totalfee = _fees.totoalFees();
 
         if (_params._sizeDelta > 0) {
-            _valid().validPosition(_params, _position, _fees);
+            marketValid.validPosition(_params, _position, _fees);
         } else {
-            _valid().validCollateralDelta(
+            marketValid.validCollateralDelta(
                 2,
                 _position.collateral,
                 _params.collateralDelta,
@@ -309,13 +309,11 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         increasePositionWithOrders(_params);
     }
 
-    function _valid() internal view returns (IMarketValid) {
-        return IMarketValid(marketValid);
-    }
+ 
 
     function _validLiq(address acc, bool _isLong) private view {
         require(
-            _valid().isLiquidate(
+            marketValid.isLiquidate(
                 acc,
                 address(this),
                 _isLong,
@@ -332,7 +330,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         bool isLong
     ) private view returns (bool) {
         return
-            _valid().getDecreaseOrderValidation(
+            marketValid.getDecreaseOrderValidation(
                 orderStore(isLong, false).orderNum(account)
             );
     }

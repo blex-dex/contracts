@@ -10,6 +10,7 @@ import {IFeeRouter} from "../fee/interfaces/IFeeRouter.sol";
 
 import {IOrderStore} from "../order/interface/IOrderStore.sol";
 import {IOrderBook} from "../order/interface/IOrderBook.sol";
+import {IMarketValid} from "../market/interfaces/IMarketValid.sol";
 
 
 contract MockOrderMgr is OrderMgr{
@@ -25,7 +26,7 @@ contract MockOrderMgr is OrderMgr{
     }
 
     function setMarketValid(address _newMv) external  {
-        marketValid = _newMv;
+        marketValid = IMarketValid(_newMv);
     }
 
     function setVaultRouter(address vr) external{

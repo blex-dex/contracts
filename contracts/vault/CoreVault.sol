@@ -96,14 +96,12 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         _grantRole(FREEZER_ROLE, _vaultRouter);
     }
 
-    function setLpFee(bool isBuy, uint256 fee) public override onlyManager {
+    function setLpFee(bool isBuy, uint256 fee) external override onlyManager {
         isBuy ? buyLpFee = fee : sellLpFee = fee;
         emit LPFeeUpdated(isBuy, fee);
     }
 
-    function setCooldownDuration(
-        uint256 _duration
-    ) public override onlyManager {
+    function setCooldownDuration(uint256 _duration) external override onlyManager {
         cooldownDuration = _duration;
         emit CoolDownDurationUpdated(_duration);
     }
@@ -152,7 +150,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
      * @param isBuy Boolean indicating whether it's a buy transaction.
      * @return The LP fee for the specified transaction type.
      */
-    function getLPFee(bool isBuy) public view override returns (uint256) {
+    function getLPFee(bool isBuy) external view override returns (uint256) {
         return isBuy ? buyLpFee : sellLpFee;
     }
 

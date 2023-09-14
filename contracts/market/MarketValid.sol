@@ -440,7 +440,6 @@ contract MarketValid is Ac, IMarketValidFuncs {
 
         MarketDataTypes.UpdatePositionInputs memory _vars;
         _vars.initialize(false);
-        _vars._oraclePrice = markPrice;
         _vars._account = _account;
         _vars._isExec = true;
         _vars._isLong = _isLong;

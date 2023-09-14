@@ -404,8 +404,6 @@ contract MarketRouter is
         require(newA != address(0), "zero");
         address _market = msg.sender;
         require(markets.contains(msg.sender), "invalid market");
-        positionBooks.remove(address(IMarket(_market).positionBook()));
-
         address _positionBook = address(IMarket(_market).positionBook());
         positionBooks.remove(_positionBook);
         require(positionBooks.add(newA));

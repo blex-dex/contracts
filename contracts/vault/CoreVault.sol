@@ -35,6 +35,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
 
     event CoolDownDurationUpdated(uint256 duration);
     event LPFeeUpdated(bool isBuy, uint256 fee);
+    event LogIsFreeze(bool isFreeze);
 
     event DepositAsset(
         address indexed sender,
@@ -300,9 +301,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
 
         emit WithdrawAsset(caller, receiver, _owner, assets, shares, cost);
     }
-
-    event LogIsFreeze(bool isFreeze);
-
+  
     function setIsFreeze(bool f) external onlyFreezer {
         isFreeze = f;
         emit LogIsFreeze(f);

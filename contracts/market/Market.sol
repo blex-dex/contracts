@@ -15,6 +15,7 @@ import "./../position/PositionStruct.sol";
 import {Order} from "../order/OrderStruct.sol";
 import {MarketDataTypes} from "./MarketDataTypes.sol";
 import {TransferHelper} from "../utils/TransferHelper.sol";
+import {IMarket} from "./interfaces/IMarket.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 import "../ac/Ac.sol";
@@ -22,6 +23,18 @@ import "../ac/Ac.sol";
 contract Market is MarketStorage, ReentrancyGuard, Ac {
     using MarketLib for uint16;
     using Order for Order.Props;
+
+    bytes4 private constant SELECTOR_EXE_ORDER_KEY =
+        IMarket.execOrderKey.selector;
+
+    // bytes4 private constant SELECTOR_EXE_ORDER_KEY =
+    // bytes4(
+    //     keccak256(
+    //         bytes(
+    //             "execOrderKey((uint8,uint32,uint8,address,uint48,uint128,uint128,uint128,uint128,uint64,uint64,uint128,bytes32),(address,bool,uint256,bool,address,uint256,uint256,uint256,bool,uint8,uint64,bytes32,uint256,uint8,uint256[]))"
+    //         )
+    //     )
+    // );
 
     constructor(address _f) Ac(_f) {}
 
@@ -56,15 +69,6 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     ) external onlyPositionKeeper {
         _callAddress(positionSubMgr, msg.data, "liquidatePositions", true);
     }
-
-    bytes4 private constant SELECTOR_EXE_ORDER_KEY =
-        bytes4(
-            keccak256(
-                bytes(
-                    "execOrderKey((uint8,uint32,uint8,address,uint48,uint128,uint128,uint128,uint128,uint64,uint64,uint128,bytes32),(address,bool,uint256,bool,address,uint256,uint256,uint256,bool,uint8,uint64,bytes32,uint256,uint8,uint256[]))"
-                )
-            )
-        );
 
     /**
      * @dev Called by `AutoOrder`.Executes the order key operation using the provided order properties and market data inputs.

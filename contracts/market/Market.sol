@@ -255,11 +255,9 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         require(_newMv != address(0), "zero");
 
         if (address(marketValid) != address(0)) {
-            IMarketValid(_newMv).setConfData(
-                marketValid.conf().data
-            );
+            IMarketValid(_newMv).setConfData(marketValid.conf().data);
         }
-        marketValid = _newMv;
+        marketValid = IMarketValid(_newMv);
 
         emit SetMarketValid(_newMv);
     }
@@ -287,8 +285,7 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         emit SetOrderMgr(_m);
     }
 
-
-    function getPrice(bool _isMax) private view returns (uint256) {
+    function _getPrice(bool _isMax) private view returns (uint256) {
         IPrice _p = IPrice(priceFeed);
         return _p.getPrice(indexToken, _isMax);
     }

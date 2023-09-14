@@ -128,7 +128,7 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
     function borrowFromVault(uint256 amount) external onlyMarket {
         require(false == isFreezeAccouting, "VaultRouter:freeze");
 
-        updateFundsUsed(msg.sender, amount, true);
+        _updateFundsUsed(msg.sender, amount, true);
     }
 
     /**
@@ -138,7 +138,7 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
      */
     function repayToVault(uint256 amount) external onlyMarket {
         require(false == isFreezeAccouting, "VaultRouter:freeze");
-        updateFundsUsed(msg.sender, amount, false);
+        _updateFundsUsed(msg.sender, amount, false);
     }
 
     event FundsUsedUpdated(
@@ -153,7 +153,7 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
      * @param amount The amount of funds used.
      * @param isBorrow Boolean indicating whether it's a borrow operation.
      */
-    function updateFundsUsed(
+    function _updateFundsUsed(
         address market,
         uint256 amount,
         bool isBorrow

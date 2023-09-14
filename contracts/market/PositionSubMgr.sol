@@ -382,7 +382,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
             );
     }
 
-    function decreasePositionFromOrder(
+    function _decreasePositionFromOrder(
         Order.Props memory order,
         MarketDataTypes.UpdatePositionInputs memory _params
     ) private {
@@ -437,7 +437,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         require(_params.isOpen == false, "PositionSubMgr:invalid increase");
         validLiq(order.account, _params._isLong);
 
-        decreasePositionFromOrder(order, _params);
+        _decreasePositionFromOrder(order, _params);
     }
 
     function validLiq(address acc, bool _isLong) private view {

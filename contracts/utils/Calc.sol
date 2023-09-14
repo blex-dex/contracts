@@ -14,10 +14,9 @@ library Calc {
 
     function sum(uint256 a, int256 b) internal pure returns (uint256) {
         if (b > 0) {
-            return a + b;
+            return a + uint256(b);
         }
-
-        return a - b;
+        return a - uint256(-b);
     }
 
     function sum(int256 a, uint256 b) internal pure returns (int256) {

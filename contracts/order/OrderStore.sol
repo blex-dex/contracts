@@ -92,7 +92,7 @@ contract OrderStore is Ac {
      * @param _ordersKeys The array of order keys to be filtered.
      * @return orderCount The count of valid orders.
      */
-    function filterOrders(
+    function _filterOrders(
         bytes32[] memory _ordersKeys
     ) internal view returns (uint256 orderCount) {
         uint256 len = _ordersKeys.length;
@@ -114,7 +114,7 @@ contract OrderStore is Ac {
         address account
     ) external onlyController returns (Order.Props[] memory _orders) {
         bytes32[] memory _ordersKeys = ordersByAccount[account].values();
-        uint256 orderCount = filterOrders(_ordersKeys);
+        uint256 orderCount = _filterOrders(_ordersKeys);
         uint256 len = _ordersKeys.length;
 
         _orders = new Order.Props[](orderCount);
@@ -148,7 +148,7 @@ contract OrderStore is Ac {
         address account
     ) external view returns (Order.Props[] memory _orders) {
         bytes32[] memory _ordersKeys = ordersByAccount[account].values();
-        uint256 orderCount = filterOrders(_ordersKeys);
+        uint256 orderCount = _filterOrders(_ordersKeys);
 
         _orders = new Order.Props[](orderCount);
         uint256 readIdx;

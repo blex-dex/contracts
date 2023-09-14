@@ -85,7 +85,6 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
 
     event SetVaultRouter(address _vaultRouter);
 
-
     function setVaultRouter(
         address _vaultRouter
     ) external override onlyManager {
@@ -132,10 +131,10 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
      * @return The total assets held in the contract.
      */
     function totalAssets()
-    public
-    view
-    override(ERC4626, IERC4626)
-    returns (uint256)
+        public
+        view
+        override(ERC4626, IERC4626)
+        returns (uint256)
     {
         return vaultRouter.getAUM();
     }
@@ -158,7 +157,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
      * @param isBuy Boolean indicating whether it's a buy transaction.
      * @return The LP fee for the specified transaction type.
      */
-    function getLPFee(bool isBuy) external view override returns (uint256) {
+    function getLPFee(bool isBuy) public view override returns (uint256) {
         return isBuy ? buyLpFee : sellLpFee;
     }
 

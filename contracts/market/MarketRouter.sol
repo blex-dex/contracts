@@ -340,7 +340,7 @@ contract MarketRouter is
      * @param _collateralAmount The amount of the collateral token used for the calculation.
      * @return The equivalent collateral amount in USDei.
      */
-    function calculateEquivalentCollateralAmount(
+    function _calculateEquivalentCollateralAmount(
         address _collateralToken,
         uint256 _collateralAmount
     ) private view returns (uint256) {
@@ -417,6 +417,7 @@ contract MarketRouter is
     }
 
     event SetIsEnableMarketConvertToOrder(bool _isEnableMarketConvertToOrder);
+
     function setIsEnableMarketConvertToOrder(
         bool _isEnableMarketConvertToOrder
     ) external onlyRole(MARKET_MGR_ROLE) {
@@ -426,6 +427,7 @@ contract MarketRouter is
     }
 
     event AddMarket(address _market, address vault);
+
     function addMarket(
         address _market,
         address vault
@@ -441,6 +443,7 @@ contract MarketRouter is
     }
 
     event RemoveMarket(address _market);
+
     function removeMarket(address _market) external onlyRole(MARKET_MGR_ROLE) {
         address _positionBook = address(IMarket(_market).positionBook());
 

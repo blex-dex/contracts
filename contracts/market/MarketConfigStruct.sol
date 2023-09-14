@@ -29,7 +29,7 @@ library MarketConfigStruct {
     uint256 constant DECREASE_NUM_LIMIT_BIT_POSITION = 120;
     uint256 constant VALID_DECREASE_BIT_POSITION = 120 + 4 * 3;
 
-    uint256 private constant DENOMINATOR_SLIPPAGE = 10 ** 4;
+    uint256 constant DENOMINATOR_SLIPPAGE = 10 ** 4;
     uint256 private constant MAX_SLIPPAGE_LIMIT = 16 ** 3 - 1;
     uint256 private constant MAX_TRADE_AMOUNT_LIMIT = 16 ** 8 - 1;
     uint256 private constant DEFAULT_DECIMALS_RATE = 10;

@@ -137,7 +137,13 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
 
     event LogUpdatePool(uint256 supply, uint256 cumulativeRewardPerToken);
 
-    event UpdateRewardsByAccount(address _account, uint256 accountReward, uint256 _cumulativeRewardPerToken, uint256 averageStakedAmount);
+    event UpdateRewardsByAccount(
+        address _account,
+        uint256 accountReward,
+        uint256 _cumulativeRewardPerToken,
+        uint256 averageStakedAmount
+    );
+
     /**
      * @dev This function is used to update rewards.
      * @notice function can only be called without reentry.
@@ -164,7 +170,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
         }
 
         if (_account != address(0)) {
-            uint256 stakedAmount = stakedAmounts(_account);
+            uint256 stakedAmount = _stakedAmounts(_account);
             uint256 accountReward = (stakedAmount *
                 (_cumulativeRewardPerToken -
                     previousCumulatedRewardPerToken[_account])) / PRECISION;
@@ -177,7 +183,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
                 _account
             ] = _cumulativeRewardPerToken;
 
-            if (_claimableReward > 0 && stakedAmount > 0) {
+            if (_claimableReward > 0 && _stakedAmounts(_account) > 0) {
                 uint256 nextCumulativeReward = lpEarnedRewards[_account] +
                     accountReward;
 
@@ -186,14 +192,19 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
                     .mul(lpEarnedRewards[_account])
                     .div(nextCumulativeReward)
                     .add(
-                    stakedAmount.mul(accountReward).div(
-                        nextCumulativeReward
-                    )
-                );
+                        stakedAmount.mul(accountReward).div(
+                            nextCumulativeReward
+                        )
+                    );
                 averageStakedAmounts[_account] = supply;
                 lpEarnedRewards[_account] = nextCumulativeReward;
 
-                emit UpdateRewardsByAccount(_account, accountReward, _cumulativeRewardPerToken, supply);
+                emit UpdateRewardsByAccount(
+                    _account,
+                    accountReward,
+                    _cumulativeRewardPerToken,
+                    supply
+                );
             }
         }
     }
@@ -328,7 +339,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
      * @return The amount of rewards claimable by the user in the market as a `uint256`.
      */
     function claimable(address _account) public view returns (uint256) {
-        uint256 stakedAmount = stakedAmounts(_account);
+        uint256 stakedAmount = _stakedAmounts(_account);
         if (stakedAmount == 0) {
             return claimableReward[_account];
         }
@@ -351,7 +362,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
             );
     }
 
-    function stakedAmounts(address _account) private view returns (uint256) {
+    function _stakedAmounts(address _account) private view returns (uint256) {
         return coreVault.balanceOf(_account);
     }
 

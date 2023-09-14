@@ -178,7 +178,6 @@ contract MarketRouter is
             _updateOrderFromPosition(_inputs);
         } else {
             require(markets.contains(_inputs._market), "invalid market");
-            require(_inputs.isValid(), "invalid params");
             IMarket im = IMarket(_inputs._market);
             address c = im.collateralToken();
             IERC20(c).safeTransferFrom(

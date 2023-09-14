@@ -39,11 +39,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
     function _shouldDeleteOrder(
         string memory errorMessage
     ) internal pure returns (bool) {
-        if (
-            StringsPlus.equals(errorMessage, StringsPlus.POSITION_TRIGGER_ABOVE)
-        ) return false;
-
-        return true;
+        return !StringsPlus.equals(errorMessage, StringsPlus.POSITION_TRIGGER_ABOVE);
     }
 
     /**

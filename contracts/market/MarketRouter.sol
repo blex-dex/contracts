@@ -178,12 +178,12 @@ contract MarketRouter is
             _updateOrderFromPosition(_inputs);
         } else {
             require(markets.contains(_inputs._market), "invalid market");
-            IMarket im = IMarket(_inputs._market);
-            address c = im.collateralToken();
-            IERC20(c).safeTransferFrom(
+            address c = IMarket(_inputs._market).collateralToken();
+            TransferHelper.transferIn(
+                c,
                 msg.sender,
                 _inputs._market,
-                calculateEquivalentCollateralAmount(c, _inputs.collateralDelta) // transfer in amount of collateral token
+                _inputs.collateralDelta
             );
             _inputs._account = msg.sender;
             validateIncreasePosition(_inputs);
@@ -217,10 +217,11 @@ contract MarketRouter is
         _vars._order.setIsFromMarket(_vars.isOpen, _vars.isFromMarket());
         if (_vars.isOpen && _vars.isCreate) {
             address c = IMarket(_vars._market).collateralToken();
-            IERC20(c).safeTransferFrom(
+            TransferHelper.transferIn(
+                c,
                 msg.sender,
                 _vars._market,
-                calculateEquivalentCollateralAmount(c, _vars.pay()) // transfer in amount of collateral token
+                _vars.pay()
             );
         }
         IMarket(_vars._market).updateOrder(_vars);

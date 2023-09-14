@@ -95,7 +95,7 @@ contract OrderBook is IOrderBook, Ac {
      * @param _order The order properties.
      * @return _order The updated order with the triggerAbove parameter set.
      */
-    function setupTriggerAbove(
+    function _setupTriggerAbove(
         MarketDataTypes.UpdateOrderInputs memory _vars,
         Order.Props memory _order
     ) private pure returns (Order.Props memory) {
@@ -125,7 +125,7 @@ contract OrderBook is IOrderBook, Ac {
                     _order.account
                 )
             );
-            _order = setupTriggerAbove(_vars[i], _order);
+            _order = _setupTriggerAbove(_vars[i], _order);
             _orders[i] = _order;
             unchecked {
                 ++i;
@@ -162,7 +162,7 @@ contract OrderBook is IOrderBook, Ac {
 
         _order.price = _vars._order.price;
 
-        _order = setupTriggerAbove(_vars, _order);
+        _order = _setupTriggerAbove(_vars, _order);
 
         if (_vars.isOpen) {
             _order.setTakeprofit(_vars._order.getTakeprofit());

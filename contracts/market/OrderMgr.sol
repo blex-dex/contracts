@@ -57,7 +57,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
             _valid().validPay(_vars.pay());
         }
 
-        _vars._oraclePrice = getPrice(_vars._isLong == _vars.isOpen);
+        _vars._oraclePrice = _getPrice(_vars._isLong == _vars.isOpen);
         if (_vars.isFromMarket()) {
             if (_vars.isOpen == _vars._isLong)
                 _vars._order.price = (_vars._order.price +
@@ -115,7 +115,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
         );
     }
 
-    function getPrice(bool _isMax) private view returns (uint256) {
+    function _getPrice(bool _isMax) private view returns (uint256) {
         IPrice _p = IPrice(priceFeed);
         return _p.getPrice(indexToken, _isMax);
     }
@@ -286,7 +286,7 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
         MarketDataTypes.UpdatePositionInputs memory inputs;
         inputs._market = address(this);
         inputs._isLong = _cache.isLong;
-        inputs._oraclePrice = getPrice(true);
+        inputs._oraclePrice = _getPrice(true);
         inputs.isOpen = _cache.isIncrease;
 
         MarketLib.afterDeleteOrder(

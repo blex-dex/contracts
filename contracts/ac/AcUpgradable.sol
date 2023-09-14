@@ -32,13 +32,13 @@ abstract contract AcUpgradable is AccessControl, Ownable, Initializable {
     // 0xde57aa0116fb656e0ab30962f03bb7a49dccfb8fac7bf6a5cf94d0d56d0e7337
     bytes32 internal constant MULTI_SIGN_ROLE = keccak256("MULTI_SIGN_ROLE");
 
-    uint256 private initBlock;
+    uint256 private _initBlock;
 
     modifier onlyInitOr(bytes32 _role) {
         bool isDefaultAdmin = hasRole(DEFAULT_ADMIN_ROLE, _msgSender());
         if (isDefaultAdmin) {
-            //            if (block.timestamp - initBlock >= 3600 * 24)
-            if (block.timestamp - initBlock >= 1 days) revert("ac time passed");
+            //            if (block.timestamp - _initBlock >= 3600 * 24)
+            if (block.timestamp - _initBlock >= 1 days) revert("ac time passed");
         } else {
             _checkRole(_role, _msgSender());
         }
@@ -46,7 +46,7 @@ abstract contract AcUpgradable is AccessControl, Ownable, Initializable {
     }
 
     function _initialize(address _f) internal {
-        initBlock = block.timestamp;
+        _initBlock = block.timestamp;
         _transferOwnership(_msgSender());
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);

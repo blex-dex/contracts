@@ -56,7 +56,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
             _inputs._slippage = 30;
         }
 
-        _inputs._oraclePrice = getPrice(_inputs._isLong);
+        _inputs._oraclePrice = _getPrice(_inputs._isLong);
         Position.Props memory _position = positionBook.getPosition(
             _inputs._account,
             _inputs._sizeDelta == 0 ? 0 : _inputs._oraclePrice,
@@ -134,7 +134,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
      * @param collD The change in collateral amount.
      * @param fr The fee amount.
      */
-    function commitIncreasePosition(
+    function _commitIncreasePosition(
         MarketDataTypes.UpdatePositionInputs memory _params,
         int256 collD,
         int256 fr
@@ -201,8 +201,8 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
             _params._isLong
         );
         collD = _params.collateralDelta.toInt256() - _totalfee;
-        commitIncreasePosition(_params, collD, _fundingRate);
-        validLiq(_params._account, _params._isLong);
+        _commitIncreasePosition(_params, collD, _fundingRate);
+        _validLiq(_params._account, _params._isLong);
 
         _transationsFees(_totalfee);
 
@@ -224,7 +224,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         );
     }
 
-    function getPrice(bool _isMax) private view returns (uint256 p) {
+    function _getPrice(bool _isMax) private view returns (uint256 p) {
         IPrice _p = IPrice(priceFeed);
         p = _p.getPrice(indexToken, _isMax);
         require(p > 0, "!oracle price");
@@ -273,7 +273,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         Order.Props memory order,
         MarketDataTypes.UpdatePositionInputs memory _params
     ) private {
-        _params._oraclePrice = getPrice(_params._isLong);
+        _params._oraclePrice = _getPrice(_params._isLong);
         require(order.account != address(0), "PositionAddMgr:!account");
         IMarketRouter(marketRouter).validateIncreasePosition(_params);
         (_params._isLong ? orderBookLong : orderBookShort).remove(
@@ -313,7 +313,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         return IMarketValid(marketValid);
     }
 
-    function validLiq(address acc, bool _isLong) private view {
+    function _validLiq(address acc, bool _isLong) private view {
         require(
             _valid().isLiquidate(
                 acc,
@@ -321,7 +321,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
                 _isLong,
                 positionBook,
                 feeRouter,
-                getPrice(!_isLong)
+                _getPrice(!_isLong)
             ) == 0,
             "PositionAddMgr:should'nt liq"
         );
@@ -357,7 +357,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         _createVars.initialize(false);
         _createVars._market = address(this);
         _createVars._isLong = _inputs._isLong;
-        _createVars._oraclePrice = getPrice(!_inputs._isLong);
+        _createVars._oraclePrice = _getPrice(!_inputs._isLong);
         _createVars.isCreate = true;
 
         _createVars._order.setFromOrder(_inputs._fromOrder);

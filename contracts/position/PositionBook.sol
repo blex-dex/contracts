@@ -19,9 +19,9 @@ contract PositionBook is Ac {
 
     PositionStore public shortStore;
 
-    constructor(address factoty) Ac(factoty) {
-        longStore = new PositionStore(factoty, true);
-        shortStore = new PositionStore(factoty, false);
+    constructor(address factory) Ac(factory) {
+        longStore = new PositionStore(factory, true);
+        shortStore = new PositionStore(factory, false);
     }
 
     function initialize(address marketAddr) external initializer {

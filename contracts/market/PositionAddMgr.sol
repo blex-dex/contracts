@@ -204,7 +204,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         _commitIncreasePosition(_params, collD, _fundingRate);
         _validLiq(_params._account, _params._isLong);
 
-        _transationsFees(_totalfee);
+        _transactionFees(_totalfee);
 
         feeRouter.collectFees(_params._account, collateralToken, _fees);
 
@@ -234,7 +234,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
      * @dev Processes the transaction fees.
      * @param fees The amount of fees to be processed.
      */
-    function _transationsFees(int256 fees) private {
+    function _transactionFees(int256 fees) private {
         if (fees < 0) {
             IFeeRouter(feeRouter).withdraw(
                 collateralToken,

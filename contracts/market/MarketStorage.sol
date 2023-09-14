@@ -22,13 +22,6 @@ abstract contract MarketStorage is IMarketStorage {
 
     mapping(bool => mapping(bool => IOrderStore)) orderStores;
 
-    function orderStore(
-        bool isLong,
-        bool isOpen
-    ) public view returns (IOrderStore) {
-        return orderStores[isLong][isOpen];
-    }
-
     IFeeRouter public override feeRouter;
     address public override priceFeed;
     address public override positionStoreLong;
@@ -54,6 +47,13 @@ abstract contract MarketStorage is IMarketStorage {
         Canceled, //5
         SysCancel, //6invalid order
         LeverageLiquidation //7
+    }
+
+    function orderStore(
+        bool isLong,
+        bool isOpen
+    ) public view returns (IOrderStore) {
+        return orderStores[isLong][isOpen];
     }
 
     uint256[50] private ______gap;

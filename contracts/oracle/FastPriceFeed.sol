@@ -242,11 +242,10 @@ contract FastPriceFeed is Ac {
         bool shouldUpdate = _setLastUpdatedValues(_timestamp);
 
         if (shouldUpdate) {
-            address _feed = chainPriceFeed;
 
             for (uint256 i = 0; i < _tokens.length; i++) {
                 address token = _tokens[i];
-                _setPrice(token, _prices[i], _feed);
+                _setPrice(token, _prices[i]);
             }
 
             emit SetPrices(_tokens, _prices, _timestamp);
@@ -263,7 +262,7 @@ contract FastPriceFeed is Ac {
         IMarket.OrderExec[] memory orders
     ) external onlyUpdater {
         _setLastUpdatedValues(timestamp);
-        _setPrice(token, price, chainPriceFeed);
+        _setPrice(token, price);
 
         for (uint256 i = 0; i < orders.length; i++) {
             IMarket _market = IMarket(orders[i].market);
@@ -304,7 +303,6 @@ contract FastPriceFeed is Ac {
         bool shouldUpdate = _setLastUpdatedValues(_timestamp);
 
         if (shouldUpdate) {
-            address _feed = chainPriceFeed;
 
             for (uint256 i = 0; i < _priceBitArray.length; i++) {
                 uint256 priceBits = _priceBitArray[i];
@@ -323,7 +321,7 @@ contract FastPriceFeed is Ac {
                     uint256 adjustedPrice = (price * PRICE_PRECISION) /
                                 tokenPrecision;
 
-                    _setPrice(token, adjustedPrice, _feed);
+                    _setPrice(token, adjustedPrice);
                 }
             }
 
@@ -459,8 +457,6 @@ contract FastPriceFeed is Ac {
         bool shouldUpdate = _setLastUpdatedValues(_timestamp);
 
         if (shouldUpdate) {
-            address _feed = chainPriceFeed;
-
             address[] memory _tokens = tokens;
             uint256[] memory _tokenPrecisions = tokenPrecisions;
             uint256 token_length = _tokens.length;
@@ -477,7 +473,7 @@ contract FastPriceFeed is Ac {
                 uint256 adjustedPrice = (price * PRICE_PRECISION) /
                                 _tokenPrecisions[j];
 
-                _setPrice(token, adjustedPrice, _feed);
+                _setPrice(token, adjustedPrice);
                 unchecked {
                     ++j;
                 }
@@ -487,7 +483,8 @@ contract FastPriceFeed is Ac {
         }
     }
 
-    function _setPrice(address _token, uint256 _price, address _feed) private {
+    function _setPrice(address _token, uint256 _price) private {
+        address _feed=chainPriceFeed;
         if (_feed != address(0)) {
             uint256 refPrice = IChainPriceFeed(_feed).getLatestPrice(_token);
             uint256 fastPrice = prices[_token];

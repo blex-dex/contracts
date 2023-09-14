@@ -57,8 +57,6 @@ library PositionSubMgrLib {
         if (isCloseAll) _params.collateralDelta = _position.collateral;
         if (_params.liqState > 0 || isCloseAll) return 0;
         if (_position.collateral.toInt256() + dPNL - fees <= 0) return 0;
-        if (_params.collateralDelta.toInt256() + dPNL - fees > 0)
-            return _position.collateral - _params.collateralDelta;
         if (_params.collateralDelta.toInt256() + dPNL - fees < 0)
             return (_position.collateral.toInt256() + dPNL - fees).toUint256();
         return _position.collateral - _params.collateralDelta;

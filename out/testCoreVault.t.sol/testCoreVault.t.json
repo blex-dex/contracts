@@ -1,0 +1,21 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "foundry_test/test/vault/testCoreVault.t.sol",
+    "id": 51526,
+    "exportedSymbols": {},
+    "nodeType": "SourceUnit",
+    "src": "19535:0:135",
+    "nodes": [],
+    "license": "BUSL-1.1"
+  },
+  "id": 135
+}

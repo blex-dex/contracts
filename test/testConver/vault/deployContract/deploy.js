@@ -15,7 +15,7 @@ const { deployVault } = require("../../../../scripts/vault/deploy");
 const {
   deployRewardDistributor,
 } = require("../../../../scripts/vault/rewardDistributor");
-const { deployUSDC, batchMint } = require("../../../../scripts/vault/usdc");
+const { deployUSDC, batchMint } = require("../../../../scripts/mocker/USDC");
 const { deployVaultReward } = require("../../../../scripts/vault/vaultReward");
 const { deployVaultRouter } = require("../../../../scripts/vault/vaultRouter");
 

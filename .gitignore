@@ -1,4 +1,8 @@
 node_modules
+artifacts
+
+lib
+out
 .env
 coverage
 coverage.json
@@ -11,8 +15,6 @@ bin
 
 #Hardhat files
 cache
-
-artifacts
 .deps
 
 .DS_Store

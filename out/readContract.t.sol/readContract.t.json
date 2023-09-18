@@ -1,0 +1,21 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "foundry_test/deploy/readContract.t.sol",
+    "id": 40963,
+    "exportedSymbols": {},
+    "nodeType": "SourceUnit",
+    "src": "3019:0:127",
+    "nodes": [],
+    "license": "BUSL-1.1"
+  },
+  "id": 127
+}

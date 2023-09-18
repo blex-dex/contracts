@@ -41,7 +41,7 @@ const {
 } = require("../../../../scripts/mock/marketRouter");
 const { deployMockOrderMgr } = require("../../../../scripts/mock/orderMgr");
 const { deployFeeRouter } = require("../../../../scripts/mock/feeRouter");
-const { deployUSDC } = require("../../../../scripts/vault/usdc");
+const { deployUSDC } = require("../../../../scripts/mocker/USDC");
 const {
   deployMockPositionAddMgr,
   setOrderStore,

@@ -1,0 +1,2021 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "contains",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "get",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "market",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "isLong",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint32",
+              "name": "lastTime",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint216",
+              "name": "extra3",
+              "type": "uint216"
+            },
+            {
+              "internalType": "uint256",
+              "name": "size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateral",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "averagePrice",
+              "type": "uint256"
+            },
+            {
+              "internalType": "int256",
+              "name": "entryFundingRate",
+              "type": "int256"
+            },
+            {
+              "internalType": "int256",
+              "name": "realisedPnl",
+              "type": "int256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra0",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra1",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra2",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct Position.Props",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getGlobalPosition",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "market",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "isLong",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint32",
+              "name": "lastTime",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint216",
+              "name": "extra3",
+              "type": "uint216"
+            },
+            {
+              "internalType": "uint256",
+              "name": "size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateral",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "averagePrice",
+              "type": "uint256"
+            },
+            {
+              "internalType": "int256",
+              "name": "entryFundingRate",
+              "type": "int256"
+            },
+            {
+              "internalType": "int256",
+              "name": "realisedPnl",
+              "type": "int256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra0",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra1",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra2",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct Position.Props",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPositionCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "start",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "end",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPositionKeys",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "globalSize",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isLong",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "positionBook",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "market",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "isLong",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint32",
+              "name": "lastTime",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint216",
+              "name": "extra3",
+              "type": "uint216"
+            },
+            {
+              "internalType": "uint256",
+              "name": "size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateral",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "averagePrice",
+              "type": "uint256"
+            },
+            {
+              "internalType": "int256",
+              "name": "entryFundingRate",
+              "type": "int256"
+            },
+            {
+              "internalType": "int256",
+              "name": "realisedPnl",
+              "type": "int256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra0",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra1",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra2",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct Position.Props",
+          "name": "globalPosition",
+          "type": "tuple"
+        }
+      ],
+      "name": "remove",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "market",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "isLong",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint32",
+              "name": "lastTime",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint216",
+              "name": "extra3",
+              "type": "uint216"
+            },
+            {
+              "internalType": "uint256",
+              "name": "size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateral",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "averagePrice",
+              "type": "uint256"
+            },
+            {
+              "internalType": "int256",
+              "name": "entryFundingRate",
+              "type": "int256"
+            },
+            {
+              "internalType": "int256",
+              "name": "realisedPnl",
+              "type": "int256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra0",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra1",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra2",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct Position.Props",
+          "name": "position",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "market",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "isLong",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint32",
+              "name": "lastTime",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint216",
+              "name": "extra3",
+              "type": "uint216"
+            },
+            {
+              "internalType": "uint256",
+              "name": "size",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateral",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "averagePrice",
+              "type": "uint256"
+            },
+            {
+              "internalType": "int256",
+              "name": "entryFundingRate",
+              "type": "int256"
+            },
+            {
+              "internalType": "int256",
+              "name": "realisedPnl",
+              "type": "int256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra0",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra1",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "extra2",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct Position.Props",
+          "name": "globalPosition",
+          "type": "tuple"
+        }
+      ],
+      "name": "set",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "positionBook",
+          "type": "address"
+        }
+      ],
+      "name": "setPositionBook",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "contains(address)": "5dbe47e8",
+    "get(address)": "c2bc2efc",
+    "getGlobalPosition()": "9027b59e",
+    "getPositionCount()": "81683476",
+    "getPositionKeys(uint256,uint256)": "7f497d97",
+    "globalSize()": "1ee229be",
+    "isLong()": "202a61a1",
+    "positionBook()": "ac0b05a6",
+    "remove(address,(address,bool,uint32,uint216,uint256,uint256,uint256,int256,int256,uint256,uint256,uint256))": "2d015618",
+    "set(address,(address,bool,uint32,uint216,uint256,uint256,uint256,int256,int256,uint256,uint256,uint256),(address,bool,uint32,uint216,uint256,uint256,uint256,int256,int256,uint256,uint256,uint256))": "b7ed1357",
+    "setPositionBook(address)": "8d49701d"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"contains\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"get\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"market\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isLong\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"lastTime\",\"type\":\"uint32\"},{\"internalType\":\"uint216\",\"name\":\"extra3\",\"type\":\"uint216\"},{\"internalType\":\"uint256\",\"name\":\"size\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"collateral\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"averagePrice\",\"type\":\"uint256\"},{\"internalType\":\"int256\",\"name\":\"entryFundingRate\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"realisedPnl\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"extra0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra2\",\"type\":\"uint256\"}],\"internalType\":\"struct Position.Props\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getGlobalPosition\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"market\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isLong\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"lastTime\",\"type\":\"uint32\"},{\"internalType\":\"uint216\",\"name\":\"extra3\",\"type\":\"uint216\"},{\"internalType\":\"uint256\",\"name\":\"size\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"collateral\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"averagePrice\",\"type\":\"uint256\"},{\"internalType\":\"int256\",\"name\":\"entryFundingRate\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"realisedPnl\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"extra0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra2\",\"type\":\"uint256\"}],\"internalType\":\"struct Position.Props\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPositionCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"start\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"end\",\"type\":\"uint256\"}],\"name\":\"getPositionKeys\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"globalSize\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"isLong\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"positionBook\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"market\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isLong\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"lastTime\",\"type\":\"uint32\"},{\"internalType\":\"uint216\",\"name\":\"extra3\",\"type\":\"uint216\"},{\"internalType\":\"uint256\",\"name\":\"size\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"collateral\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"averagePrice\",\"type\":\"uint256\"},{\"internalType\":\"int256\",\"name\":\"entryFundingRate\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"realisedPnl\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"extra0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra2\",\"type\":\"uint256\"}],\"internalType\":\"struct Position.Props\",\"name\":\"globalPosition\",\"type\":\"tuple\"}],\"name\":\"remove\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"market\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isLong\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"lastTime\",\"type\":\"uint32\"},{\"internalType\":\"uint216\",\"name\":\"extra3\",\"type\":\"uint216\"},{\"internalType\":\"uint256\",\"name\":\"size\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"collateral\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"averagePrice\",\"type\":\"uint256\"},{\"internalType\":\"int256\",\"name\":\"entryFundingRate\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"realisedPnl\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"extra0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra2\",\"type\":\"uint256\"}],\"internalType\":\"struct Position.Props\",\"name\":\"position\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"market\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isLong\",\"type\":\"bool\"},{\"internalType\":\"uint32\",\"name\":\"lastTime\",\"type\":\"uint32\"},{\"internalType\":\"uint216\",\"name\":\"extra3\",\"type\":\"uint216\"},{\"internalType\":\"uint256\",\"name\":\"size\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"collateral\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"averagePrice\",\"type\":\"uint256\"},{\"internalType\":\"int256\",\"name\":\"entryFundingRate\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"realisedPnl\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"extra0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"extra2\",\"type\":\"uint256\"}],\"internalType\":\"struct Position.Props\",\"name\":\"globalPosition\",\"type\":\"tuple\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"positionBook\",\"type\":\"address\"}],\"name\":\"setPositionBook\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/position/interfaces/IPositionStore.sol\":\"IPositionStore\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@chainlink/=node_modules/@chainlink/\",\":@eth-optimism/=node_modules/@eth-optimism/\",\":@ethereum-waffle/=node_modules/@ethereum-waffle/\",\":@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/=node_modules/@uniswap/\",\":base64-sol/=node_modules/base64-sol/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/\",\":eth-gas-reporter/=node_modules/eth-gas-reporter/\",\":forge-std/=lib/forge-std/src/\",\":hardhat-deploy/=node_modules/hardhat-deploy/\",\":hardhat-solidity-create2-deployer/=node_modules/hardhat-solidity-create2-deployer/\",\":hardhat/=node_modules/hardhat/\",\":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":openzeppelin/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":solidity-create2-deployer/=node_modules/solidity-create2-deployer/\"]},\"sources\":{\"contracts/position/PositionStruct.sol\":{\"keccak256\":\"0xa036f419bc12d25736302f1f5d89ac354ae52571251025a6f9670c98c1d81286\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://20a8f5d52308f950d7e90882c8622f178beb989821401edebbc1336a6776e415\",\"dweb:/ipfs/QmdMmqGWE6b7G5mBAL4DnQwfRFjjdnCo32Yc1L3sHPm1nW\"]},\"contracts/position/interfaces/IPositionStore.sol\":{\"keccak256\":\"0x9712dd0cde72677dd04b3d9fdde029534fefc3672c01aa947eaeffe8605d3cd4\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://054c6b0f68ba8b60e060ed5ffbdcc7897cf4b69e7fdd79d94e136e5b464447b6\",\"dweb:/ipfs/QmaWY124rDbA2P57chkXc26AhyHCKqGa7ew1EDUNW6jjzg\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.17+commit.8df45f5f"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "contains",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "get",
+          "outputs": [
+            {
+              "internalType": "struct Position.Props",
+              "name": "",
+              "type": "tuple",
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "market",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "isLong",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "lastTime",
+                  "type": "uint32"
+                },
+                {
+                  "internalType": "uint216",
+                  "name": "extra3",
+                  "type": "uint216"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "size",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "collateral",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "averagePrice",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "entryFundingRate",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "realisedPnl",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra0",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra1",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra2",
+                  "type": "uint256"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getGlobalPosition",
+          "outputs": [
+            {
+              "internalType": "struct Position.Props",
+              "name": "",
+              "type": "tuple",
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "market",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "isLong",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "lastTime",
+                  "type": "uint32"
+                },
+                {
+                  "internalType": "uint216",
+                  "name": "extra3",
+                  "type": "uint216"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "size",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "collateral",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "averagePrice",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "entryFundingRate",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "realisedPnl",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra0",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra1",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra2",
+                  "type": "uint256"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getPositionCount",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "start",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "end",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getPositionKeys",
+          "outputs": [
+            {
+              "internalType": "address[]",
+              "name": "",
+              "type": "address[]"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "globalSize",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "isLong",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "positionBook",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "internalType": "struct Position.Props",
+              "name": "globalPosition",
+              "type": "tuple",
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "market",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "isLong",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "lastTime",
+                  "type": "uint32"
+                },
+                {
+                  "internalType": "uint216",
+                  "name": "extra3",
+                  "type": "uint216"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "size",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "collateral",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "averagePrice",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "entryFundingRate",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "realisedPnl",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra0",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra1",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra2",
+                  "type": "uint256"
+                }
+              ]
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "remove"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "internalType": "struct Position.Props",
+              "name": "position",
+              "type": "tuple",
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "market",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "isLong",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "lastTime",
+                  "type": "uint32"
+                },
+                {
+                  "internalType": "uint216",
+                  "name": "extra3",
+                  "type": "uint216"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "size",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "collateral",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "averagePrice",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "entryFundingRate",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "realisedPnl",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra0",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra1",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra2",
+                  "type": "uint256"
+                }
+              ]
+            },
+            {
+              "internalType": "struct Position.Props",
+              "name": "globalPosition",
+              "type": "tuple",
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "market",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "isLong",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "lastTime",
+                  "type": "uint32"
+                },
+                {
+                  "internalType": "uint216",
+                  "name": "extra3",
+                  "type": "uint216"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "size",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "collateral",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "averagePrice",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "entryFundingRate",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "realisedPnl",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra0",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra1",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "extra2",
+                  "type": "uint256"
+                }
+              ]
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "set"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "positionBook",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "setPositionBook"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "@chainlink/=node_modules/@chainlink/",
+        "@eth-optimism/=node_modules/@eth-optimism/",
+        "@ethereum-waffle/=node_modules/@ethereum-waffle/",
+        "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "@uniswap/=node_modules/@uniswap/",
+        "base64-sol/=node_modules/base64-sol/",
+        "ds-test/=lib/forge-std/lib/ds-test/src/",
+        "erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/",
+        "eth-gas-reporter/=node_modules/eth-gas-reporter/",
+        "forge-std/=lib/forge-std/src/",
+        "hardhat-deploy/=node_modules/hardhat-deploy/",
+        "hardhat-solidity-create2-deployer/=node_modules/hardhat-solidity-create2-deployer/",
+        "hardhat/=node_modules/hardhat/",
+        "openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "openzeppelin/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "solidity-create2-deployer/=node_modules/solidity-create2-deployer/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "contracts/position/interfaces/IPositionStore.sol": "IPositionStore"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "contracts/position/PositionStruct.sol": {
+        "keccak256": "0xa036f419bc12d25736302f1f5d89ac354ae52571251025a6f9670c98c1d81286",
+        "urls": [
+          "bzz-raw://20a8f5d52308f950d7e90882c8622f178beb989821401edebbc1336a6776e415",
+          "dweb:/ipfs/QmdMmqGWE6b7G5mBAL4DnQwfRFjjdnCo32Yc1L3sHPm1nW"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/position/interfaces/IPositionStore.sol": {
+        "keccak256": "0x9712dd0cde72677dd04b3d9fdde029534fefc3672c01aa947eaeffe8605d3cd4",
+        "urls": [
+          "bzz-raw://054c6b0f68ba8b60e060ed5ffbdcc7897cf4b69e7fdd79d94e136e5b464447b6",
+          "dweb:/ipfs/QmaWY124rDbA2P57chkXc26AhyHCKqGa7ew1EDUNW6jjzg"
+        ],
+        "license": "BUSL-1.1"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "contracts/position/interfaces/IPositionStore.sol",
+    "id": 30579,
+    "exportedSymbols": {
+      "IPositionStore": [
+        30578
+      ],
+      "Position": [
+        30340
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "37:1004:86",
+    "nodes": [
+      {
+        "id": 30501,
+        "nodeType": "PragmaDirective",
+        "src": "37:24:86",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".17"
+        ]
+      },
+      {
+        "id": 30502,
+        "nodeType": "ImportDirective",
+        "src": "63:31:86",
+        "nodes": [],
+        "absolutePath": "contracts/position/PositionStruct.sol",
+        "file": "../PositionStruct.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 30579,
+        "sourceUnit": 30341,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 30578,
+        "nodeType": "ContractDefinition",
+        "src": "96:944:86",
+        "nodes": [
+          {
+            "id": 30507,
+            "nodeType": "FunctionDefinition",
+            "src": "127:56:86",
+            "nodes": [],
+            "functionSelector": "ac0b05a6",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "positionBook",
+            "nameLocation": "136:12:86",
+            "parameters": {
+              "id": 30503,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "148:2:86"
+            },
+            "returnParameters": {
+              "id": 30506,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30505,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30507,
+                  "src": "174:7:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 30504,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "174:7:86",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "173:9:86"
+            },
+            "scope": 30578,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30512,
+            "nodeType": "FunctionDefinition",
+            "src": "189:47:86",
+            "nodes": [],
+            "functionSelector": "202a61a1",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "isLong",
+            "nameLocation": "198:6:86",
+            "parameters": {
+              "id": 30508,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "204:2:86"
+            },
+            "returnParameters": {
+              "id": 30511,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30510,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30512,
+                  "src": "230:4:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 30509,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "230:4:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "229:6:86"
+            },
+            "scope": 30578,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30520,
+            "nodeType": "FunctionDefinition",
+            "src": "242:76:86",
+            "nodes": [],
+            "functionSelector": "c2bc2efc",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "get",
+            "nameLocation": "251:3:86",
+            "parameters": {
+              "id": 30515,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30514,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "263:7:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30520,
+                  "src": "255:15:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 30513,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "255:7:86",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "254:17:86"
+            },
+            "returnParameters": {
+              "id": 30519,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30518,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30520,
+                  "src": "295:21:86",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Props_$30140_memory_ptr",
+                    "typeString": "struct Position.Props"
+                  },
+                  "typeName": {
+                    "id": 30517,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 30516,
+                      "name": "Position.Props",
+                      "nameLocations": [
+                        "295:8:86",
+                        "304:5:86"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30140,
+                      "src": "295:14:86"
+                    },
+                    "referencedDeclaration": 30140,
+                    "src": "295:14:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Props_$30140_storage_ptr",
+                      "typeString": "struct Position.Props"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "294:23:86"
+            },
+            "scope": 30578,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30525,
+            "nodeType": "FunctionDefinition",
+            "src": "324:54:86",
+            "nodes": [],
+            "functionSelector": "1ee229be",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "globalSize",
+            "nameLocation": "333:10:86",
+            "parameters": {
+              "id": 30521,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "343:2:86"
+            },
+            "returnParameters": {
+              "id": 30524,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30523,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30525,
+                  "src": "369:7:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 30522,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "369:7:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "368:9:86"
+            },
+            "scope": 30578,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30531,
+            "nodeType": "FunctionDefinition",
+            "src": "384:75:86",
+            "nodes": [],
+            "functionSelector": "9027b59e",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getGlobalPosition",
+            "nameLocation": "393:17:86",
+            "parameters": {
+              "id": 30526,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "410:2:86"
+            },
+            "returnParameters": {
+              "id": 30530,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30529,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30531,
+                  "src": "436:21:86",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Props_$30140_memory_ptr",
+                    "typeString": "struct Position.Props"
+                  },
+                  "typeName": {
+                    "id": 30528,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 30527,
+                      "name": "Position.Props",
+                      "nameLocations": [
+                        "436:8:86",
+                        "445:5:86"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30140,
+                      "src": "436:14:86"
+                    },
+                    "referencedDeclaration": 30140,
+                    "src": "436:14:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Props_$30140_storage_ptr",
+                      "typeString": "struct Position.Props"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "435:23:86"
+            },
+            "scope": 30578,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30538,
+            "nodeType": "FunctionDefinition",
+            "src": "465:64:86",
+            "nodes": [],
+            "functionSelector": "5dbe47e8",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "contains",
+            "nameLocation": "474:8:86",
+            "parameters": {
+              "id": 30534,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30533,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "491:7:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30538,
+                  "src": "483:15:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 30532,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "483:7:86",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "482:17:86"
+            },
+            "returnParameters": {
+              "id": 30537,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30536,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30538,
+                  "src": "523:4:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 30535,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "523:4:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "522:6:86"
+            },
+            "scope": 30578,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30543,
+            "nodeType": "FunctionDefinition",
+            "src": "535:60:86",
+            "nodes": [],
+            "functionSelector": "81683476",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPositionCount",
+            "nameLocation": "544:16:86",
+            "parameters": {
+              "id": 30539,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "560:2:86"
+            },
+            "returnParameters": {
+              "id": 30542,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30541,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30543,
+                  "src": "586:7:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 30540,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "586:7:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "585:9:86"
+            },
+            "scope": 30578,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30553,
+            "nodeType": "FunctionDefinition",
+            "src": "601:116:86",
+            "nodes": [],
+            "functionSelector": "7f497d97",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPositionKeys",
+            "nameLocation": "610:15:86",
+            "parameters": {
+              "id": 30548,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30545,
+                  "mutability": "mutable",
+                  "name": "start",
+                  "nameLocation": "643:5:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30553,
+                  "src": "635:13:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 30544,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "635:7:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 30547,
+                  "mutability": "mutable",
+                  "name": "end",
+                  "nameLocation": "666:3:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30553,
+                  "src": "658:11:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 30546,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "658:7:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "625:50:86"
+            },
+            "returnParameters": {
+              "id": 30552,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30551,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30553,
+                  "src": "699:16:86",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_$dyn_memory_ptr",
+                    "typeString": "address[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 30549,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "699:7:86",
+                      "stateMutability": "nonpayable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "id": 30550,
+                    "nodeType": "ArrayTypeName",
+                    "src": "699:9:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                      "typeString": "address[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "698:18:86"
+            },
+            "scope": 30578,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30558,
+            "nodeType": "FunctionDefinition",
+            "src": "723:56:86",
+            "nodes": [],
+            "functionSelector": "8d49701d",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setPositionBook",
+            "nameLocation": "732:15:86",
+            "parameters": {
+              "id": 30556,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30555,
+                  "mutability": "mutable",
+                  "name": "positionBook",
+                  "nameLocation": "756:12:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30558,
+                  "src": "748:20:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 30554,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "748:7:86",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "747:22:86"
+            },
+            "returnParameters": {
+              "id": 30557,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "778:0:86"
+            },
+            "scope": 30578,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30569,
+            "nodeType": "FunctionDefinition",
+            "src": "785:143:86",
+            "nodes": [],
+            "functionSelector": "b7ed1357",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "set",
+            "nameLocation": "794:3:86",
+            "parameters": {
+              "id": 30567,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30560,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "815:7:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30569,
+                  "src": "807:15:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 30559,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "807:7:86",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 30563,
+                  "mutability": "mutable",
+                  "name": "position",
+                  "nameLocation": "856:8:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30569,
+                  "src": "832:32:86",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Props_$30140_calldata_ptr",
+                    "typeString": "struct Position.Props"
+                  },
+                  "typeName": {
+                    "id": 30562,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 30561,
+                      "name": "Position.Props",
+                      "nameLocations": [
+                        "832:8:86",
+                        "841:5:86"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30140,
+                      "src": "832:14:86"
+                    },
+                    "referencedDeclaration": 30140,
+                    "src": "832:14:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Props_$30140_storage_ptr",
+                      "typeString": "struct Position.Props"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 30566,
+                  "mutability": "mutable",
+                  "name": "globalPosition",
+                  "nameLocation": "898:14:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30569,
+                  "src": "874:38:86",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Props_$30140_calldata_ptr",
+                    "typeString": "struct Position.Props"
+                  },
+                  "typeName": {
+                    "id": 30565,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 30564,
+                      "name": "Position.Props",
+                      "nameLocations": [
+                        "874:8:86",
+                        "883:5:86"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30140,
+                      "src": "874:14:86"
+                    },
+                    "referencedDeclaration": 30140,
+                    "src": "874:14:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Props_$30140_storage_ptr",
+                      "typeString": "struct Position.Props"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "797:121:86"
+            },
+            "returnParameters": {
+              "id": 30568,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "927:0:86"
+            },
+            "scope": 30578,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 30577,
+            "nodeType": "FunctionDefinition",
+            "src": "934:104:86",
+            "nodes": [],
+            "functionSelector": "2d015618",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "remove",
+            "nameLocation": "943:6:86",
+            "parameters": {
+              "id": 30575,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 30571,
+                  "mutability": "mutable",
+                  "name": "account",
+                  "nameLocation": "967:7:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30577,
+                  "src": "959:15:86",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 30570,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "959:7:86",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 30574,
+                  "mutability": "mutable",
+                  "name": "globalPosition",
+                  "nameLocation": "1008:14:86",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 30577,
+                  "src": "984:38:86",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Props_$30140_calldata_ptr",
+                    "typeString": "struct Position.Props"
+                  },
+                  "typeName": {
+                    "id": 30573,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 30572,
+                      "name": "Position.Props",
+                      "nameLocations": [
+                        "984:8:86",
+                        "993:5:86"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30140,
+                      "src": "984:14:86"
+                    },
+                    "referencedDeclaration": 30140,
+                    "src": "984:14:86",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Props_$30140_storage_ptr",
+                      "typeString": "struct Position.Props"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "949:79:86"
+            },
+            "returnParameters": {
+              "id": 30576,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1037:0:86"
+            },
+            "scope": 30578,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IPositionStore",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          30578
+        ],
+        "name": "IPositionStore",
+        "nameLocation": "106:14:86",
+        "scope": 30579,
+        "usedErrors": []
+      }
+    ],
+    "license": "BUSL-1.1"
+  },
+  "id": 86
+}

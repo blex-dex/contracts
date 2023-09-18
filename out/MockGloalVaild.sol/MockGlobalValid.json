@@ -1,0 +1,420 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "market",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sizeDelta",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "isLong",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint256",
+              "name": "globalLongSizes",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "globalShortSizes",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "userLongSizes",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "userShortSizes",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "marketLongSizes",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "marketShortSizes",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "aum",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IGlobalValid.ValidParams",
+          "name": "params",
+          "type": "tuple"
+        }
+      ],
+      "name": "isIncreasePosition",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x608060405234801561001057600080fd5b50610187806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c806328c7b51014610030575b600080fd5b61004461003e3660046100bc565b50600190565b604051901515815260200160405180910390f35b604051610140810167ffffffffffffffff8111828210171561008a57634e487b7160e01b600052604160045260246000fd5b60405290565b80356001600160a01b03811681146100a757600080fd5b919050565b803580151581146100a757600080fd5b600061014082840312156100cf57600080fd5b6100d7610058565b6100e083610090565b8152602083013560208201526100f8604084016100ac565b6040820152606083013560608201526080830135608082015260a083013560a082015260c083013560c082015260e083013560e0820152610100808401358183015250610120808401358183015250809150509291505056fea264697066735822122065dd6ef8a3bb4852893a67b615d7481f148cf344d1971fd0c0113788f3d80c6b64736f6c63430008110033",
+    "sourceMap": "113:175:40:-:0;;;;;;;;;;;;;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x608060405234801561001057600080fd5b506004361061002b5760003560e01c806328c7b51014610030575b600080fd5b61004461003e3660046100bc565b50600190565b604051901515815260200160405180910390f35b604051610140810167ffffffffffffffff8111828210171561008a57634e487b7160e01b600052604160045260246000fd5b60405290565b80356001600160a01b03811681146100a757600080fd5b919050565b803580151581146100a757600080fd5b600061014082840312156100cf57600080fd5b6100d7610058565b6100e083610090565b8152602083013560208201526100f8604084016100ac565b6040820152606083013560608201526080830135608082015260a083013560a082015260c083013560c082015260e083013560e0820152610100808401358183015250610120808401358183015250809150509291505056fea264697066735822122065dd6ef8a3bb4852893a67b615d7481f148cf344d1971fd0c0113788f3d80c6b64736f6c63430008110033",
+    "sourceMap": "113:175:40:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;146:139;;;;;;:::i;:::-;-1:-1:-1;274:4:40;;146:139;;;;1801:14:232;;1794:22;1776:41;;1764:2;1749:18;146:139:40;;;;;;;14:344:232;81:2;75:9;123:3;111:16;;157:18;142:34;;178:22;;;139:62;136:185;;;243:10;238:3;234:20;231:1;224:31;278:4;275:1;268:15;306:4;303:1;296:15;136:185;337:2;330:22;14:344;:::o;363:173::-;431:20;;-1:-1:-1;;;;;480:31:232;;470:42;;460:70;;526:1;523;516:12;460:70;363:173;;;:::o;541:160::-;606:20;;662:13;;655:21;645:32;;635:60;;691:1;688;681:12;706:925;795:6;848:3;836:9;827:7;823:23;819:33;816:53;;;865:1;862;855:12;816:53;891:17;;:::i;:::-;931:29;950:9;931:29;:::i;:::-;924:5;917:44;1021:2;1010:9;1006:18;993:32;988:2;981:5;977:14;970:56;1058:35;1089:2;1078:9;1074:18;1058:35;:::i;:::-;1053:2;1046:5;1042:14;1035:59;1154:2;1143:9;1139:18;1126:32;1121:2;1114:5;1110:14;1103:56;1220:3;1209:9;1205:19;1192:33;1186:3;1179:5;1175:15;1168:58;1287:3;1276:9;1272:19;1259:33;1253:3;1246:5;1242:15;1235:58;1354:3;1343:9;1339:19;1326:33;1320:3;1313:5;1309:15;1302:58;1421:3;1410:9;1406:19;1393:33;1387:3;1380:5;1376:15;1369:58;1446:3;1509:2;1498:9;1494:18;1481:32;1476:2;1469:5;1465:14;1458:56;;1533:3;1596:2;1585:9;1581:18;1568:32;1563:2;1556:5;1552:14;1545:56;;1620:5;1610:15;;;706:925;;;;:::o",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "isIncreasePosition((address,uint256,bool,uint256,uint256,uint256,uint256,uint256,uint256,uint256))": "28c7b510"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"market\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"sizeDelta\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isLong\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"globalLongSizes\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"globalShortSizes\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"userLongSizes\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"userShortSizes\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"marketLongSizes\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"marketShortSizes\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"aum\",\"type\":\"uint256\"}],\"internalType\":\"struct IGlobalValid.ValidParams\",\"name\":\"params\",\"type\":\"tuple\"}],\"name\":\"isIncreasePosition\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/mocker/MockGloalVaild.sol\":\"MockGlobalValid\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@chainlink/=node_modules/@chainlink/\",\":@eth-optimism/=node_modules/@eth-optimism/\",\":@ethereum-waffle/=node_modules/@ethereum-waffle/\",\":@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/=node_modules/@uniswap/\",\":base64-sol/=node_modules/base64-sol/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/\",\":eth-gas-reporter/=node_modules/eth-gas-reporter/\",\":forge-std/=lib/forge-std/src/\",\":hardhat-deploy/=node_modules/hardhat-deploy/\",\":hardhat-solidity-create2-deployer/=node_modules/hardhat-solidity-create2-deployer/\",\":hardhat/=node_modules/hardhat/\",\":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":openzeppelin/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":solidity-create2-deployer/=node_modules/solidity-create2-deployer/\"]},\"sources\":{\"contracts/market/interfaces/IGlobalValid.sol\":{\"keccak256\":\"0x5eef1d5d1e5bf37ed8d5f482f2cbf2330f298eb36356b0a282371683d35125b2\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://82bb07ad49ca394eb035de18368df9b57d433490a75a9fb046d734c3534404f9\",\"dweb:/ipfs/QmcUY9ipngUv3r1fG6zTQYYaNYd5aYt7uNoYoL1cJr3skJ\"]},\"contracts/mocker/MockGloalVaild.sol\":{\"keccak256\":\"0x97fe140a8430837978bc9f28e8593a42c09b4929782442b17c142a8117b7e995\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://6fb14c0aaabcf6aac74597279db55152bcdc43964fa045043570b6d9ff93ed11\",\"dweb:/ipfs/QmZqZyyF2UpemBNB1ZHYq9hWLoynm6GHfR9W7vyeJ7Rdai\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.17+commit.8df45f5f"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "struct IGlobalValid.ValidParams",
+              "name": "params",
+              "type": "tuple",
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "market",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "sizeDelta",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "isLong",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "globalLongSizes",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "globalShortSizes",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "userLongSizes",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "userShortSizes",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "marketLongSizes",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "marketShortSizes",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "aum",
+                  "type": "uint256"
+                }
+              ]
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "isIncreasePosition",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "@chainlink/=node_modules/@chainlink/",
+        "@eth-optimism/=node_modules/@eth-optimism/",
+        "@ethereum-waffle/=node_modules/@ethereum-waffle/",
+        "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "@uniswap/=node_modules/@uniswap/",
+        "base64-sol/=node_modules/base64-sol/",
+        "ds-test/=lib/forge-std/lib/ds-test/src/",
+        "erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/",
+        "eth-gas-reporter/=node_modules/eth-gas-reporter/",
+        "forge-std/=lib/forge-std/src/",
+        "hardhat-deploy/=node_modules/hardhat-deploy/",
+        "hardhat-solidity-create2-deployer/=node_modules/hardhat-solidity-create2-deployer/",
+        "hardhat/=node_modules/hardhat/",
+        "openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "openzeppelin/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "solidity-create2-deployer/=node_modules/solidity-create2-deployer/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "contracts/mocker/MockGloalVaild.sol": "MockGlobalValid"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "contracts/market/interfaces/IGlobalValid.sol": {
+        "keccak256": "0x5eef1d5d1e5bf37ed8d5f482f2cbf2330f298eb36356b0a282371683d35125b2",
+        "urls": [
+          "bzz-raw://82bb07ad49ca394eb035de18368df9b57d433490a75a9fb046d734c3534404f9",
+          "dweb:/ipfs/QmcUY9ipngUv3r1fG6zTQYYaNYd5aYt7uNoYoL1cJr3skJ"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/mocker/MockGloalVaild.sol": {
+        "keccak256": "0x97fe140a8430837978bc9f28e8593a42c09b4929782442b17c142a8117b7e995",
+        "urls": [
+          "bzz-raw://6fb14c0aaabcf6aac74597279db55152bcdc43964fa045043570b6d9ff93ed11",
+          "dweb:/ipfs/QmZqZyyF2UpemBNB1ZHYq9hWLoynm6GHfR9W7vyeJ7Rdai"
+        ],
+        "license": "BUSL-1.1"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "contracts/mocker/MockGloalVaild.sol",
+    "id": 17265,
+    "exportedSymbols": {
+      "IGlobalValid": [
+        13243
+      ],
+      "MockGlobalValid": [
+        17264
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "37:252:40",
+    "nodes": [
+      {
+        "id": 17251,
+        "nodeType": "PragmaDirective",
+        "src": "37:24:40",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".17"
+        ]
+      },
+      {
+        "id": 17252,
+        "nodeType": "ImportDirective",
+        "src": "63:47:40",
+        "nodes": [],
+        "absolutePath": "contracts/market/interfaces/IGlobalValid.sol",
+        "file": "../market/interfaces/IGlobalValid.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 17265,
+        "sourceUnit": 13244,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 17264,
+        "nodeType": "ContractDefinition",
+        "src": "113:175:40",
+        "nodes": [
+          {
+            "id": 17263,
+            "nodeType": "FunctionDefinition",
+            "src": "146:139:40",
+            "nodes": [],
+            "body": {
+              "id": 17262,
+              "nodeType": "Block",
+              "src": "258:27:40",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "hexValue": "74727565",
+                    "id": 17260,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "274:4:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "functionReturnParameters": 17259,
+                  "id": 17261,
+                  "nodeType": "Return",
+                  "src": "267:11:40"
+                }
+              ]
+            },
+            "functionSelector": "28c7b510",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "isIncreasePosition",
+            "nameLocation": "155:18:40",
+            "parameters": {
+              "id": 17256,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 17255,
+                  "mutability": "mutable",
+                  "name": "params",
+                  "nameLocation": "216:6:40",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 17263,
+                  "src": "184:38:40",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_ValidParams_$13177_memory_ptr",
+                    "typeString": "struct IGlobalValid.ValidParams"
+                  },
+                  "typeName": {
+                    "id": 17254,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 17253,
+                      "name": "IGlobalValid.ValidParams",
+                      "nameLocations": [
+                        "184:12:40",
+                        "197:11:40"
+                      ],
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 13177,
+                      "src": "184:24:40"
+                    },
+                    "referencedDeclaration": 13177,
+                    "src": "184:24:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_ValidParams_$13177_storage_ptr",
+                      "typeString": "struct IGlobalValid.ValidParams"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "173:55:40"
+            },
+            "returnParameters": {
+              "id": 17259,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 17258,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 17263,
+                  "src": "252:4:40",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 17257,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "252:4:40",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "251:6:40"
+            },
+            "scope": 17264,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "MockGlobalValid",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "linearizedBaseContracts": [
+          17264
+        ],
+        "name": "MockGlobalValid",
+        "nameLocation": "122:15:40",
+        "scope": 17265,
+        "usedErrors": []
+      }
+    ],
+    "license": "BUSL-1.1"
+  },
+  "id": 40
+}

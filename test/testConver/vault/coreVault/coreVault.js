@@ -37,7 +37,7 @@ const {
   approve,
   balanceOf,
   connectApprove,
-} = require("../../../../scripts/vault/usdc");
+} = require("../../../../scripts/mocker/USDC");
 const { setMarket } = require("../../../../scripts/vault/vaultRouter");
 const {
   deployMarket,
@@ -91,7 +91,6 @@ describe("coreVault", function () {
   });
 
   it("preMint && Mint", async () => {
-
     let preMint = await previewMint(1000 + 1000);
     console.log(preMint);
     let bal = await balanceOfCoreVault(owner.address);

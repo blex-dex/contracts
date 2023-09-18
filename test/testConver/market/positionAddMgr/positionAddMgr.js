@@ -17,7 +17,7 @@ const {
   setPrice,
   readOracleContract,
 } = require("../../../../scripts/mock/oracle");
-const { deployUSDC } = require("../../../../scripts/vault/usdc");
+const { deployUSDC } = require("../../../../scripts/mocker/USDC");
 const { expect } = require("chai");
 const {
   deployMockPositionAddMgr,

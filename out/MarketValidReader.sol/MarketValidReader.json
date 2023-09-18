@@ -1,0 +1,2818 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_addr",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "getAllowClose",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllowOpen",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getConf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMaxLev",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMaxTradeAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMinCollateral",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMinLev",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMinPay",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "marketValid",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxSlippage",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minSlippage",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x608060405234801561001057600080fd5b506040516108d23803806108d283398101604081905261002f91610054565b600080546001600160a01b0319166001600160a01b0392909216919091179055610084565b60006020828403121561006657600080fd5b81516001600160a01b038116811461007d57600080fd5b9392505050565b61083f806100936000396000f3fe608060405234801561001057600080fd5b50600436106100a95760003560e01c80638c04166f116100715780638c04166f146100f9578063b1b1fdc214610101578063b894300d14610109578063c0677c4714610134578063e3a7b3b81461013c578063e830b6901461014457600080fd5b806309aea85f146100ae5780632a5f1e38146100c957806342274d71146100d1578063424a30fb146100d9578063478e3597146100f1575b600080fd5b6100b661014c565b6040519081526020015b60405180910390f35b6100b66101c6565b6100b6610241565b6100e16102c2565b60405190151581526020016100c0565b6100b661033e565b6100b66103bc565b6100e161043b565b60005461011c906001600160a01b031681565b6040516001600160a01b0390911681526020016100c0565b6100b66104b7565b6100b6610533565b6100b66105a8565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610198573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101bc9190610695565b61061d565b905090565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610212573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906102369190610695565b5160241c610fff1690565b6000805460408051631779272960e01b8152905183926001600160a01b03169163177927299160048083019260209291908290030181865afa15801561028b573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906102af9190610695565b805190915060181c610fff165b91505090565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa15801561030e573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103329190610695565b51600f606c1b16151590565b60008060009054906101000a90046001600160a01b03166001600160a01b031663177927296040518163ffffffff1660e01b8152600401602060405180830381865afa158015610392573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103b69190610695565b51919050565b6000805460408051631779272960e01b8152905183926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610406573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061042a9190610695565b8051909150600c1c610fff166102bc565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610487573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104ab9190610695565b51600f60681b16151590565b6000805460408051631779272960e01b8152905183926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610501573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906105259190610695565b90506102bc8151610fff1690565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa15801561057f573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906105a39190610695565b610643565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa1580156105f4573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906106189190610695565b610661565b60006106288261067f565b825161063d919060481c63ffffffff166106fb565b92915050565b600061064e8261067f565b825161063d919060301c610fff166106fb565b600061066c8261067f565b825161063d9190603c1c610fff166106fb565b805160009061063d9060701c60ff16600a6107f6565b6000602082840312156106a757600080fd5b6040516020810181811067ffffffffffffffff821117156106d857634e487b7160e01b600052604160045260246000fd5b6040529151825250919050565b634e487b7160e01b600052601160045260246000fd5b808202811582820484141761063d5761063d6106e5565b600181815b8085111561074d578160001904821115610733576107336106e5565b8085161561074057918102915b93841c9390800290610717565b509250929050565b6000826107645750600161063d565b816107715750600061063d565b81600181146107875760028114610791576107ad565b600191505061063d565b60ff8411156107a2576107a26106e5565b50506001821b61063d565b5060208310610133831016604e8410600b84101617156107d0575081810a61063d565b6107da8383610712565b80600019048211156107ee576107ee6106e5565b029392505050565b60006108028383610755565b939250505056fea2646970667358221220c35fed09fdbc64db6311cea65ee5b21b56d36b63d02c4c2216bab41673e3f2f764736f6c63430008110033",
+    "sourceMap": "220:1630:34:-:0;;;340:63;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;377:11;:19;;-1:-1:-1;;;;;;377:19:34;-1:-1:-1;;;;;377:19:34;;;;;;;;;;220:1630;;14:290:232;84:6;137:2;125:9;116:7;112:23;108:32;105:52;;;153:1;150;143:12;105:52;179:16;;-1:-1:-1;;;;;224:31:232;;214:42;;204:70;;270:1;267;260:12;204:70;293:5;14:290;-1:-1:-1;;;14:290:232:o;:::-;220:1630:34;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x608060405234801561001057600080fd5b50600436106100a95760003560e01c80638c04166f116100715780638c04166f146100f9578063b1b1fdc214610101578063b894300d14610109578063c0677c4714610134578063e3a7b3b81461013c578063e830b6901461014457600080fd5b806309aea85f146100ae5780632a5f1e38146100c957806342274d71146100d1578063424a30fb146100d9578063478e3597146100f1575b600080fd5b6100b661014c565b6040519081526020015b60405180910390f35b6100b66101c6565b6100b6610241565b6100e16102c2565b60405190151581526020016100c0565b6100b661033e565b6100b66103bc565b6100e161043b565b60005461011c906001600160a01b031681565b6040516001600160a01b0390911681526020016100c0565b6100b66104b7565b6100b6610533565b6100b66105a8565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610198573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101bc9190610695565b61061d565b905090565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610212573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906102369190610695565b5160241c610fff1690565b6000805460408051631779272960e01b8152905183926001600160a01b03169163177927299160048083019260209291908290030181865afa15801561028b573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906102af9190610695565b805190915060181c610fff165b91505090565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa15801561030e573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103329190610695565b51600f606c1b16151590565b60008060009054906101000a90046001600160a01b03166001600160a01b031663177927296040518163ffffffff1660e01b8152600401602060405180830381865afa158015610392573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103b69190610695565b51919050565b6000805460408051631779272960e01b8152905183926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610406573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061042a9190610695565b8051909150600c1c610fff166102bc565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610487573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104ab9190610695565b51600f60681b16151590565b6000805460408051631779272960e01b8152905183926001600160a01b03169163177927299160048083019260209291908290030181865afa158015610501573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906105259190610695565b90506102bc8151610fff1690565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa15801561057f573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906105a39190610695565b610643565b6000805460408051631779272960e01b815290516101c1926001600160a01b03169163177927299160048083019260209291908290030181865afa1580156105f4573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906106189190610695565b610661565b60006106288261067f565b825161063d919060481c63ffffffff166106fb565b92915050565b600061064e8261067f565b825161063d919060301c610fff166106fb565b600061066c8261067f565b825161063d9190603c1c610fff166106fb565b805160009061063d9060701c60ff16600a6107f6565b6000602082840312156106a757600080fd5b6040516020810181811067ffffffffffffffff821117156106d857634e487b7160e01b600052604160045260246000fd5b6040529151825250919050565b634e487b7160e01b600052601160045260246000fd5b808202811582820484141761063d5761063d6106e5565b600181815b8085111561074d578160001904821115610733576107336106e5565b8085161561074057918102915b93841c9390800290610717565b509250929050565b6000826107645750600161063d565b816107715750600061063d565b81600181146107875760028114610791576107ad565b600191505061063d565b60ff8411156107a2576107a26106e5565b50506001821b61063d565b5060208310610133831016604e8410600b84101617156107d0575081810a61063d565b6107da8383610712565b80600019048211156107ee576107ee6106e5565b029392505050565b60006108028383610755565b939250505056fea2646970667358221220c35fed09fdbc64db6311cea65ee5b21b56d36b63d02c4c2216bab41673e3f2f764736f6c63430008110033",
+    "sourceMap": "220:1630:34:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1452:134;;;:::i;:::-;;;160:25:232;;;148:2;133:18;1452:134:34;;;;;;;;1066:118;;;:::i;527:169::-;;;:::i;1592:124::-;;;:::i;:::-;;;361:14:232;;354:22;336:41;;324:2;309:18;1592:124:34;196:187:232;409:112:34;;;:::i;884:176::-;;;:::i;1722:126::-;;;:::i;307:26::-;;;;;-1:-1:-1;;;;;307:26:34;;;;;;-1:-1:-1;;;;;552:32:232;;;534:51;;522:2;507:18;307:26:34;388:203:232;702:176:34;;;:::i;1190:118::-;;;:::i;1314:132::-;;;:::i;1452:134::-;1504:4;1540:11;;1527:32;;;-1:-1:-1;;;1527:32:34;;;;:52;;-1:-1:-1;;;;;1540:11:34;;1527:30;;:32;;;;;;;;;;;;;;1540:11;1527:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;:50;:52::i;:::-;1520:59;;1452:134;:::o;1066:118::-;1110:4;1146:11;;1133:32;;;-1:-1:-1;;;1133:32:34;;;;:44;;-1:-1:-1;;;;;1146:11:34;;1133:30;;:32;;;;;;;;;;;;;;1146:11;1133:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;4536:9:10;2132;4535:51;;;;4421:172;527:169:34;571:4;635:11;;622:32;;;-1:-1:-1;;;622:32:34;;;;571:4;;-1:-1:-1;;;;;635:11:34;;622:30;;:32;;;;;;;;;;;;;;635:11;622:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;4057:9:10;;587:67:34;;-1:-1:-1;2077:9:10;4056:51;;;671:18:34;664:25;;;527:169;:::o;1592:124::-;1639:4;1675:11;;1662:32;;;-1:-1:-1;;;1662:32:34;;;;:47;;-1:-1:-1;;;;;1675:11:34;;1662:30;;:32;;;;;;;;;;;;;;1675:11;1662:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;8063:9:10;-1:-1:-1;;;8063:28:10;8062:35;;;7948:156;409:112:34;451:7;490:11;;;;;;;;;-1:-1:-1;;;;;490:11:34;-1:-1:-1;;;;;477:30:34;;:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;:37;;409:112;-1:-1:-1;409:112:34:o;884:176::-;930:4;994:11;;981:32;;;-1:-1:-1;;;981:32:34;;;;930:4;;-1:-1:-1;;;;;994:11:34;;981:30;;:32;;;;;;;;;;;;;;994:11;981:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;3568:9:10;;946:67:34;;-1:-1:-1;1995:5:10;3567:61;;;1030:23:34;3448:187:10;1722:126:34;1770:4;1806:11;;1793:32;;;-1:-1:-1;;;1793:32:34;;;;:48;;-1:-1:-1;;;;;1806:11:34;;1793:30;;:32;;;;;;;;;;;;;;1806:11;1793:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;7656:9:10;-1:-1:-1;;;7656:29:10;7655:36;;;7540:158;702:176:34;748:4;812:11;;799:32;;;-1:-1:-1;;;799:32:34;;;;748:4;;-1:-1:-1;;;;;812:11:34;;799:30;;:32;;;;;;;;;;;;;;812:11;799:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;764:67;;848:23;:6;3089:9:10;3101:18;3089:30;;2970:156;1190:118:34;1234:4;1270:11;;1257:32;;;-1:-1:-1;;;1257:32:34;;;;:44;;-1:-1:-1;;;;;1270:11:34;;1257:30;;:32;;;;;;;;;;;;;;1270:11;1257:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;:42;:44::i;1314:132::-;1365:4;1401:11;;1388:32;;;-1:-1:-1;;;1388:32:34;;;;:51;;-1:-1:-1;;;;;1401:11:34;;1388:30;;:32;;;;;;;;;;;;;;1401:11;1388:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;:49;:51::i;6600:249:10:-;6696:7;6824:18;:4;:16;:18::i;:::-;6736:9;;6734:108;;;2306:9;6735:85;;;6734:108;:::i;:::-;6715:127;6600:249;-1:-1:-1;;6600:249:10:o;4901:219::-;4989:7;5095:18;:4;:16;:18::i;:::-;5029:9;;5027:86;;;2187:9;5028:51;;;5027:86;:::i;5434:226::-;5529:7;5635:18;:4;:16;:18::i;:::-;5569:9;;5567:86;;;2242:9;5568:51;;;5567:86;:::i;8404:184::-;8528:9;;8494:7;;8520:61;;2499:25;8527:53;;;8520:2;:61;:::i;596:538:232:-;690:6;743:2;731:9;722:7;718:23;714:32;711:52;;;759:1;756;749:12;711:52;792:2;786:9;834:2;826:6;822:15;903:6;891:10;888:22;867:18;855:10;852:34;849:62;846:185;;;953:10;948:3;944:20;941:1;934:31;988:4;985:1;978:15;1016:4;1013:1;1006:15;846:185;1047:2;1040:22;1086:16;;1071:32;;-1:-1:-1;1078:6:232;596:538;-1:-1:-1;596:538:232:o;1139:127::-;1200:10;1195:3;1191:20;1188:1;1181:31;1231:4;1228:1;1221:15;1255:4;1252:1;1245:15;1271:168;1344:9;;;1375;;1392:15;;;1386:22;;1372:37;1362:71;;1413:18;;:::i;1444:422::-;1533:1;1576:5;1533:1;1590:270;1611:7;1601:8;1598:21;1590:270;;;1670:4;1666:1;1662:6;1658:17;1652:4;1649:27;1646:53;;;1679:18;;:::i;:::-;1729:7;1719:8;1715:22;1712:55;;;1749:16;;;;1712:55;1828:22;;;;1788:15;;;;1590:270;;;1594:3;1444:422;;;;;:::o;1871:806::-;1920:5;1950:8;1940:80;;-1:-1:-1;1991:1:232;2005:5;;1940:80;2039:4;2029:76;;-1:-1:-1;2076:1:232;2090:5;;2029:76;2121:4;2139:1;2134:59;;;;2207:1;2202:130;;;;2114:218;;2134:59;2164:1;2155:10;;2178:5;;;2202:130;2239:3;2229:8;2226:17;2223:43;;;2246:18;;:::i;:::-;-1:-1:-1;;2302:1:232;2288:16;;2317:5;;2114:218;;2416:2;2406:8;2403:16;2397:3;2391:4;2388:13;2384:36;2378:2;2368:8;2365:16;2360:2;2354:4;2351:12;2347:35;2344:77;2341:159;;;-1:-1:-1;2453:19:232;;;2485:5;;2341:159;2532:34;2557:8;2551:4;2532:34;:::i;:::-;2602:6;2598:1;2594:6;2590:19;2581:7;2578:32;2575:58;;;2613:18;;:::i;:::-;2651:20;;1871:806;-1:-1:-1;;;1871:806:232:o;2682:131::-;2742:5;2771:36;2798:8;2792:4;2771:36;:::i;:::-;2762:45;2682:131;-1:-1:-1;;;2682:131:232:o",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "getAllowClose()": "b1b1fdc2",
+    "getAllowOpen()": "424a30fb",
+    "getConf()": "478e3597",
+    "getMaxLev()": "2a5f1e38",
+    "getMaxTradeAmount()": "09aea85f",
+    "getMinCollateral()": "e830b690",
+    "getMinLev()": "42274d71",
+    "getMinPay()": "e3a7b3b8",
+    "marketValid()": "b894300d",
+    "maxSlippage()": "8c04166f",
+    "minSlippage()": "c0677c47"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"getAllowClose\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllowOpen\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getConf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMaxLev\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMaxTradeAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMinCollateral\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMinLev\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMinPay\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"marketValid\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"maxSlippage\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"minSlippage\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/mocker/MarketValidReader.sol\":\"MarketValidReader\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@chainlink/=node_modules/@chainlink/\",\":@eth-optimism/=node_modules/@eth-optimism/\",\":@ethereum-waffle/=node_modules/@ethereum-waffle/\",\":@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/=node_modules/@uniswap/\",\":base64-sol/=node_modules/base64-sol/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/\",\":eth-gas-reporter/=node_modules/eth-gas-reporter/\",\":forge-std/=lib/forge-std/src/\",\":hardhat-deploy/=node_modules/hardhat-deploy/\",\":hardhat-solidity-create2-deployer/=node_modules/hardhat-solidity-create2-deployer/\",\":hardhat/=node_modules/hardhat/\",\":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":openzeppelin/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":solidity-create2-deployer/=node_modules/solidity-create2-deployer/\"]},\"sources\":{\"contracts/fee/interfaces/IFeeRouter.sol\":{\"keccak256\":\"0x40a37f18ab9eeb6f578f3586dcec6b5dd238865f078e1eae65174ab22b961da2\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://ba232bc1a43a98a2c22147fa133a86f4733fb83b5029c0c3fc9b3aec1199cfcb\",\"dweb:/ipfs/QmYYSZ35oEgDB6R28WxzZu8moe5PybjnRzm2b3y9nc4AwA\"]},\"contracts/market/MarketConfigStruct.sol\":{\"keccak256\":\"0xcb33c17fa87bb3ffb7cf83e22f1af6439a8fca18677f4a4ee3e4c1ac29df14ec\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://60a3aad8490144ed9bcd52c959102163462a786950b3e0db83810be8962b76fd\",\"dweb:/ipfs/QmTGd436ceMxwmYVwjfbUSZNb3BdbVycPMn8yypd9Xd4tb\"]},\"contracts/market/MarketDataTypes.sol\":{\"keccak256\":\"0x63fcbb3198fb40245cb0a116eb3d7853b18d180ad3c63a09df3a1dc6484a5098\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://52ae993112c7a9ef1647c03dd26ec08c461ef1441865ed2e967296e12222a363\",\"dweb:/ipfs/QmVn8SDWtL7M2ER7GpQxAvfazqtQhHEPGsJQ7NBGnhDUEf\"]},\"contracts/market/interfaces/IMarketValid.sol\":{\"keccak256\":\"0x598813afa73b2b47861b1de36040174fc6e40002010ad94ef24e14a075a92f11\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://cf4cd641017cd74945fcc577f81527c7bd7dac158965f91c6ca2f40c0f19c6eb\",\"dweb:/ipfs/QmRY5pwDDALeYoorxn8aWXjpcWYR12Fo2LtoR32DdmnQPR\"]},\"contracts/mocker/MarketValidReader.sol\":{\"keccak256\":\"0xd40fd0182de8d6759db4db24c61b9b8f605f0cfc839da4877efae72699117eb2\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://fc6bbb69f65172d09fc02ecdf6185c71d1d36b0ab4d18e3ee8c9e155492e9276\",\"dweb:/ipfs/QmdmZBW7Pg5ct5S6QNU6GsPTCrqzh6dXM3vhk9G1Ky3kVw\"]},\"contracts/order/OrderLib.sol\":{\"keccak256\":\"0xee945b3014458a3d5502f54ca9ef2e1d80158c2c2e6d66ebe6ccde5624ef03a6\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://bf1dc56bb4730c9b17100b00eabe725a57fd6a9d04afe23550212a640b355bf9\",\"dweb:/ipfs/QmUWjkbStRZUbDBTyBb5owVJckzJ7UL42fMfVfedBBfEFR\"]},\"contracts/order/OrderStruct.sol\":{\"keccak256\":\"0x11d0acbcbdb2e0d9850c593ec15210ee8c9e4c0577b729aae77419f635c0516e\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://f6f037f4f5a357fd70e61875f3229f50c2c876a2d0060ee5beb2d9729c3715e2\",\"dweb:/ipfs/QmetWbQMkkGrLTpe3iUH4dx6SQf1GYzjiirQGA1gs8ABty\"]},\"contracts/position/PositionStruct.sol\":{\"keccak256\":\"0xa036f419bc12d25736302f1f5d89ac354ae52571251025a6f9670c98c1d81286\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://20a8f5d52308f950d7e90882c8622f178beb989821401edebbc1336a6776e415\",\"dweb:/ipfs/QmdMmqGWE6b7G5mBAL4DnQwfRFjjdnCo32Yc1L3sHPm1nW\"]},\"contracts/position/interfaces/IPositionBook.sol\":{\"keccak256\":\"0xee3cb7021b70d4cc33baa83411a0c10833fae3fe959f4fb3b7cecb48fe97ed75\",\"license\":\"BUSL-1.1\",\"urls\":[\"bzz-raw://c4092cc744a57406570ff49ec7a04c0d77f56dd0be68a0545de7ea741416722d\",\"dweb:/ipfs/QmTAL9mtEe4W837Axdx1bLPyoRvBZXAzCzE3uDuuxzJ3cJ\"]},\"lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol\":{\"keccak256\":\"0x52a8cfb0f5239d11b457dcdd1b326992ef672714ca8da71a157255bddd13f3ad\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://495145362c7ff1c9ca88c58bbbbcb412e3c2004406647412394486552ff6c278\",\"dweb:/ipfs/QmNNCeng6d5eRPDn6tkWSQhjE39XWfQEfjA63rRwHmr1iH\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.17+commit.8df45f5f"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_addr",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getAllowClose",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getAllowOpen",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getConf",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getMaxLev",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getMaxTradeAmount",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getMinCollateral",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getMinLev",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getMinPay",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "marketValid",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "maxSlippage",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "minSlippage",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "@chainlink/=node_modules/@chainlink/",
+        "@eth-optimism/=node_modules/@eth-optimism/",
+        "@ethereum-waffle/=node_modules/@ethereum-waffle/",
+        "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "@uniswap/=node_modules/@uniswap/",
+        "base64-sol/=node_modules/base64-sol/",
+        "ds-test/=lib/forge-std/lib/ds-test/src/",
+        "erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/",
+        "eth-gas-reporter/=node_modules/eth-gas-reporter/",
+        "forge-std/=lib/forge-std/src/",
+        "hardhat-deploy/=node_modules/hardhat-deploy/",
+        "hardhat-solidity-create2-deployer/=node_modules/hardhat-solidity-create2-deployer/",
+        "hardhat/=node_modules/hardhat/",
+        "openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "openzeppelin/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "solidity-create2-deployer/=node_modules/solidity-create2-deployer/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "contracts/mocker/MarketValidReader.sol": "MarketValidReader"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "contracts/fee/interfaces/IFeeRouter.sol": {
+        "keccak256": "0x40a37f18ab9eeb6f578f3586dcec6b5dd238865f078e1eae65174ab22b961da2",
+        "urls": [
+          "bzz-raw://ba232bc1a43a98a2c22147fa133a86f4733fb83b5029c0c3fc9b3aec1199cfcb",
+          "dweb:/ipfs/QmYYSZ35oEgDB6R28WxzZu8moe5PybjnRzm2b3y9nc4AwA"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/market/MarketConfigStruct.sol": {
+        "keccak256": "0xcb33c17fa87bb3ffb7cf83e22f1af6439a8fca18677f4a4ee3e4c1ac29df14ec",
+        "urls": [
+          "bzz-raw://60a3aad8490144ed9bcd52c959102163462a786950b3e0db83810be8962b76fd",
+          "dweb:/ipfs/QmTGd436ceMxwmYVwjfbUSZNb3BdbVycPMn8yypd9Xd4tb"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/market/MarketDataTypes.sol": {
+        "keccak256": "0x63fcbb3198fb40245cb0a116eb3d7853b18d180ad3c63a09df3a1dc6484a5098",
+        "urls": [
+          "bzz-raw://52ae993112c7a9ef1647c03dd26ec08c461ef1441865ed2e967296e12222a363",
+          "dweb:/ipfs/QmVn8SDWtL7M2ER7GpQxAvfazqtQhHEPGsJQ7NBGnhDUEf"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/market/interfaces/IMarketValid.sol": {
+        "keccak256": "0x598813afa73b2b47861b1de36040174fc6e40002010ad94ef24e14a075a92f11",
+        "urls": [
+          "bzz-raw://cf4cd641017cd74945fcc577f81527c7bd7dac158965f91c6ca2f40c0f19c6eb",
+          "dweb:/ipfs/QmRY5pwDDALeYoorxn8aWXjpcWYR12Fo2LtoR32DdmnQPR"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/mocker/MarketValidReader.sol": {
+        "keccak256": "0xd40fd0182de8d6759db4db24c61b9b8f605f0cfc839da4877efae72699117eb2",
+        "urls": [
+          "bzz-raw://fc6bbb69f65172d09fc02ecdf6185c71d1d36b0ab4d18e3ee8c9e155492e9276",
+          "dweb:/ipfs/QmdmZBW7Pg5ct5S6QNU6GsPTCrqzh6dXM3vhk9G1Ky3kVw"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/order/OrderLib.sol": {
+        "keccak256": "0xee945b3014458a3d5502f54ca9ef2e1d80158c2c2e6d66ebe6ccde5624ef03a6",
+        "urls": [
+          "bzz-raw://bf1dc56bb4730c9b17100b00eabe725a57fd6a9d04afe23550212a640b355bf9",
+          "dweb:/ipfs/QmUWjkbStRZUbDBTyBb5owVJckzJ7UL42fMfVfedBBfEFR"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/order/OrderStruct.sol": {
+        "keccak256": "0x11d0acbcbdb2e0d9850c593ec15210ee8c9e4c0577b729aae77419f635c0516e",
+        "urls": [
+          "bzz-raw://f6f037f4f5a357fd70e61875f3229f50c2c876a2d0060ee5beb2d9729c3715e2",
+          "dweb:/ipfs/QmetWbQMkkGrLTpe3iUH4dx6SQf1GYzjiirQGA1gs8ABty"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/position/PositionStruct.sol": {
+        "keccak256": "0xa036f419bc12d25736302f1f5d89ac354ae52571251025a6f9670c98c1d81286",
+        "urls": [
+          "bzz-raw://20a8f5d52308f950d7e90882c8622f178beb989821401edebbc1336a6776e415",
+          "dweb:/ipfs/QmdMmqGWE6b7G5mBAL4DnQwfRFjjdnCo32Yc1L3sHPm1nW"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "contracts/position/interfaces/IPositionBook.sol": {
+        "keccak256": "0xee3cb7021b70d4cc33baa83411a0c10833fae3fe959f4fb3b7cecb48fe97ed75",
+        "urls": [
+          "bzz-raw://c4092cc744a57406570ff49ec7a04c0d77f56dd0be68a0545de7ea741416722d",
+          "dweb:/ipfs/QmTAL9mtEe4W837Axdx1bLPyoRvBZXAzCzE3uDuuxzJ3cJ"
+        ],
+        "license": "BUSL-1.1"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol": {
+        "keccak256": "0x52a8cfb0f5239d11b457dcdd1b326992ef672714ca8da71a157255bddd13f3ad",
+        "urls": [
+          "bzz-raw://495145362c7ff1c9ca88c58bbbbcb412e3c2004406647412394486552ff6c278",
+          "dweb:/ipfs/QmNNCeng6d5eRPDn6tkWSQhjE39XWfQEfjA63rRwHmr1iH"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "contracts/mocker/MarketValidReader.sol",
+    "id": 16283,
+    "exportedSymbols": {
+      "IMarketValid": [
+        13928
+      ],
+      "IMarketValidFuncs": [
+        13916
+      ],
+      "MarketConfigStruct": [
+        4689
+      ],
+      "MarketValidReader": [
+        16282
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "37:1814:34",
+    "nodes": [
+      {
+        "id": 16100,
+        "nodeType": "PragmaDirective",
+        "src": "37:24:34",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".17"
+        ]
+      },
+      {
+        "id": 16102,
+        "nodeType": "ImportDirective",
+        "src": "63:68:34",
+        "nodes": [],
+        "absolutePath": "contracts/market/MarketConfigStruct.sol",
+        "file": "../market/MarketConfigStruct.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 16283,
+        "sourceUnit": 4690,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 16101,
+              "name": "MarketConfigStruct",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 4689,
+              "src": "71:18:34",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 16105,
+        "nodeType": "ImportDirective",
+        "src": "132:86:34",
+        "nodes": [],
+        "absolutePath": "contracts/market/interfaces/IMarketValid.sol",
+        "file": "../market/interfaces/IMarketValid.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 16283,
+        "sourceUnit": 13929,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 16103,
+              "name": "IMarketValid",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 13928,
+              "src": "140:12:34",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          },
+          {
+            "foreign": {
+              "id": 16104,
+              "name": "IMarketValidFuncs",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 13916,
+              "src": "154:17:34",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 16282,
+        "nodeType": "ContractDefinition",
+        "src": "220:1630:34",
+        "nodes": [
+          {
+            "id": 16109,
+            "nodeType": "UsingForDirective",
+            "src": "253:48:34",
+            "nodes": [],
+            "global": false,
+            "libraryName": {
+              "id": 16106,
+              "name": "MarketConfigStruct",
+              "nameLocations": [
+                "259:18:34"
+              ],
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 4689,
+              "src": "259:18:34"
+            },
+            "typeName": {
+              "id": 16108,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 16107,
+                "name": "IMarketValid.Props",
+                "nameLocations": [
+                  "282:12:34",
+                  "295:5:34"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 13921,
+                "src": "282:18:34"
+              },
+              "referencedDeclaration": 13921,
+              "src": "282:18:34",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_Props_$13921_storage_ptr",
+                "typeString": "struct IMarketValid.Props"
+              }
+            }
+          },
+          {
+            "id": 16111,
+            "nodeType": "VariableDeclaration",
+            "src": "307:26:34",
+            "nodes": [],
+            "constant": false,
+            "functionSelector": "b894300d",
+            "mutability": "mutable",
+            "name": "marketValid",
+            "nameLocation": "322:11:34",
+            "scope": 16282,
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 16110,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "307:7:34",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "visibility": "public"
+          },
+          {
+            "id": 16121,
+            "nodeType": "FunctionDefinition",
+            "src": "340:63:34",
+            "nodes": [],
+            "body": {
+              "id": 16120,
+              "nodeType": "Block",
+              "src": "367:36:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "id": 16118,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "id": 16116,
+                      "name": "marketValid",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 16111,
+                      "src": "377:11:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 16117,
+                      "name": "_addr",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 16113,
+                      "src": "391:5:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "377:19:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 16119,
+                  "nodeType": "ExpressionStatement",
+                  "src": "377:19:34"
+                }
+              ]
+            },
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nameLocation": "-1:-1:-1",
+            "parameters": {
+              "id": 16114,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16113,
+                  "mutability": "mutable",
+                  "name": "_addr",
+                  "nameLocation": "360:5:34",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16121,
+                  "src": "352:13:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 16112,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "352:7:34",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "351:15:34"
+            },
+            "returnParameters": {
+              "id": 16115,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "367:0:34"
+            },
+            "scope": 16282,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "id": 16134,
+            "nodeType": "FunctionDefinition",
+            "src": "409:112:34",
+            "nodes": [],
+            "body": {
+              "id": 16133,
+              "nodeType": "Block",
+              "src": "460:61:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "expression": {
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "expression": {
+                          "arguments": [
+                            {
+                              "id": 16127,
+                              "name": "marketValid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 16111,
+                              "src": "490:11:34",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            ],
+                            "id": 16126,
+                            "name": "IMarketValid",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 13928,
+                            "src": "477:12:34",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                              "typeString": "type(contract IMarketValid)"
+                            }
+                          },
+                          "id": 16128,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "nameLocations": [],
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "477:25:34",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                            "typeString": "contract IMarketValid"
+                          }
+                        },
+                        "id": 16129,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberLocation": "503:4:34",
+                        "memberName": "conf",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 13927,
+                        "src": "477:30:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                          "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                        }
+                      },
+                      "id": 16130,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "nameLocations": [],
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "477:32:34",
+                      "tryCall": false,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                        "typeString": "struct IMarketValid.Props memory"
+                      }
+                    },
+                    "id": 16131,
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberLocation": "510:4:34",
+                    "memberName": "data",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": 13920,
+                    "src": "477:37:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 16125,
+                  "id": 16132,
+                  "nodeType": "Return",
+                  "src": "470:44:34"
+                }
+              ]
+            },
+            "functionSelector": "478e3597",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getConf",
+            "nameLocation": "418:7:34",
+            "parameters": {
+              "id": 16122,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "425:2:34"
+            },
+            "returnParameters": {
+              "id": 16125,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16124,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16134,
+                  "src": "451:7:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 16123,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "451:7:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "450:9:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 16155,
+            "nodeType": "FunctionDefinition",
+            "src": "527:169:34",
+            "nodes": [],
+            "body": {
+              "id": 16154,
+              "nodeType": "Block",
+              "src": "577:119:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "assignments": [
+                    16143
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 16143,
+                      "mutability": "mutable",
+                      "name": "_confg",
+                      "nameLocation": "613:6:34",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 16154,
+                      "src": "587:32:34",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                        "typeString": "struct IMarketValid.Props"
+                      },
+                      "typeName": {
+                        "id": 16142,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 16141,
+                          "name": "IMarketValid.Props",
+                          "nameLocations": [
+                            "587:12:34",
+                            "600:5:34"
+                          ],
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 13921,
+                          "src": "587:18:34"
+                        },
+                        "referencedDeclaration": 13921,
+                        "src": "587:18:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_storage_ptr",
+                          "typeString": "struct IMarketValid.Props"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 16149,
+                  "initialValue": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [
+                          {
+                            "id": 16145,
+                            "name": "marketValid",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 16111,
+                            "src": "635:11:34",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 16144,
+                          "name": "IMarketValid",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 13928,
+                          "src": "622:12:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                            "typeString": "type(contract IMarketValid)"
+                          }
+                        },
+                        "id": 16146,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "622:25:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                          "typeString": "contract IMarketValid"
+                        }
+                      },
+                      "id": 16147,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "648:4:34",
+                      "memberName": "conf",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 13927,
+                      "src": "622:30:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                      }
+                    },
+                    "id": 16148,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "622:32:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                      "typeString": "struct IMarketValid.Props memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "587:67:34"
+                },
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "id": 16150,
+                        "name": "_confg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 16143,
+                        "src": "671:6:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                          "typeString": "struct IMarketValid.Props memory"
+                        }
+                      },
+                      "id": 16151,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "678:9:34",
+                      "memberName": "getMinLev",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4186,
+                      "src": "671:16:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_Props_$13921_memory_ptr_$returns$_t_uint256_$bound_to$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function (struct IMarketValid.Props memory) pure returns (uint256)"
+                      }
+                    },
+                    "id": 16152,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "671:18:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 16138,
+                  "id": 16153,
+                  "nodeType": "Return",
+                  "src": "664:25:34"
+                }
+              ]
+            },
+            "functionSelector": "42274d71",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getMinLev",
+            "nameLocation": "536:9:34",
+            "parameters": {
+              "id": 16135,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "545:2:34"
+            },
+            "returnParameters": {
+              "id": 16138,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16137,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16155,
+                  "src": "571:4:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 16136,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "571:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "570:6:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 16176,
+            "nodeType": "FunctionDefinition",
+            "src": "702:176:34",
+            "nodes": [],
+            "body": {
+              "id": 16175,
+              "nodeType": "Block",
+              "src": "754:124:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "assignments": [
+                    16164
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 16164,
+                      "mutability": "mutable",
+                      "name": "_confg",
+                      "nameLocation": "790:6:34",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 16175,
+                      "src": "764:32:34",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                        "typeString": "struct IMarketValid.Props"
+                      },
+                      "typeName": {
+                        "id": 16163,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 16162,
+                          "name": "IMarketValid.Props",
+                          "nameLocations": [
+                            "764:12:34",
+                            "777:5:34"
+                          ],
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 13921,
+                          "src": "764:18:34"
+                        },
+                        "referencedDeclaration": 13921,
+                        "src": "764:18:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_storage_ptr",
+                          "typeString": "struct IMarketValid.Props"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 16170,
+                  "initialValue": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [
+                          {
+                            "id": 16166,
+                            "name": "marketValid",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 16111,
+                            "src": "812:11:34",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 16165,
+                          "name": "IMarketValid",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 13928,
+                          "src": "799:12:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                            "typeString": "type(contract IMarketValid)"
+                          }
+                        },
+                        "id": 16167,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "799:25:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                          "typeString": "contract IMarketValid"
+                        }
+                      },
+                      "id": 16168,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "825:4:34",
+                      "memberName": "conf",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 13927,
+                      "src": "799:30:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                      }
+                    },
+                    "id": 16169,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "799:32:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                      "typeString": "struct IMarketValid.Props memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "764:67:34"
+                },
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "id": 16171,
+                        "name": "_confg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 16164,
+                        "src": "848:6:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                          "typeString": "struct IMarketValid.Props memory"
+                        }
+                      },
+                      "id": 16172,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "855:14:34",
+                      "memberName": "getMinSlippage",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4076,
+                      "src": "848:21:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_Props_$13921_memory_ptr_$returns$_t_uint256_$bound_to$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function (struct IMarketValid.Props memory) pure returns (uint256)"
+                      }
+                    },
+                    "id": 16173,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "848:23:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 16159,
+                  "id": 16174,
+                  "nodeType": "Return",
+                  "src": "841:30:34"
+                }
+              ]
+            },
+            "functionSelector": "c0677c47",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "minSlippage",
+            "nameLocation": "711:11:34",
+            "parameters": {
+              "id": 16156,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "722:2:34"
+            },
+            "returnParameters": {
+              "id": 16159,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16158,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16176,
+                  "src": "748:4:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 16157,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "748:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "747:6:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 16197,
+            "nodeType": "FunctionDefinition",
+            "src": "884:176:34",
+            "nodes": [],
+            "body": {
+              "id": 16196,
+              "nodeType": "Block",
+              "src": "936:124:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "assignments": [
+                    16185
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 16185,
+                      "mutability": "mutable",
+                      "name": "_confg",
+                      "nameLocation": "972:6:34",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 16196,
+                      "src": "946:32:34",
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                        "typeString": "struct IMarketValid.Props"
+                      },
+                      "typeName": {
+                        "id": 16184,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 16183,
+                          "name": "IMarketValid.Props",
+                          "nameLocations": [
+                            "946:12:34",
+                            "959:5:34"
+                          ],
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 13921,
+                          "src": "946:18:34"
+                        },
+                        "referencedDeclaration": 13921,
+                        "src": "946:18:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_storage_ptr",
+                          "typeString": "struct IMarketValid.Props"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 16191,
+                  "initialValue": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [
+                          {
+                            "id": 16187,
+                            "name": "marketValid",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 16111,
+                            "src": "994:11:34",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 16186,
+                          "name": "IMarketValid",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 13928,
+                          "src": "981:12:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                            "typeString": "type(contract IMarketValid)"
+                          }
+                        },
+                        "id": 16188,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "981:25:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                          "typeString": "contract IMarketValid"
+                        }
+                      },
+                      "id": 16189,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1007:4:34",
+                      "memberName": "conf",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 13927,
+                      "src": "981:30:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                      }
+                    },
+                    "id": 16190,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "981:32:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                      "typeString": "struct IMarketValid.Props memory"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "946:67:34"
+                },
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "id": 16192,
+                        "name": "_confg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 16185,
+                        "src": "1030:6:34",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                          "typeString": "struct IMarketValid.Props memory"
+                        }
+                      },
+                      "id": 16193,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1037:14:34",
+                      "memberName": "getMaxSlippage",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4131,
+                      "src": "1030:21:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_Props_$13921_memory_ptr_$returns$_t_uint256_$bound_to$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function (struct IMarketValid.Props memory) pure returns (uint256)"
+                      }
+                    },
+                    "id": 16194,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1030:23:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 16180,
+                  "id": 16195,
+                  "nodeType": "Return",
+                  "src": "1023:30:34"
+                }
+              ]
+            },
+            "functionSelector": "8c04166f",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "maxSlippage",
+            "nameLocation": "893:11:34",
+            "parameters": {
+              "id": 16177,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "904:2:34"
+            },
+            "returnParameters": {
+              "id": 16180,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16179,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16197,
+                  "src": "930:4:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 16178,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "930:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "929:6:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 16211,
+            "nodeType": "FunctionDefinition",
+            "src": "1066:118:34",
+            "nodes": [],
+            "body": {
+              "id": 16210,
+              "nodeType": "Block",
+              "src": "1116:68:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "expression": {
+                            "arguments": [
+                              {
+                                "id": 16203,
+                                "name": "marketValid",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 16111,
+                                "src": "1146:11:34",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "id": 16202,
+                              "name": "IMarketValid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 13928,
+                              "src": "1133:12:34",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                                "typeString": "type(contract IMarketValid)"
+                              }
+                            },
+                            "id": 16204,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "typeConversion",
+                            "lValueRequested": false,
+                            "nameLocations": [],
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "1133:25:34",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                              "typeString": "contract IMarketValid"
+                            }
+                          },
+                          "id": 16205,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberLocation": "1159:4:34",
+                          "memberName": "conf",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 13927,
+                          "src": "1133:30:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                            "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                          }
+                        },
+                        "id": 16206,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1133:32:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                          "typeString": "struct IMarketValid.Props memory"
+                        }
+                      },
+                      "id": 16207,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1166:9:34",
+                      "memberName": "getMaxLev",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4241,
+                      "src": "1133:42:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_Props_$13921_memory_ptr_$returns$_t_uint256_$bound_to$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function (struct IMarketValid.Props memory) pure returns (uint256)"
+                      }
+                    },
+                    "id": 16208,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1133:44:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 16201,
+                  "id": 16209,
+                  "nodeType": "Return",
+                  "src": "1126:51:34"
+                }
+              ]
+            },
+            "functionSelector": "2a5f1e38",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getMaxLev",
+            "nameLocation": "1075:9:34",
+            "parameters": {
+              "id": 16198,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1084:2:34"
+            },
+            "returnParameters": {
+              "id": 16201,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16200,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16211,
+                  "src": "1110:4:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 16199,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1110:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1109:6:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 16225,
+            "nodeType": "FunctionDefinition",
+            "src": "1190:118:34",
+            "nodes": [],
+            "body": {
+              "id": 16224,
+              "nodeType": "Block",
+              "src": "1240:68:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "expression": {
+                            "arguments": [
+                              {
+                                "id": 16217,
+                                "name": "marketValid",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 16111,
+                                "src": "1270:11:34",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "id": 16216,
+                              "name": "IMarketValid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 13928,
+                              "src": "1257:12:34",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                                "typeString": "type(contract IMarketValid)"
+                              }
+                            },
+                            "id": 16218,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "typeConversion",
+                            "lValueRequested": false,
+                            "nameLocations": [],
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "1257:25:34",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                              "typeString": "contract IMarketValid"
+                            }
+                          },
+                          "id": 16219,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberLocation": "1283:4:34",
+                          "memberName": "conf",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 13927,
+                          "src": "1257:30:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                            "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                          }
+                        },
+                        "id": 16220,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1257:32:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                          "typeString": "struct IMarketValid.Props memory"
+                        }
+                      },
+                      "id": 16221,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1290:9:34",
+                      "memberName": "getMinPay",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4301,
+                      "src": "1257:42:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_Props_$13921_memory_ptr_$returns$_t_uint256_$bound_to$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function (struct IMarketValid.Props memory) pure returns (uint256)"
+                      }
+                    },
+                    "id": 16222,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1257:44:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 16215,
+                  "id": 16223,
+                  "nodeType": "Return",
+                  "src": "1250:51:34"
+                }
+              ]
+            },
+            "functionSelector": "e3a7b3b8",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getMinPay",
+            "nameLocation": "1199:9:34",
+            "parameters": {
+              "id": 16212,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1208:2:34"
+            },
+            "returnParameters": {
+              "id": 16215,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16214,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16225,
+                  "src": "1234:4:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 16213,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1234:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1233:6:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 16239,
+            "nodeType": "FunctionDefinition",
+            "src": "1314:132:34",
+            "nodes": [],
+            "body": {
+              "id": 16238,
+              "nodeType": "Block",
+              "src": "1371:75:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "expression": {
+                            "arguments": [
+                              {
+                                "id": 16231,
+                                "name": "marketValid",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 16111,
+                                "src": "1401:11:34",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "id": 16230,
+                              "name": "IMarketValid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 13928,
+                              "src": "1388:12:34",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                                "typeString": "type(contract IMarketValid)"
+                              }
+                            },
+                            "id": 16232,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "typeConversion",
+                            "lValueRequested": false,
+                            "nameLocations": [],
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "1388:25:34",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                              "typeString": "contract IMarketValid"
+                            }
+                          },
+                          "id": 16233,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberLocation": "1414:4:34",
+                          "memberName": "conf",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 13927,
+                          "src": "1388:30:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                            "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                          }
+                        },
+                        "id": 16234,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1388:32:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                          "typeString": "struct IMarketValid.Props memory"
+                        }
+                      },
+                      "id": 16235,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1421:16:34",
+                      "memberName": "getMinCollateral",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4361,
+                      "src": "1388:49:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_Props_$13921_memory_ptr_$returns$_t_uint256_$bound_to$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function (struct IMarketValid.Props memory) pure returns (uint256)"
+                      }
+                    },
+                    "id": 16236,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1388:51:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 16229,
+                  "id": 16237,
+                  "nodeType": "Return",
+                  "src": "1381:58:34"
+                }
+              ]
+            },
+            "functionSelector": "e830b690",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getMinCollateral",
+            "nameLocation": "1323:16:34",
+            "parameters": {
+              "id": 16226,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1339:2:34"
+            },
+            "returnParameters": {
+              "id": 16229,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16228,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16239,
+                  "src": "1365:4:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 16227,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1365:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1364:6:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 16253,
+            "nodeType": "FunctionDefinition",
+            "src": "1452:134:34",
+            "nodes": [],
+            "body": {
+              "id": 16252,
+              "nodeType": "Block",
+              "src": "1510:76:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "expression": {
+                            "arguments": [
+                              {
+                                "id": 16245,
+                                "name": "marketValid",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 16111,
+                                "src": "1540:11:34",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "id": 16244,
+                              "name": "IMarketValid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 13928,
+                              "src": "1527:12:34",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                                "typeString": "type(contract IMarketValid)"
+                              }
+                            },
+                            "id": 16246,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "typeConversion",
+                            "lValueRequested": false,
+                            "nameLocations": [],
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "1527:25:34",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                              "typeString": "contract IMarketValid"
+                            }
+                          },
+                          "id": 16247,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberLocation": "1553:4:34",
+                          "memberName": "conf",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 13927,
+                          "src": "1527:30:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                            "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                          }
+                        },
+                        "id": 16248,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1527:32:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                          "typeString": "struct IMarketValid.Props memory"
+                        }
+                      },
+                      "id": 16249,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1560:17:34",
+                      "memberName": "getMaxTradeAmount",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4488,
+                      "src": "1527:50:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_Props_$13921_memory_ptr_$returns$_t_uint256_$bound_to$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function (struct IMarketValid.Props memory) pure returns (uint256)"
+                      }
+                    },
+                    "id": 16250,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1527:52:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 16243,
+                  "id": 16251,
+                  "nodeType": "Return",
+                  "src": "1520:59:34"
+                }
+              ]
+            },
+            "functionSelector": "09aea85f",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getMaxTradeAmount",
+            "nameLocation": "1461:17:34",
+            "parameters": {
+              "id": 16240,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1478:2:34"
+            },
+            "returnParameters": {
+              "id": 16243,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16242,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16253,
+                  "src": "1504:4:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 16241,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1504:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1503:6:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 16267,
+            "nodeType": "FunctionDefinition",
+            "src": "1592:124:34",
+            "nodes": [],
+            "body": {
+              "id": 16266,
+              "nodeType": "Block",
+              "src": "1645:71:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "expression": {
+                            "arguments": [
+                              {
+                                "id": 16259,
+                                "name": "marketValid",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 16111,
+                                "src": "1675:11:34",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "id": 16258,
+                              "name": "IMarketValid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 13928,
+                              "src": "1662:12:34",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                                "typeString": "type(contract IMarketValid)"
+                              }
+                            },
+                            "id": 16260,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "typeConversion",
+                            "lValueRequested": false,
+                            "nameLocations": [],
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "1662:25:34",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                              "typeString": "contract IMarketValid"
+                            }
+                          },
+                          "id": 16261,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberLocation": "1688:4:34",
+                          "memberName": "conf",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 13927,
+                          "src": "1662:30:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                            "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                          }
+                        },
+                        "id": 16262,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1662:32:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                          "typeString": "struct IMarketValid.Props memory"
+                        }
+                      },
+                      "id": 16263,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1695:12:34",
+                      "memberName": "getAllowOpen",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4632,
+                      "src": "1662:45:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_Props_$13921_memory_ptr_$returns$_t_bool_$bound_to$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function (struct IMarketValid.Props memory) pure returns (bool)"
+                      }
+                    },
+                    "id": 16264,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1662:47:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "functionReturnParameters": 16257,
+                  "id": 16265,
+                  "nodeType": "Return",
+                  "src": "1655:54:34"
+                }
+              ]
+            },
+            "functionSelector": "424a30fb",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getAllowOpen",
+            "nameLocation": "1601:12:34",
+            "parameters": {
+              "id": 16254,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1613:2:34"
+            },
+            "returnParameters": {
+              "id": 16257,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16256,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16267,
+                  "src": "1639:4:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 16255,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1639:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1638:6:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 16281,
+            "nodeType": "FunctionDefinition",
+            "src": "1722:126:34",
+            "nodes": [],
+            "body": {
+              "id": 16280,
+              "nodeType": "Block",
+              "src": "1776:72:34",
+              "nodes": [],
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "expression": {
+                            "arguments": [
+                              {
+                                "id": 16273,
+                                "name": "marketValid",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 16111,
+                                "src": "1806:11:34",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "id": 16272,
+                              "name": "IMarketValid",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 13928,
+                              "src": "1793:12:34",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_type$_t_contract$_IMarketValid_$13928_$",
+                                "typeString": "type(contract IMarketValid)"
+                              }
+                            },
+                            "id": 16274,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "typeConversion",
+                            "lValueRequested": false,
+                            "nameLocations": [],
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "1793:25:34",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_IMarketValid_$13928",
+                              "typeString": "contract IMarketValid"
+                            }
+                          },
+                          "id": 16275,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberLocation": "1819:4:34",
+                          "memberName": "conf",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 13927,
+                          "src": "1793:30:34",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_external_view$__$returns$_t_struct$_Props_$13921_memory_ptr_$",
+                            "typeString": "function () view external returns (struct IMarketValid.Props memory)"
+                          }
+                        },
+                        "id": 16276,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "nameLocations": [],
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1793:32:34",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Props_$13921_memory_ptr",
+                          "typeString": "struct IMarketValid.Props memory"
+                        }
+                      },
+                      "id": 16277,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberLocation": "1826:13:34",
+                      "memberName": "getAllowClose",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 4584,
+                      "src": "1793:46:34",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_struct$_Props_$13921_memory_ptr_$returns$_t_bool_$bound_to$_t_struct$_Props_$13921_memory_ptr_$",
+                        "typeString": "function (struct IMarketValid.Props memory) pure returns (bool)"
+                      }
+                    },
+                    "id": 16278,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "nameLocations": [],
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1793:48:34",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "functionReturnParameters": 16271,
+                  "id": 16279,
+                  "nodeType": "Return",
+                  "src": "1786:55:34"
+                }
+              ]
+            },
+            "functionSelector": "b1b1fdc2",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getAllowClose",
+            "nameLocation": "1731:13:34",
+            "parameters": {
+              "id": 16268,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1744:2:34"
+            },
+            "returnParameters": {
+              "id": 16271,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16270,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 16281,
+                  "src": "1770:4:34",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 16269,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1770:4:34",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1769:6:34"
+            },
+            "scope": 16282,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "MarketValidReader",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "linearizedBaseContracts": [
+          16282
+        ],
+        "name": "MarketValidReader",
+        "nameLocation": "229:17:34",
+        "scope": 16283,
+        "usedErrors": []
+      }
+    ],
+    "license": "BUSL-1.1"
+  },
+  "id": 34
+}

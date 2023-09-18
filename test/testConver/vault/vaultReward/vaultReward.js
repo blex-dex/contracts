@@ -44,7 +44,7 @@ const {
   batchMint,
   approve,
   balanceOf,
-} = require("../../../../scripts/vault/usdc");
+} = require("../../../../scripts/mocker/USDC");
 // const { getVaultRouter } = require('../../../scripts/vault/coreVault');
 
 describe("vaultReward", async function () {

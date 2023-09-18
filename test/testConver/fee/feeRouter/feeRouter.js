@@ -17,7 +17,7 @@ const { deployFee } = require("../../../../scripts/fee/deployFeeAll");
 const { expect } = require("chai");
 const { getFundingRates } = require("../../../../scripts/fee/feeVault");
 
-const { deployUSDC, batchMint } = require("../../../../scripts/vault/usdc");
+const { deployUSDC, batchMint } = require("../../../../scripts/mocker/USDC");
 
 const {
   deployMockMarketFactoryContract,

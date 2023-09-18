@@ -1,12 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 contract MockVaultRouter {
     uint256 public fundLimit = 10000000;
     uint256 public totalAUM = 1000000;
     uint256 public USDBalance;
+    address public coreVault;
 
     address public temAddress;
+    address public usdc;
+
+    constructor(address _coreVault, address _usdc) {
+        coreVault = _coreVault;
+        usdc = _usdc;
+    }
 
     mapping(address => uint256) public fundsUsed; // for different market
 
@@ -34,6 +43,6 @@ contract MockVaultRouter {
     }
 
     function getAUM() external view returns (uint256) {
-        return totalAUM;
+        return IERC20(usdc).balanceOf(coreVault);
     }
 }

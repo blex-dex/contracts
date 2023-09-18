@@ -6592,8 +6592,8 @@
       }
     },
     "contracts/vault/ERC4626.sol": {
-      "lastModificationDate": 1695008147369,
-      "contentHash": "2381fbc9d4d3aed6b807e3517798d1a9",
+      "lastModificationDate": 1695019322241,
+      "contentHash": "bc1f98c74f236752c4dcbeeba44b15d6",
       "sourceName": "contracts/vault/ERC4626.sol",
       "solcConfig": {
         "settings": {
@@ -6633,8 +6633,7 @@
         "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
         "lib/openzeppelin-contracts/contracts/utils/Address.sol",
         "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "node_modules/hardhat/console.sol"
+        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol"
       ],
       "versionRequirement": "^0.8.0",
       "artifacts": {
@@ -7190,8 +7189,8 @@
       }
     },
     "foundry_test/test/vault/docs_test/testDocsCoreVault.t.sol": {
-      "lastModificationDate": 1695009235781,
-      "contentHash": "661b6bc192a1f04e250de1e701693e0a",
+      "lastModificationDate": 1695027679403,
+      "contentHash": "920a43a0e2c6e634cf0207ea0daf55df",
       "sourceName": "foundry_test/test/vault/docs_test/testDocsCoreVault.t.sol",
       "solcConfig": {
         "settings": {
@@ -7295,8 +7294,7 @@
         "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
         "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
         "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
+        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol"
       ],
       "versionRequirement": "^0.8.17",
       "artifacts": {
@@ -7306,7 +7304,7 @@
       }
     },
     "foundry_test/test/vault/docs_test/testDocsRewardDistributor.t.sol": {
-      "lastModificationDate": 1694680833856,
+      "lastModificationDate": 1695026483448,
       "contentHash": "b2f6b7296d4ad99f1b48528dc9164bf4",
       "sourceName": "foundry_test/test/vault/docs_test/testDocsRewardDistributor.t.sol",
       "solcConfig": {
@@ -7408,8 +7406,7 @@
         "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
         "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
         "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
+        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol"
       ],
       "versionRequirement": "^0.8.17",
       "artifacts": {
@@ -7419,8 +7416,8 @@
       }
     },
     "foundry_test/test/vault/docs_test/testDocsVaultReward.t.sol": {
-      "lastModificationDate": 1695009921260,
-      "contentHash": "97159083b942585979d949c16c4daf69",
+      "lastModificationDate": 1695026483448,
+      "contentHash": "ce75691ad284887b648888842247ecc5",
       "sourceName": "foundry_test/test/vault/docs_test/testDocsVaultReward.t.sol",
       "solcConfig": {
         "settings": {
@@ -7534,8 +7531,7 @@
         "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
         "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
         "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
+        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol"
       ],
       "versionRequirement": "^0.8.17",
       "artifacts": {
@@ -7548,7 +7544,7 @@
       }
     },
     "foundry_test/test/vault/docs_test/testDocsVaultRouter.t.sol": {
-      "lastModificationDate": 1694680833858,
+      "lastModificationDate": 1695026483448,
       "contentHash": "1cb1ef0c882057b2a538e7332d312e70",
       "sourceName": "foundry_test/test/vault/docs_test/testDocsVaultRouter.t.sol",
       "solcConfig": {
@@ -7664,721 +7660,12 @@
         "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
         "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
         "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
+        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol"
       ],
       "versionRequirement": "^0.8.17",
       "artifacts": {
         "MockDocsVaultRouterTest": {
           "0.8.17+commit.8df45f5f.Darwin.appleclang": "testDocsVaultRouter.t.sol/MockDocsVaultRouterTest.json"
-        }
-      }
-    },
-    "foundry_test/test/vault/testForkCoreVault.t.sol": {
-      "lastModificationDate": 1694681541815,
-      "contentHash": "28ab799a629f50036d153b19c2464231",
-      "sourceName": "foundry_test/test/vault/testForkCoreVault.t.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "contracts/ac/AcUpgradable.sol",
-        "contracts/fee/interfaces/IFeeRouter.sol",
-        "contracts/market/MarketDataTypes.sol",
-        "contracts/order/OrderLib.sol",
-        "contracts/order/OrderStruct.sol",
-        "contracts/position/PositionStruct.sol",
-        "contracts/position/interfaces/IPositionBook.sol",
-        "contracts/vault/ERC20.sol",
-        "contracts/vault/ERC4626.sol",
-        "contracts/vault/RewardDistributor.sol",
-        "contracts/vault/VaultReward.sol",
-        "contracts/vault/interfaces/ICoreVault.sol",
-        "contracts/vault/interfaces/IRewardDistributor.sol",
-        "contracts/vault/interfaces/IVaultReward.sol",
-        "contracts/vault/interfaces/IVaultRouter.sol",
-        "lib/forge-std/lib/ds-test/src/test.sol",
-        "lib/forge-std/src/Base.sol",
-        "lib/forge-std/src/StdAssertions.sol",
-        "lib/forge-std/src/StdChains.sol",
-        "lib/forge-std/src/StdCheats.sol",
-        "lib/forge-std/src/StdError.sol",
-        "lib/forge-std/src/StdInvariant.sol",
-        "lib/forge-std/src/StdJson.sol",
-        "lib/forge-std/src/StdMath.sol",
-        "lib/forge-std/src/StdStorage.sol",
-        "lib/forge-std/src/StdStyle.sol",
-        "lib/forge-std/src/StdUtils.sol",
-        "lib/forge-std/src/Test.sol",
-        "lib/forge-std/src/Vm.sol",
-        "lib/forge-std/src/console.sol",
-        "lib/forge-std/src/console2.sol",
-        "lib/forge-std/src/interfaces/IMulticall3.sol",
-        "lib/forge-std/src/safeconsole.sol",
-        "lib/openzeppelin-contracts/contracts/access/AccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/IAccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/security/ReentrancyGuard.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeMath.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
-      ],
-      "versionRequirement": "^0.8.17",
-      "artifacts": {
-        "ForkCoreVaultTest": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "testForkCoreVault.t.sol/ForkCoreVaultTest.json"
-        }
-      }
-    },
-    "foundry_test/test/vault/testMockCoreVault.t.sol": {
-      "lastModificationDate": 1695008731887,
-      "contentHash": "220f2c665da3fb4833ca9f1533fab109",
-      "sourceName": "foundry_test/test/vault/testMockCoreVault.t.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "contracts/ac/Ac.sol",
-        "contracts/ac/AcUpgradable.sol",
-        "contracts/fee/FeeRouter.sol",
-        "contracts/fee/FeeVault.sol",
-        "contracts/fee/FundFee.sol",
-        "contracts/fee/interfaces/IFeeRouter.sol",
-        "contracts/fee/interfaces/IFeeVault.sol",
-        "contracts/fee/interfaces/IFundFee.sol",
-        "contracts/market/MarketDataTypes.sol",
-        "contracts/market/interfaces/IMarketFactory.sol",
-        "contracts/mocker/MockFeeRouter.sol",
-        "contracts/mocker/MockRewardDistributor.sol",
-        "contracts/mocker/MockVaultRewardForCoreVault.sol",
-        "contracts/mocker/MockVaultRouter.sol",
-        "contracts/mocker/USDC.sol",
-        "contracts/openzeppelin/ERC20.sol",
-        "contracts/openzeppelin/ERC4626.sol",
-        "contracts/order/OrderLib.sol",
-        "contracts/order/OrderStruct.sol",
-        "contracts/position/PositionStruct.sol",
-        "contracts/position/interfaces/IPositionBook.sol",
-        "contracts/utils/TransferHelper.sol",
-        "contracts/vault/CoreVault.sol",
-        "contracts/vault/ERC20.sol",
-        "contracts/vault/ERC4626.sol",
-        "contracts/vault/interfaces/ICoreVault.sol",
-        "contracts/vault/interfaces/IVaultReward.sol",
-        "contracts/vault/interfaces/IVaultRouter.sol",
-        "foundry_test/test/utils/calc.sol",
-        "lib/forge-std/lib/ds-test/src/test.sol",
-        "lib/forge-std/src/Base.sol",
-        "lib/forge-std/src/StdAssertions.sol",
-        "lib/forge-std/src/StdChains.sol",
-        "lib/forge-std/src/StdCheats.sol",
-        "lib/forge-std/src/StdError.sol",
-        "lib/forge-std/src/StdInvariant.sol",
-        "lib/forge-std/src/StdJson.sol",
-        "lib/forge-std/src/StdMath.sol",
-        "lib/forge-std/src/StdStorage.sol",
-        "lib/forge-std/src/StdStyle.sol",
-        "lib/forge-std/src/StdUtils.sol",
-        "lib/forge-std/src/Test.sol",
-        "lib/forge-std/src/Vm.sol",
-        "lib/forge-std/src/console.sol",
-        "lib/forge-std/src/console2.sol",
-        "lib/forge-std/src/interfaces/IMulticall3.sol",
-        "lib/forge-std/src/safeconsole.sol",
-        "lib/openzeppelin-contracts/contracts/access/AccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/IAccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC5267.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Counters.sol",
-        "lib/openzeppelin-contracts/contracts/utils/ShortStrings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
-      ],
-      "versionRequirement": "^0.8.17",
-      "artifacts": {
-        "MockCoreVaultTest": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "testMockCoreVault.t.sol/MockCoreVaultTest.json"
-        }
-      }
-    },
-    "foundry_test/test/vault/testMockRewardDistributor.t.sol": {
-      "lastModificationDate": 1695006033654,
-      "contentHash": "703202ccf60278e3ef1a1b1d4992cb99",
-      "sourceName": "foundry_test/test/vault/testMockRewardDistributor.t.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "contracts/ac/Ac.sol",
-        "contracts/ac/AcUpgradable.sol",
-        "contracts/fee/FeeRouter.sol",
-        "contracts/fee/FeeVault.sol",
-        "contracts/fee/FundFee.sol",
-        "contracts/fee/interfaces/IFeeRouter.sol",
-        "contracts/fee/interfaces/IFeeVault.sol",
-        "contracts/fee/interfaces/IFundFee.sol",
-        "contracts/market/MarketDataTypes.sol",
-        "contracts/market/interfaces/IMarketFactory.sol",
-        "contracts/mocker/MockVaultRewardForCoreVault.sol",
-        "contracts/mocker/USDC.sol",
-        "contracts/order/OrderLib.sol",
-        "contracts/order/OrderStruct.sol",
-        "contracts/position/PositionStruct.sol",
-        "contracts/position/interfaces/IPositionBook.sol",
-        "contracts/utils/TransferHelper.sol",
-        "contracts/vault/ERC20.sol",
-        "contracts/vault/ERC4626.sol",
-        "contracts/vault/RewardDistributor.sol",
-        "contracts/vault/interfaces/ICoreVault.sol",
-        "contracts/vault/interfaces/IVaultReward.sol",
-        "lib/forge-std/lib/ds-test/src/test.sol",
-        "lib/forge-std/src/Base.sol",
-        "lib/forge-std/src/StdAssertions.sol",
-        "lib/forge-std/src/StdChains.sol",
-        "lib/forge-std/src/StdCheats.sol",
-        "lib/forge-std/src/StdError.sol",
-        "lib/forge-std/src/StdInvariant.sol",
-        "lib/forge-std/src/StdJson.sol",
-        "lib/forge-std/src/StdMath.sol",
-        "lib/forge-std/src/StdStorage.sol",
-        "lib/forge-std/src/StdStyle.sol",
-        "lib/forge-std/src/StdUtils.sol",
-        "lib/forge-std/src/Test.sol",
-        "lib/forge-std/src/Vm.sol",
-        "lib/forge-std/src/console.sol",
-        "lib/forge-std/src/console2.sol",
-        "lib/forge-std/src/interfaces/IMulticall3.sol",
-        "lib/forge-std/src/safeconsole.sol",
-        "lib/openzeppelin-contracts/contracts/access/AccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/IAccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC5267.sol",
-        "lib/openzeppelin-contracts/contracts/security/ReentrancyGuard.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Counters.sol",
-        "lib/openzeppelin-contracts/contracts/utils/ShortStrings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
-      ],
-      "versionRequirement": "^0.8.17",
-      "artifacts": {
-        "MockRewardDistributorTest": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "testMockRewardDistributor.t.sol/MockRewardDistributorTest.json"
-        }
-      }
-    },
-    "foundry_test/test/vault/testMockVaultReward.t.sol": {
-      "lastModificationDate": 1694680833848,
-      "contentHash": "1ebe9789b6d9ced42f36a98b777851bf",
-      "sourceName": "foundry_test/test/vault/testMockVaultReward.t.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "contracts/ac/Ac.sol",
-        "contracts/ac/AcUpgradable.sol",
-        "contracts/fee/FeeRouter.sol",
-        "contracts/fee/FeeVault.sol",
-        "contracts/fee/FundFee.sol",
-        "contracts/fee/interfaces/IFeeRouter.sol",
-        "contracts/fee/interfaces/IFeeVault.sol",
-        "contracts/fee/interfaces/IFundFee.sol",
-        "contracts/market/MarketDataTypes.sol",
-        "contracts/market/interfaces/IMarket.sol",
-        "contracts/market/interfaces/IMarketFactory.sol",
-        "contracts/mocker/USDC.sol",
-        "contracts/openzeppelin/ERC20.sol",
-        "contracts/openzeppelin/ERC4626.sol",
-        "contracts/order/OrderLib.sol",
-        "contracts/order/OrderStruct.sol",
-        "contracts/order/interface/IOrderBook.sol",
-        "contracts/order/interface/IOrderStore.sol",
-        "contracts/position/PositionStruct.sol",
-        "contracts/position/interfaces/IPositionBook.sol",
-        "contracts/utils/TransferHelper.sol",
-        "contracts/vault/CoreVault.sol",
-        "contracts/vault/ERC20.sol",
-        "contracts/vault/ERC4626.sol",
-        "contracts/vault/RewardDistributor.sol",
-        "contracts/vault/VaultReward.sol",
-        "contracts/vault/VaultRouter.sol",
-        "contracts/vault/interfaces/ICoreVault.sol",
-        "contracts/vault/interfaces/IRewardDistributor.sol",
-        "contracts/vault/interfaces/IVaultReward.sol",
-        "contracts/vault/interfaces/IVaultRouter.sol",
-        "lib/forge-std/lib/ds-test/src/test.sol",
-        "lib/forge-std/src/Base.sol",
-        "lib/forge-std/src/StdAssertions.sol",
-        "lib/forge-std/src/StdChains.sol",
-        "lib/forge-std/src/StdCheats.sol",
-        "lib/forge-std/src/StdError.sol",
-        "lib/forge-std/src/StdInvariant.sol",
-        "lib/forge-std/src/StdJson.sol",
-        "lib/forge-std/src/StdMath.sol",
-        "lib/forge-std/src/StdStorage.sol",
-        "lib/forge-std/src/StdStyle.sol",
-        "lib/forge-std/src/StdUtils.sol",
-        "lib/forge-std/src/Test.sol",
-        "lib/forge-std/src/Vm.sol",
-        "lib/forge-std/src/console.sol",
-        "lib/forge-std/src/console2.sol",
-        "lib/forge-std/src/interfaces/IMulticall3.sol",
-        "lib/forge-std/src/safeconsole.sol",
-        "lib/openzeppelin-contracts/contracts/access/AccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/IAccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC5267.sol",
-        "lib/openzeppelin-contracts/contracts/security/ReentrancyGuard.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Counters.sol",
-        "lib/openzeppelin-contracts/contracts/utils/ShortStrings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeMath.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
-      ],
-      "versionRequirement": "^0.8.17",
-      "artifacts": {
-        "MockForkMarket": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "testMockVaultReward.t.sol/MockForkMarket.json"
-        },
-        "MockVaultRewardTest": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "testMockVaultReward.t.sol/MockVaultRewardTest.json"
-        }
-      }
-    },
-    "foundry_test/test/vault/testMockVaultRouter.t.sol": {
-      "lastModificationDate": 1694680833852,
-      "contentHash": "bc7f10aaea9de25813a2e524622c9e70",
-      "sourceName": "foundry_test/test/vault/testMockVaultRouter.t.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "contracts/ac/Ac.sol",
-        "contracts/ac/AcUpgradable.sol",
-        "contracts/fee/FeeRouter.sol",
-        "contracts/fee/FeeVault.sol",
-        "contracts/fee/FundFee.sol",
-        "contracts/fee/interfaces/IFeeRouter.sol",
-        "contracts/fee/interfaces/IFeeVault.sol",
-        "contracts/fee/interfaces/IFundFee.sol",
-        "contracts/market/MarketDataTypes.sol",
-        "contracts/market/interfaces/IMarket.sol",
-        "contracts/market/interfaces/IMarketCallBackIntl.sol",
-        "contracts/market/interfaces/IMarketFactory.sol",
-        "contracts/market/interfaces/IMarketRouter.sol",
-        "contracts/market/interfaces/IMarketValid.sol",
-        "contracts/mocker/MockFeeRouter.sol",
-        "contracts/mocker/MockMarket.sol",
-        "contracts/mocker/MockRewardDistributor.sol",
-        "contracts/mocker/MockVaultRewardForCoreVault.sol",
-        "contracts/mocker/USDC.sol",
-        "contracts/openzeppelin/ERC20.sol",
-        "contracts/openzeppelin/ERC4626.sol",
-        "contracts/order/OrderLib.sol",
-        "contracts/order/OrderStruct.sol",
-        "contracts/order/interface/IOrderBook.sol",
-        "contracts/order/interface/IOrderStore.sol",
-        "contracts/position/PositionStruct.sol",
-        "contracts/position/interfaces/IPositionBook.sol",
-        "contracts/utils/TransferHelper.sol",
-        "contracts/vault/CoreVault.sol",
-        "contracts/vault/ERC20.sol",
-        "contracts/vault/ERC4626.sol",
-        "contracts/vault/VaultRouter.sol",
-        "contracts/vault/interfaces/ICoreVault.sol",
-        "contracts/vault/interfaces/IVaultReward.sol",
-        "contracts/vault/interfaces/IVaultRouter.sol",
-        "lib/forge-std/lib/ds-test/src/test.sol",
-        "lib/forge-std/src/Base.sol",
-        "lib/forge-std/src/StdAssertions.sol",
-        "lib/forge-std/src/StdChains.sol",
-        "lib/forge-std/src/StdCheats.sol",
-        "lib/forge-std/src/StdError.sol",
-        "lib/forge-std/src/StdInvariant.sol",
-        "lib/forge-std/src/StdJson.sol",
-        "lib/forge-std/src/StdMath.sol",
-        "lib/forge-std/src/StdStorage.sol",
-        "lib/forge-std/src/StdStyle.sol",
-        "lib/forge-std/src/StdUtils.sol",
-        "lib/forge-std/src/Test.sol",
-        "lib/forge-std/src/Vm.sol",
-        "lib/forge-std/src/console.sol",
-        "lib/forge-std/src/console2.sol",
-        "lib/forge-std/src/interfaces/IMulticall3.sol",
-        "lib/forge-std/src/safeconsole.sol",
-        "lib/openzeppelin-contracts/contracts/access/AccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/IAccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC5267.sol",
-        "lib/openzeppelin-contracts/contracts/security/ReentrancyGuard.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Counters.sol",
-        "lib/openzeppelin-contracts/contracts/utils/ShortStrings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
-      ],
-      "versionRequirement": "^0.8.17",
-      "artifacts": {
-        "MockVaultRouterTest": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "testMockVaultRouter.t.sol/MockVaultRouterTest.json"
-        }
-      }
-    },
-    "foundry_test/test/vault/testVault.t.sol": {
-      "lastModificationDate": 1694680833849,
-      "contentHash": "2d2c8df8d9978e1531d7bdba54001dad",
-      "sourceName": "foundry_test/test/vault/testVault.t.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "contracts/ac/Ac.sol",
-        "contracts/ac/AcUpgradable.sol",
-        "contracts/fee/FeeRouter.sol",
-        "contracts/fee/FeeVault.sol",
-        "contracts/fee/FundFee.sol",
-        "contracts/fee/interfaces/IFeeRouter.sol",
-        "contracts/fee/interfaces/IFeeVault.sol",
-        "contracts/fee/interfaces/IFundFee.sol",
-        "contracts/market/MarketDataTypes.sol",
-        "contracts/market/interfaces/IMarket.sol",
-        "contracts/market/interfaces/IMarketFactory.sol",
-        "contracts/mocker/USDC.sol",
-        "contracts/openzeppelin/ERC20.sol",
-        "contracts/openzeppelin/ERC4626.sol",
-        "contracts/order/OrderLib.sol",
-        "contracts/order/OrderStruct.sol",
-        "contracts/order/interface/IOrderBook.sol",
-        "contracts/order/interface/IOrderStore.sol",
-        "contracts/position/PositionStruct.sol",
-        "contracts/position/interfaces/IPositionBook.sol",
-        "contracts/utils/TransferHelper.sol",
-        "contracts/vault/CoreVault.sol",
-        "contracts/vault/ERC20.sol",
-        "contracts/vault/ERC4626.sol",
-        "contracts/vault/RewardDistributor.sol",
-        "contracts/vault/VaultReward.sol",
-        "contracts/vault/VaultRouter.sol",
-        "contracts/vault/interfaces/ICoreVault.sol",
-        "contracts/vault/interfaces/IRewardDistributor.sol",
-        "contracts/vault/interfaces/IVaultReward.sol",
-        "contracts/vault/interfaces/IVaultRouter.sol",
-        "lib/forge-std/lib/ds-test/src/test.sol",
-        "lib/forge-std/src/Base.sol",
-        "lib/forge-std/src/StdAssertions.sol",
-        "lib/forge-std/src/StdChains.sol",
-        "lib/forge-std/src/StdCheats.sol",
-        "lib/forge-std/src/StdError.sol",
-        "lib/forge-std/src/StdInvariant.sol",
-        "lib/forge-std/src/StdJson.sol",
-        "lib/forge-std/src/StdMath.sol",
-        "lib/forge-std/src/StdStorage.sol",
-        "lib/forge-std/src/StdStyle.sol",
-        "lib/forge-std/src/StdUtils.sol",
-        "lib/forge-std/src/Test.sol",
-        "lib/forge-std/src/Vm.sol",
-        "lib/forge-std/src/console.sol",
-        "lib/forge-std/src/console2.sol",
-        "lib/forge-std/src/interfaces/IMulticall3.sol",
-        "lib/forge-std/src/safeconsole.sol",
-        "lib/openzeppelin-contracts/contracts/access/AccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/IAccessControl.sol",
-        "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/interfaces/IERC5267.sol",
-        "lib/openzeppelin-contracts/contracts/security/ReentrancyGuard.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Burnable.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC4626.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-ERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Counters.sol",
-        "lib/openzeppelin-contracts/contracts/utils/ShortStrings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Strings.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol",
-        "lib/openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/Math.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeMath.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol",
-        "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol",
-        "lib/openzeppelin-contracts-upgradeable/contracts/utils/AddressUpgradeable.sol",
-        "node_modules/hardhat/console.sol"
-      ],
-      "versionRequirement": "^0.8.17",
-      "artifacts": {
-        "VaultTest": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "testVault.t.sol/VaultTest.json"
         }
       }
     },
@@ -8424,7 +7711,7 @@
       }
     },
     "lib/forge-std/src/Base.sol": {
-      "lastModificationDate": 1694077541074,
+      "lastModificationDate": 1695022261305,
       "contentHash": "ee13c050b1914464f1d3f90cde90204b",
       "sourceName": "lib/forge-std/src/Base.sol",
       "solcConfig": {
@@ -8518,7 +7805,7 @@
       }
     },
     "lib/forge-std/src/StdChains.sol": {
-      "lastModificationDate": 1694077541074,
+      "lastModificationDate": 1695022261305,
       "contentHash": "b0324b2e5a11948f852032aa293b3a05",
       "sourceName": "lib/forge-std/src/StdChains.sol",
       "solcConfig": {
@@ -8561,7 +7848,7 @@
       }
     },
     "lib/forge-std/src/StdCheats.sol": {
-      "lastModificationDate": 1694077541074,
+      "lastModificationDate": 1695022261305,
       "contentHash": "d984e2c76dae07bac1e292af2a5d4fd1",
       "sourceName": "lib/forge-std/src/StdCheats.sol",
       "solcConfig": {
@@ -8650,8 +7937,8 @@
       }
     },
     "lib/forge-std/src/StdInvariant.sol": {
-      "lastModificationDate": 1694160685717,
-      "contentHash": "6d12d54c05754ad4e03066726dca3a84",
+      "lastModificationDate": 1695022261305,
+      "contentHash": "0a580d6fac69e9d4b6504f747f3c0c24",
       "sourceName": "lib/forge-std/src/StdInvariant.sol",
       "solcConfig": {
         "settings": {
@@ -8691,8 +7978,8 @@
       }
     },
     "lib/forge-std/src/StdJson.sol": {
-      "lastModificationDate": 1694077541075,
-      "contentHash": "b5de4d3e9eda3333019b0e407ec2a1ac",
+      "lastModificationDate": 1695022282042,
+      "contentHash": "a341308627b7eeab7589534daad58186",
       "sourceName": "lib/forge-std/src/StdJson.sol",
       "solcConfig": {
         "settings": {
@@ -8775,8 +8062,8 @@
       }
     },
     "lib/forge-std/src/StdStorage.sol": {
-      "lastModificationDate": 1694160685718,
-      "contentHash": "4fc0ff0cb196a405e5a4c9fa1c6acccb",
+      "lastModificationDate": 1695022261306,
+      "contentHash": "abd6f3379e6e2a7979b18abc21aea0c1",
       "sourceName": "lib/forge-std/src/StdStorage.sol",
       "solcConfig": {
         "settings": {
@@ -8821,7 +8108,7 @@
       }
     },
     "lib/forge-std/src/StdStyle.sol": {
-      "lastModificationDate": 1694077541076,
+      "lastModificationDate": 1695022261306,
       "contentHash": "6281165a12aa639705c691fccefd855e",
       "sourceName": "lib/forge-std/src/StdStyle.sol",
       "solcConfig": {
@@ -8864,7 +8151,7 @@
       }
     },
     "lib/forge-std/src/StdUtils.sol": {
-      "lastModificationDate": 1694077541076,
+      "lastModificationDate": 1695022261306,
       "contentHash": "3ce83748fd76644688f916c9cced545b",
       "sourceName": "lib/forge-std/src/StdUtils.sol",
       "solcConfig": {
@@ -8908,7 +8195,7 @@
       }
     },
     "lib/forge-std/src/Test.sol": {
-      "lastModificationDate": 1694077541076,
+      "lastModificationDate": 1695022261306,
       "contentHash": "15866901137b5670eabf31362523bd28",
       "sourceName": "lib/forge-std/src/Test.sol",
       "solcConfig": {
@@ -8967,8 +8254,8 @@
       }
     },
     "lib/forge-std/src/Vm.sol": {
-      "lastModificationDate": 1694160685718,
-      "contentHash": "4c87c2ff7a8762212b263935311e9261",
+      "lastModificationDate": 1695022282042,
+      "contentHash": "1aa47fad133db768909962309c719f25",
       "sourceName": "lib/forge-std/src/Vm.sol",
       "solcConfig": {
         "settings": {

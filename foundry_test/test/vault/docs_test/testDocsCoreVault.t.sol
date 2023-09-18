@@ -164,23 +164,14 @@ contract DocsCoreVaultTest is Test {
         //Grant permissions `MANAGER_ROLE` to the test contract to set `buyLpFee` vaulue
         coreVault.grantRole(keccak256("MANAGER_ROLE"), address(this));
         coreVault.setLpFee(true, 2000);
-        //往前推进一定的时间
         vm.warp(20 * 60 * 60 + block.timestamp);
-        //本次要deposit的金额
         uint256 assets = 1000 * 10 ** 6;
         address owner = address(0x01);
-        //为owner用户mint assets数量的usdt
         usdc.mint(owner, assets);
-        //以owner用户的身份进行操作
         vm.startPrank(owner);
         usdc.approve(address(coreVault), assets);
-        //获取在deposit交易之前coreVault合约中的usdc的金额
         uint256 beforeTotalAssets = usdc.balanceOf(address(coreVault));
-        //获取assets数量的资金能够获取多少BLP
         uint256 shares = coreVault.convertToShares(assets);
-        //通过触发RewardUpdated事件用于判断是否执行_beforeTokenTransfer函数的updateRewardsByAccount
-
-        //计算一下本次要收取的费用
         uint256 s_assets = CalcCoreVault.convertToAssets(
             shares,
             coreVault.totalSupply(),
@@ -198,7 +189,7 @@ contract DocsCoreVaultTest is Test {
         vm.expectEmit(true, true, false, true, address(usdc));
         emit Transfer(owner, address(coreVault), _assets);
         vm.expectEmit(true, true, false, true, address(coreVault));
-        //todo cost第五个参数应该为0(因为buy的费用为0),为了让测试跑起来 这里暂时写出错误的值
+        //todo cost wrong value
         emit DepositAsset(owner, owner, assets, shares, cost);
         coreVault.deposit(assets, owner);
         uint256 afterTotalAssets = usdc.balanceOf(address(coreVault));
@@ -213,39 +204,26 @@ contract DocsCoreVaultTest is Test {
 
     function testCV01003(uint256 assets, address receiver) public {
         vm.assume(assets > 100 * 10 ** 6);
-        //控制assets在一万亿以内
         vm.assume(assets < 10000000000000 * 10 ** 6);
-        //授权铸币给此合约,用户mint测试币
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
-        //给合约mint一定量的资金
         usdc.mint(address(this), assets);
-        //以这个合约的身份运行下边的代码
         vm.startPrank(address(this));
         usdc.approve(address(coreVault), assets);
-        //冻结coreVault合约
         coreVault.grantRole(keccak256("FREEZER_ROLE"), address(this));
         coreVault.setIsFreeze(true);
-        //应该会被revert,因为金库被冻结
         vm.expectRevert(bytes("vault:freeze"));
         coreVault.deposit(assets, receiver);
     }
 
     function testCV01004() public {
-        //授权给测试合约管理权限,用来mint测试币
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
-        //给当前测试合约mint一定量的测试币,并且approve
         usdc.mint(address(this), 2000);
         usdc.approve(address(coreVault), 2000);
-        //调用deposit合约,本次是第一次deposit
         coreVault.deposit(2000, address(this));
-        //往前推进一定的时间
         vm.warp(20 * 60 * 60 + block.timestamp);
-        //本次要deposit的金额
         uint256 assets = 1000 * 10 ** 6;
         address owner = address(0x01);
-        //为owner用户mintassets数量的usdt
         usdc.mint(owner, assets);
-        //以owner用户的身份进行操作
         vm.startPrank(owner);
         //usdc.approve(address(coreVault), assets);
         vm.expectRevert();
@@ -260,36 +238,24 @@ contract DocsCoreVaultTest is Test {
         uint256 assets = 100 * 10 ** 18;
         usdc.mint(address(this), assets);
         usdc.transfer(address(coreVault), assets);
-        //检测用户花100刀购买BLP应该得到的BLP数量
         uint256 shares = coreVault.previewDeposit(100);
         assertEq(shares, 0);
     }
 
     function testCV02001() public {
-        //授权给测试合约管理权限,用来mint测试币
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
-        //给当前测试合约mint一定量的测试币,并且approve
         usdc.mint(address(this), 2000);
         usdc.approve(address(coreVault), 2000);
-        //调用deposit合约,本次是第一次deposit
         coreVault.deposit(2000, address(this));
-        //往前推进一定的时间
         vm.warp(20 * 60 * 60 + block.timestamp);
 
-        //本次要购买的shares
         uint256 shares = 1000 * 10 ** 6;
-        //本次要mint的金额
-        //根据shares计算一下要话费多少assets
         uint256 assets = coreVault.previewMint(shares);
         address owner = address(0x01);
-        //为owner用户mintassets数量的usdt
         usdc.mint(owner, assets);
-        //以owner用户的身份进行操作
         vm.startPrank(owner);
         usdc.approve(address(coreVault), assets);
-        //获取在mint交易之前coreVault合约中的usdc的金额
         uint256 beforeTotalAssets = usdc.balanceOf(address(coreVault));
-        //计算一下本次要收取的费用
         uint256 s_assets = CalcCoreVault.convertToAssets(
             shares,
             coreVault.totalSupply(),
@@ -300,14 +266,13 @@ contract DocsCoreVaultTest is Test {
             ? assets - s_assets
             : s_assets - assets;
         console2.log("local cost", cost);
-        //通过触发RewardUpdated事件用于判断是否执行_beforeTokenTransfer函数的updateRewardsByAccount
         vm.expectEmit(false, false, false, true, address(vaultReward));
         emit RewardUpdated(owner, 0);
         vm.expectEmit(true, true, false, true, address(coreVault));
         emit Transfer(address(0), owner, shares);
 
         vm.expectEmit(true, true, false, true, address(coreVault));
-        //todo cost第五个参数应该为0(因为buy的费用为0),为了让测试跑起来 这里暂时写出错误的值
+        //todo cost wrong vaule
         emit DepositAsset(owner, owner, assets, shares, cost);
         coreVault.mint(shares, owner);
         uint256 afterTotalAssets = usdc.balanceOf(address(coreVault));
@@ -321,33 +286,22 @@ contract DocsCoreVaultTest is Test {
     }
 
     function testCV02002() public {
-        //授权给测试合约管理权限,用来mint测试币
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
-        //给当前测试合约mint一定量的测试币,并且approve
         usdc.mint(address(this), 2000);
         usdc.approve(address(coreVault), 2000);
-        //调用deposit合约,本次是第一次deposit
         coreVault.deposit(2000, address(this));
-        //往前推进一定的时间
         vm.warp(20 * 60 * 60 + block.timestamp);
 
         coreVault.grantRole(keccak256("MANAGER_ROLE"), address(this));
         coreVault.setLpFee(true, 2000);
 
-        //本次要购买的shares
         uint256 shares = 1000 * 10 ** 6;
-        //本次要mint的金额
-        //根据shares计算一下要话费多少assets
         uint256 assets = coreVault.previewMint(shares);
         address owner = address(0x01);
-        //为owner用户mintassets数量的usdt
         usdc.mint(owner, assets);
-        //以owner用户的身份进行操作
         vm.startPrank(owner);
         usdc.approve(address(coreVault), assets);
-        //获取在mint交易之前coreVault合约中的usdc的金额
         uint256 beforeTotalAssets = usdc.balanceOf(address(coreVault));
-        //计算一下本次要收取的费用
         uint256 s_assets = CalcCoreVault.convertToAssets(
             shares,
             coreVault.totalSupply(),
@@ -358,14 +312,13 @@ contract DocsCoreVaultTest is Test {
             ? assets - s_assets
             : s_assets - assets;
         console2.log("local cost", cost);
-        //通过触发RewardUpdated事件用于判断是否执行_beforeTokenTransfer函数的updateRewardsByAccount
         vm.expectEmit(false, false, false, true, address(vaultReward));
         emit RewardUpdated(owner, 0);
         vm.expectEmit(true, true, false, true, address(coreVault));
         emit Transfer(address(0), owner, shares);
 
         vm.expectEmit(true, true, false, true, address(coreVault));
-        //todo cost第五个参数应该为0(因为buy的费用为0),为了让测试跑起来 这里暂时写出错误的值
+        //todo cost wrong value
         emit DepositAsset(owner, owner, assets, shares, cost);
         coreVault.mint(shares, owner);
         uint256 afterTotalAssets = usdc.balanceOf(address(coreVault));
@@ -380,50 +333,33 @@ contract DocsCoreVaultTest is Test {
 
     function testCV02003(uint256 shares, address receiver) public {
         vm.assume(shares > 100 * 10 ** 6);
-        //控制assets在一万亿以内
         vm.assume(shares < 10000000000000 * 10 ** 6);
-        //授权铸币给此合约,用户mint测试币
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
-        //本次要mint的金额
-        //根据shares计算一下要话费多少assets
         uint256 assets = coreVault.previewMint(shares);
 
         usdc.mint(address(this), assets);
-        //以这个合约的身份运行下边的代码
         vm.startPrank(address(this));
         usdc.approve(address(coreVault), assets);
-        //冻结coreVault合约
         coreVault.grantRole(keccak256("FREEZER_ROLE"), address(this));
         coreVault.setIsFreeze(true);
-        //应该会被revert,因为金库被冻结
         vm.expectRevert(bytes("vault:freeze"));
         coreVault.mint(shares, receiver);
     }
 
     function testCV02004() public {
-        //授权给测试合约管理权限,用来mint测试币
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
-        //给当前测试合约mint一定量的测试币,并且approve
         usdc.mint(address(this), 2000 * 10 ** 6);
         usdc.approve(address(coreVault), 2000 * 10 ** 6);
-        //调用deposit合约,本次是第一次deposit
         coreVault.deposit(2000 * 10 ** 6, address(this));
-        //往前推进一定的时间
         vm.warp(20 * 60 * 60 + block.timestamp);
-        //默认购买BLP不收取费用,这里授权并设置收费
         coreVault.grantRole(keccak256("MANAGER_ROLE"), address(this));
         coreVault.setLpFee(true, 10000);
 
-        //本次要购买的shares
         uint256 shares = 1000 * 10 ** 6;
-        //本次要mint的金额
-        //根据shares计算一下要话费多少assets
         uint256 assets = coreVault.previewMint(shares);
         address owner = address(0x01);
-        //为owner用户mintassets数量的usdt
         usdc.mint(owner, assets);
 
-        //以owner用户的身份进行操作
         vm.startPrank(owner);
         //usdc.approve(address(coreVault), assets);
         vm.expectRevert();
@@ -434,13 +370,11 @@ contract DocsCoreVaultTest is Test {
         vm.assume(receiver != address(0) && owner != address(0));
         coreVault.grantRole(keccak256("MANAGER_ROLE"), address(this));
         coreVault.setLpFee(false, 0);
-        //前值条件
         assertEq(coreVault.isFreeze(), false);
         assertNotEq(coreVault.vaultReward(), address(0));
         assertNotEq(coreVault.cooldownDuration(), 0);
         assertNotEq(address(coreVault.feeRouter()), address(0));
         assertNotEq(receiver, address(0));
-        //授于这个合约mint的权限 第一次注入流动性
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
         usdc.mint(address(this), 2000);
         usdc.approve(address(coreVault), 2000);
@@ -448,10 +382,8 @@ contract DocsCoreVaultTest is Test {
         //60915427
         uint256 assets = 100 * 10 ** 6;
         usdc.mint(address(owner), assets);
-        //以owner的身份进行一下操作
         vm.startPrank(owner);
         usdc.approve(address(coreVault), assets);
-        //购买一定量的BLP
 
         coreVault.deposit(assets, owner);
         uint256 beforeAmount = usdc.balanceOf(receiver);
@@ -499,7 +431,6 @@ contract DocsCoreVaultTest is Test {
 
     function testCV03002(address owner, address receiver) public {
         vm.assume(receiver != address(0) && owner != address(0));
-        //前值条件
         assertEq(coreVault.isFreeze(), false);
         assertNotEq(coreVault.vaultReward(), address(0));
         assertNotEq(coreVault.cooldownDuration(), 0);
@@ -508,7 +439,6 @@ contract DocsCoreVaultTest is Test {
         coreVault.grantRole(keccak256("MANAGER_ROLE"), address(this));
         coreVault.setLpFee(false, 20000);
 
-        //授于这个合约mint的权限 第一次注入流动性
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
         usdc.mint(address(this), 2000);
         usdc.approve(address(coreVault), 2000);
@@ -516,10 +446,8 @@ contract DocsCoreVaultTest is Test {
 
         uint256 assets = 100 * 10 ** 6;
         usdc.mint(address(owner), assets);
-        //以owner的身份进行一下操作
         vm.startPrank(owner);
         usdc.approve(address(coreVault), assets);
-        //购买一定量的BLP
 
         coreVault.deposit(assets, owner);
         uint256 beforeAmount = usdc.balanceOf(receiver);
@@ -621,23 +549,19 @@ contract DocsCoreVaultTest is Test {
     function testCV04001(address owner, address receiver) public {
         vm.assume(receiver != address(0) && owner != address(0));
         //vm.assume(assets>10*10*6 && assets < 123123000000);
-        //前值条件
         assertEq(coreVault.isFreeze(), false);
         assertNotEq(coreVault.vaultReward(), address(0));
         assertNotEq(coreVault.cooldownDuration(), 0);
         assertNotEq(address(coreVault.feeRouter()), address(0));
         assertNotEq(receiver, address(0));
-        //授于这个合约mint的权限 第一次注入流动性
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
         usdc.mint(address(this), 2000);
         usdc.approve(address(coreVault), 2000);
         coreVault.deposit(2000, address(this));
         uint256 assets = 100 * 10 ** 6;
         usdc.mint(address(owner), assets);
-        //以owner的身份进行一下操作
         vm.startPrank(owner);
         usdc.approve(address(coreVault), assets);
-        //购买一定量的BLP
         coreVault.deposit(assets, owner);
         uint256 beforeAmount = usdc.balanceOf(receiver);
         vm.warp(block.timestamp + 15 * 60 * 60);
@@ -686,13 +610,11 @@ contract DocsCoreVaultTest is Test {
     function testCV04002(address owner, address receiver) public {
         vm.assume(receiver != address(0) && owner != address(0));
         //vm.assume(assets>10*10*6 && assets < 123123000000);
-        //前值条件
         assertEq(coreVault.isFreeze(), false);
         assertNotEq(coreVault.vaultReward(), address(0));
         assertNotEq(coreVault.cooldownDuration(), 0);
         assertNotEq(address(coreVault.feeRouter()), address(0));
         assertNotEq(receiver, address(0));
-        //授于这个合约mint的权限 第一次注入流动性
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
         usdc.mint(address(this), 2000);
         usdc.approve(address(coreVault), 2000);
@@ -700,10 +622,8 @@ contract DocsCoreVaultTest is Test {
         //60915427
         uint256 assets = 100 * 10 ** 6;
         usdc.mint(address(owner), assets);
-        //以owner的身份进行一下操作
         vm.startPrank(owner);
         usdc.approve(address(coreVault), assets);
-        //购买一定量的BLP
 
         coreVault.deposit(assets, owner);
         uint256 beforeAmount = usdc.balanceOf(receiver);

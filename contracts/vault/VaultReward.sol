@@ -8,12 +8,10 @@ import {IRewardDistributor} from "./interfaces/IRewardDistributor.sol";
 import {IFeeRouter} from "../fee/interfaces/IFeeRouter.sol";
 import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import {ICoreVault, IERC4626} from "./interfaces/ICoreVault.sol";
-import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {AcUpgradable} from "../ac/AcUpgradable.sol";
 
 contract VaultReward is AcUpgradable, ReentrancyGuard {
-    using SafeMath for uint256;
     using SafeCast for int256;
     using SafeERC20 for IERC20;
     uint256 public constant PRECISION = 1e30;
@@ -113,7 +111,7 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
     function claimForAccount(
         address account
     ) external onlyController returns (uint256 tokenAmount) {
-        _claimForAccount(account);
+        return _claimForAccount(account);
     }
 
     function _claimForAccount(
@@ -187,15 +185,11 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
                 uint256 nextCumulativeReward = lpEarnedRewards[_account] +
                     accountReward;
 
-                // reuse supply as averageStakedAmount to avoid `stack too deep`
-                supply = averageStakedAmounts[_account]
-                    .mul(lpEarnedRewards[_account])
-                    .div(nextCumulativeReward)
-                    .add(
-                        stakedAmount.mul(accountReward).div(
-                            nextCumulativeReward
-                        )
-                    );
+                supply =
+                    (averageStakedAmounts[_account] *
+                        (lpEarnedRewards[_account])) /
+                    (nextCumulativeReward) +
+                    ((stakedAmount * (accountReward)) / (nextCumulativeReward));
                 averageStakedAmounts[_account] = supply;
                 lpEarnedRewards[_account] = nextCumulativeReward;
 
@@ -345,21 +339,15 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
         }
         uint256 supply = coreVault.totalSupply();
         uint256 _pendingRewards = IRewardDistributor(distributor)
-            .pendingRewards()
-            .mul(PRECISION);
-        uint256 nextCumulativeRewardPerToken = cumulativeRewardPerToken.add(
-            _pendingRewards.div(supply)
-        );
+            .pendingRewards() * PRECISION;
+        uint256 nextCumulativeRewardPerToken = cumulativeRewardPerToken +
+            (_pendingRewards / supply);
+
         return
-            claimableReward[_account].add(
-                stakedAmount
-                    .mul(
-                        nextCumulativeRewardPerToken.sub(
-                            previousCumulatedRewardPerToken[_account]
-                        )
-                    )
-                    .div(PRECISION)
-            );
+            claimableReward[_account] +
+            ((stakedAmount *
+                (nextCumulativeRewardPerToken -
+                    previousCumulatedRewardPerToken[_account])) / PRECISION);
     }
 
     function _stakedAmounts(address _account) private view returns (uint256) {

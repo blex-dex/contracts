@@ -204,7 +204,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         _commitIncreasePosition(_params, collD, _fundingRate);
         _validLiq(_params._account, _params._isLong);
 
-        _transactionFees(_totalfee);
+        _approveTransationsFees(_totalfee); // 手续费转账
 
         feeRouter.collectFees(_params._account, collateralToken, _fees);
 
@@ -230,18 +230,8 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         require(p > 0, "!oracle price");
     }
 
-    /**
-     * @dev Processes the transaction fees.
-     * @param fees The amount of fees to be processed.
-     */
-    function _transactionFees(int256 fees) private {
-        if (fees < 0) {
-            IFeeRouter(feeRouter).withdraw(
-                collateralToken,
-                address(this),
-                (fees * -1).toUint256()
-            );
-        } else if (fees > 0) {
+    function _approveTransationsFees(int256 fees) private {
+        if (fees > 0) {
             uint256 amount = TransferHelper.formatCollateral(
                 fees.toUint256(),
                 IERC20Metadata(collateralToken).decimals()
@@ -282,7 +272,9 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         _params.execNum += 1;
         require(
             order.isMarkPriceValid(_params._oraclePrice),
-            StringsPlus.POSITION_TRIGGER_ABOVE
+            order.getIsFromMarket()
+                ? "PositionAddMgr:market slippage"
+                : StringsPlus.POSITION_TRIGGER_ABOVE
         );
 
         // Check collateralDelta before updating positions
@@ -307,8 +299,6 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         );
         increasePositionWithOrders(_params);
     }
-
- 
 
     function _validLiq(address acc, bool _isLong) private view {
         require(

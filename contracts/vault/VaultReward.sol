@@ -60,7 +60,6 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
         uint256 amount,
         uint256 minSharesOut
     ) public nonReentrant returns (uint256 sharesOut) {
-        updateRewardsByAccount(msg.sender);
         address _token = vault.asset();
 
         SafeERC20.safeTransferFrom(
@@ -89,7 +88,6 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
         uint256 shares,
         uint256 minAssetsOut
     ) public nonReentrant returns (uint256 assetOut) {
-        updateRewardsByAccount(msg.sender);
         if ((assetOut = vault.redeem(shares, to, to)) < minAssetsOut)
             revert("MinOutError");
     }

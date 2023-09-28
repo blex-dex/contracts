@@ -5,22 +5,6 @@ import {MarketDataTypes} from "../../market/MarketDataTypes.sol";
 import {Position} from "../../position/PositionStruct.sol";
 
 interface IFeeRouter {
-    enum FeeType {
-        OpenFee, // 0
-        CloseFee, // 1
-        FundFee, // 2
-        ExecFee, // 3
-        LiqFee, // 4
-        BuyLpFee, // 5
-        SellLpFee, // 6
-        ExtraFee0,
-        ExtraFee1,
-        ExtraFee2,
-        ExtraFee3,
-        ExtraFee4,
-        Counter
-    }
-
     function feeVault() external view returns (address);
 
     function fundFee() external view returns (address);
@@ -68,6 +52,20 @@ interface IFeeRouter {
     function collectFees(
         address account,
         address token,
-        int256[] memory fees
+        int256[] memory originFees
+    ) external;
+
+    function collectFees(
+        address account,
+        address token,
+        int256[] memory fees,
+        uint256 fundfeeLoss
+    ) external;
+
+    function payoutFees(
+        address account,
+        address token,
+        int256[] memory fees,
+        int256 feesTotal
     ) external;
 }

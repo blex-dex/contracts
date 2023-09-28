@@ -3,110 +3,60 @@ pragma solidity ^0.8.17;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
-import "../ac/Ac.sol";
+import {AcUpgradable} from "../ac/AcUpgradable.sol";
 import {IFeeVault} from "./interfaces/IFeeVault.sol";
-import {Precision} from '../utils/TransferHelper.sol';
+import {IMarketReader} from "../market/interfaces/IMarketReader.sol";
+import {IMarketFactory} from "../market/interfaces/IMarketFactory.sol";
+import "./../position/PositionStruct.sol";
+import "./FundFeeStore.sol";
 
-contract FundFee is Ac {
+contract FundFee is FundFeeStore {
     using SafeCast for uint256;
+    using SafeCast for int256;
 
-    address public blankSlot;
-
-    address public immutable feeVault;
-
-    uint256 public constant MIN_FUNDING_INTERVAL = 1 hours;
-    uint256 public constant FEE_RATE_PRECISION = Precision.FEE_RATE_PRECISION;
-    uint256 public constant BASIS_INTERVAL_HOU = 24;
-    uint256 public constant DEFAULT_RATE_DIVISOR = 100;
-
-    uint256 public minRateLimit = 2083;
-    uint256 public minorityFRate = 0;
-
-    // market's funding rate update interval
-    mapping(address => uint256) public fundingIntervals;
-
-    struct SkipTime {
-        uint256 start;
-        uint256 end;
+    // Temporary cumulative funding rate change value
+    function getCalFundingRates(
+        address market
+    ) public view returns (int256, int256) {
+        return (calFundingRates[market][true], calFundingRates[market][false]);
     }
 
-    SkipTime[] public skipTimes;
-
-    event UpdateMinRateLimit(uint256 indexed oldLimit, uint256 newLimit);
-    event UpdateFundInterval(address indexed market, uint256 interval);
-    event UpdateMinorityFRate(uint256 oldFRate, uint256 newFRate);
-    event AddSkipTime(uint256 indexed startTime, uint256 indexed endTime);
-
-    constructor(address vault) Ac(msg.sender) {
-        require(vault != address(0), "invalid feeVault");
-        feeVault = vault;
-
-        _grantRole(MANAGER_ROLE, msg.sender);
+    function _updateCalFundingRate(
+        address market,
+        uint256 longSize,
+        uint256 shortSize,
+        uint256 calcPart // 1 or 2
+    ) private {
+        FundingRateCalculator.updateCalFundingRate(
+            FundingRateCalculator.UpdateCalFundingRateCache(
+                market,
+                longSize,
+                shortSize,
+                calcPart,
+                _getCalInterval(market),
+                _getCollectInterval(market),
+                _getTimeStamp(),
+                _getMaxFRate(market),
+                _calFeeRate(market, longSize, shortSize)
+            ),
+            calFundingRates,
+            lastCalTimes,
+            configs
+        );
     }
 
-    function setMinRateLimit(uint256 limit) external onlyManager {
-        require(limit > 0, "invalid limit");
-
-        uint256 _oldLimit = minRateLimit;
-        minRateLimit = limit;
-
-        emit UpdateMinRateLimit(_oldLimit, limit);
-    }
-
-    function setMinorityFRate(uint256 rate) external onlyManager {
-        uint256 _old = minorityFRate;
-        minorityFRate = rate;
-
-        emit UpdateMinorityFRate(_old, rate);
-    }
-
-    function setFundingInterval(
-        address[] memory markets,
-        uint256[] memory intervals
-    ) external onlyManager {
-        require(markets.length == intervals.length, "invalid params");
-
-        uint256 interval;
-
-        for (uint256 i = 0; i < markets.length; i++) {
-            require(markets[i] != address(0));
-            require(intervals[i] >= MIN_FUNDING_INTERVAL);
-
-            interval =
-                (intervals[i] / MIN_FUNDING_INTERVAL) *
-                MIN_FUNDING_INTERVAL;
-            fundingIntervals[markets[i]] = interval;
-
-            emit UpdateFundInterval(markets[i], interval);
-        }
+    struct UpdateCumulativeFundingRateCache {
+        uint256 fundingInterval;
+        uint256 roundedTime;
+        uint256 currentTimeStamp;
+        int256 collectInterval;
+        int256 longCumCFRateDelta;
+        int256 shortCumCFRateDelta;
     }
 
     /**
-     * @dev Adds a skip time interval during which certain operations are skipped.
-     * @param start The start timestamp of the skip time interval.
-     * @param end The end timestamp of the skip time interval.
-     */
-    function addSkipTime(uint256 start, uint256 end) external onlyManager {
-        require(end >= start, "invalid params");
-
-        SkipTime memory _skipTime;
-        _skipTime.start = start;
-        _skipTime.end = end;
-        skipTimes.push(_skipTime);
-
-        emit AddSkipTime(start, end);
-    }
-
-    /**
-     * @dev Retrieves the current timestamp.
-     * @return The current timestamp.
-     */
-    function _getTimeStamp() private view returns (uint256) {
-        return block.timestamp;
-    }
-
-    /**
-     * @dev Updates the cumulative funding rate for a market based on the sizes of long and short positions.
+     * @dev Called by the market.
+     * Updates the cumulative funding rate for a market based on the sizes of long and short positions.
      * @param market The address of the market.
      * @param longSize The size of the long position.
      * @param shortSize The size of the short position.
@@ -116,52 +66,140 @@ contract FundFee is Ac {
         uint256 longSize,
         uint256 shortSize
     ) external onlyController {
-        uint256 _fundingInterval = _getFundingInterval(market);
-        uint256 _lastTime = _getLastFundingTimes(market);
+        UpdateCumulativeFundingRateCache memory _cache;
+        // Update the funding rate calculation
+        _updateCalFundingRate(market, longSize, shortSize, 1);
 
-        if (_lastTime == 0) {
-            _lastTime = (_getTimeStamp() / _fundingInterval) * _fundingInterval;
-            _updateGlobalFundingRate(market, 0, 0, 0, 0, _lastTime);
+        // Check if cumulative funding rate update is needed
+        _cache.fundingInterval = _getCollectInterval(market);
+        _cache.roundedTime = _getLastCollectTimes(market);
+
+        _cache.currentTimeStamp = _getTimeStamp();
+        // Initialize the state
+        if (_cache.roundedTime == 0) {
+            _cache.roundedTime =
+                (_cache.currentTimeStamp / _cache.fundingInterval) *
+                _cache.fundingInterval;
+            IFeeVault(feeVault).updateGlobalFundingRate(
+                market,
+                0,
+                0,
+                0,
+                0,
+                _cache.roundedTime
+            );
             return;
         }
 
-        if ((_lastTime + _fundingInterval) > _getTimeStamp()) {
-            return;
-        }
+        // If the time has not arrived, do not update the funding rate
+        if (
+            !FundingRateCalculator.isFundingTimeReached(
+                _cache.roundedTime,
+                _cache.fundingInterval,
+                _cache.currentTimeStamp
+            )
+        ) return;
+        (int256 _longRate, int256 _shortRate) = getCalFundingRates(market);
+        uint256 CFRate = FundingRateCalculator.calCFRate(
+            _longRate,
+            _shortRate,
+            minCFRate()
+        );
+        (
+            int256 _longCFRate,
+            int256 _shortCFRate,
+            uint256 deductFundFeeAmount
+        ) = FundingRateCalculator.calNextCFRate(
+                _longRate,
+                _shortRate,
+                CFRate,
+                fundingFeeLossOffLimit(),
+                fundingFeeLoss(market),
+                longSize,
+                shortSize
+            );
 
-        (int256 _longRate, int256 _shortRate) = _getFundingRate(
+        _cache.collectInterval = FundingRateCalculator
+            ._calculateIntervals(
+                // Multiples of eight-hour intervals
+                FundingRateCalculator.calcRoundedTime(
+                    _cache.currentTimeStamp,
+                    _cache.fundingInterval
+                ), // Current rounded time
+                // Last time
+                _cache.roundedTime, // Last time
+                // One-hour time interval
+                _cache.fundingInterval // Time interval
+            )
+            .toInt256();
+        _cache.longCumCFRateDelta = _longCFRate * _cache.collectInterval;
+        _cache.shortCumCFRateDelta = _shortCFRate * _cache.collectInterval;
+
+        FundingRateCalculator.addPositiveFeeLoss(
+            market,
+            deductFundFeeAmount,
+            fundFeeLoss
+        );
+
+        _cache.roundedTime = FundingRateCalculator.calcRoundedTime(
+            _cache.currentTimeStamp,
+            _cache.fundingInterval
+        );
+
+        // Update the funding rate
+        IFeeVault(feeVault).updateGlobalFundingRate(
+            market,
+            _longCFRate,
+            _shortCFRate,
+            _cache.longCumCFRateDelta,
+            _cache.shortCumCFRateDelta,
+            _cache.roundedTime
+        );
+
+        // If cumulative funding rate is updated
+        // Reset the calculation of funding rate
+        FundingRateCalculator.resetCalFundingRate(
+            market,
+            _cache.roundedTime,
+            calFundingRates,
+            lastCalTimes
+        );
+
+        _updateCalFundingRate(market, longSize, shortSize, 2);
+    }
+
+    //==========================================================
+    //          readonly
+    //==========================================================
+
+    /**
+     * @dev Retrieves the next funding rates for a market based on the sizes of long and short positions.
+     * @param market The address of the market.
+     * @param longSize The size of the long position.
+     * @param shortSize The size of the short position.
+     * @return _longRates The next funding rates for long and short positions.
+     * @return _shortRates The next funding rates for long and short positions.
+     */
+    function getNextFundingRate(
+        address market,
+        uint256 longSize,
+        uint256 shortSize
+    ) external view returns (int256 _longRates, int256 _shortRates) {
+        (int256 _longRate, int256 _shortRate) = getCalFundingRates(market);
+        uint256 CFRate = FundingRateCalculator.calCFRate(
+            _longRate,
+            _shortRate,
+            minCFRate()
+        );
+        (_longRates, _shortRates, ) = FundingRateCalculator.calNextCFRate(
+            _longRate,
+            _shortRate,
+            CFRate,
+            fundingFeeLossOffLimit(),
+            fundingFeeLoss(market),
             longSize,
             shortSize
         );
-        (int256 _longRates, int256 _shortRates) = _getNextFundingRate(
-            market,
-            _longRate,
-            _shortRate
-        );
-
-        _lastTime = (_getTimeStamp() / _fundingInterval) * _fundingInterval;
-
-        _updateGlobalFundingRate(
-            market,
-            _longRate,
-            _shortRate,
-            _longRates,
-            _shortRates,
-            _lastTime
-        );
-    }
-
-    /**
-     * @dev Retrieves the funding rate for a market based on the sizes of long and short positions.
-     * @param market The address of the market.
-     * @param isLong Flag indicating whether the position is long.
-     * @return The funding rate.
-     */
-    function getFundingRate(
-        address market,
-        bool isLong
-    ) external view returns (int256) {
-        return IFeeVault(feeVault).fundingRates(market, isLong);
     }
 
     /**
@@ -178,146 +216,46 @@ contract FundFee is Ac {
         int256 entryFundingRate,
         bool isLong
     ) external view returns (int256) {
-        if (size == 0) {
-            return 0;
-        }
-
         int256 _cumRates = IFeeVault(feeVault).cumulativeFundingRates(
             market,
             isLong
         );
-        int256 _divisor = FEE_RATE_PRECISION.toInt256();
-
-        return _getFundingFee(size, entryFundingRate, _cumRates) / _divisor;
+        return
+            FundingRateCalculator.calUserFundingFee(
+                size,
+                entryFundingRate,
+                _cumRates
+            );
     }
 
-    /**
-     * @dev Retrieves the next funding rates for a market based on the sizes of long and short positions.
-     * @param market The address of the market.
-     * @param longSize The size of the long position.
-     * @param shortSize The size of the short position.
-     * @return The next funding rates for long and short positions.
-     */
-    function getNextFundingRate(
-        address market,
-        uint256 longSize,
-        uint256 shortSize
-    ) external view returns (int256, int256) {
-        (int256 _longRate, int256 _shortRate) = _getFundingRate(
-            longSize,
-            shortSize
-        );
-
-        (int256 _longRates, int256 _shortRates) = _getNextFundingRate(
-            market,
-            _longRate,
-            _shortRate
-        );
-        return (_longRates, _shortRates);
+    function getGlobalOpenInterest() public view returns (uint256 _globalSize) {
+        IMarketReader mr = IMarketReader(marketReader);
+        IMarketFactory.Outs[] memory _outs = mr.getMarkets();
+        for (uint256 i; i < _outs.length; i++) {
+            _globalSize += mr.vaultRouter().fundsUsed(_outs[i].addr);
+        }
     }
 
-    /**
-     * @dev Retrieves the funding rate for a market based on the sizes of long and short positions.
-     * @param longSize The size of the long position.
-     * @param shortSize The size of the short position.
-     * @return The funding rates for long and short positions.
-     */
-    function _getFundingRate(
-        uint256 longSize,
-        uint256 shortSize
-    ) private view returns (int256, int256) {
-        uint256 _rate = _calFeeRate(longSize, shortSize);
-        int256 _sRate = _rate.toInt256();
-
-        if (_rate == minRateLimit) {
-            return (_sRate, _sRate);
-        }
-        if (longSize >= shortSize) {
-            return (_sRate, minorityFRate.toInt256());
-        }
-        return (minorityFRate.toInt256(), _sRate);
-    }
-
-    /**
-     * @dev Calculates the fee rate based on the long and short positions' sizes.
-     * @param _longSize The size of the long position.
-     * @param _shortSize The size of the short position.
-     * @return The fee rate calculated based on the position sizes.
-     */
-    function _calFeeRate(
-        uint256 _longSize,
-        uint256 _shortSize
-    ) private view returns (uint256) {
-        // If both long and short positions have size 0, return the minimum rate limit.
-        if (_longSize == 0 && _shortSize == 0) {
-            return minRateLimit;
-        }
-
-        uint256 _size;
-        // Calculate the absolute difference between longSize and shortSize.
-        if (_longSize >= _shortSize) _size = _longSize - _shortSize;
-        else _size = _shortSize - _longSize;
-
-        uint256 _rate;
-        if (_size != 0) {
-            // Calculate the divisor by summing longSize and shortSize.
-            uint256 _divisor = _longSize + _shortSize;
-
-            // Calculate the fee rate.
-            _rate = (_size * FEE_RATE_PRECISION) / _divisor;
-            // Square the rate and divide by constants to adjust the rate.
-            _rate =
-                (_rate ** 2) /
-                FEE_RATE_PRECISION /
-                DEFAULT_RATE_DIVISOR /
-                BASIS_INTERVAL_HOU;
-        }
-
-        // If the calculated rate is less than the minimum rate limit, return the minimum rate limit.
-        if (_rate < minRateLimit) {
-            return minRateLimit;
-        }
-
-        return _rate;
-    }
-
-    /**
-     * @dev Calculates the funding fee based on the position size, entry funding rate, and cumulative rates.
-     * @param size The size of the position.
-     * @param entryFundingRate The entry funding rate of the position.
-     * @param cumRates The cumulative rates.
-     * @return The funding fee calculated based on the position parameters.
-     */
-    function _getFundingFee(
-        uint256 size,
-        int256 entryFundingRate,
-        int256 cumRates
-    ) private pure returns (int256) {
-        int256 _rate = cumRates - entryFundingRate;
-        // If the rate is 0, return 0 as the funding fee.
-        if (_rate == 0) {
-            return 0;
-        }
-        // Calculate the funding fee by multiplying the position size with the rate.
-        return size.toInt256() * _rate;
-    }
+    //==========================================================
+    //          private & internal
+    //==========================================================
 
     /**
      * @dev Retrieves the funding interval for a given market.
      * @param market The address of the market.
-     * @return The funding interval for the specified market, or the minimum funding interval if not set.
+     * @return _interval The funding interval for the specified market, or the minimum funding interval if not set.
      */
-    function _getFundingInterval(
+    function _getCollectInterval(
         address market
-    ) private view returns (uint256) {
-        uint256 _interval = fundingIntervals[market];
-        // If the funding interval is set for the market, return it.
-        if (_interval != 0) {
-            return _interval;
-        }
+    ) private view returns (uint256 _interval) {
+        return
+            FundingRateCalculator.getFundingInterval(market, fundingIntervals);
+    }
 
-        // If the funding interval is not set, return the minimum funding interval.
-        return MIN_FUNDING_INTERVAL;
+    function _getCalInterval(
+        address market
+    ) private view returns (uint256 _interval) {
+        return FundingRateCalculator.getFundingInterval(market, calIntervals);
     }
 
     /**
@@ -325,86 +263,63 @@ contract FundFee is Ac {
      * @param market The address of the market.
      * @return The last funding time for the specified market.
      */
-    function _getLastFundingTimes(
+    function _getLastCollectTimes(
         address market
     ) private view returns (uint256) {
         return IFeeVault(feeVault).lastFundingTimes(market);
     }
 
-    /**
-     * @dev Calculates the next funding rate for a given market based on the current rates and funding interval.
-     * @param _market The address of the market.
-     * @param _longRate The current long rate.
-     * @param _shortRate The current short rate.
-     * @return The next long rate and short rate after the funding interval has passed.
-     */
-    function _getNextFundingRate(
-        address _market,
-        int256 _longRate,
-        int256 _shortRate
-    ) private view returns (int256, int256) {
-        uint256 _fundingInterval = _getFundingInterval(_market);
-        uint256 _lastTime = _getLastFundingTimes(_market);
-
-        // If the next funding time is not reached yet, return (0, 0) as the next rates.
-        if ((_lastTime + _fundingInterval) > _getTimeStamp()) {
-            return (0, 0);
-        }
-
-        uint256 _skipTimes = _getSkipTimes();
-        int256 _intervals = (
-            (_getTimeStamp() - _lastTime - _skipTimes) / MIN_FUNDING_INTERVAL
-        ).toInt256();
-
-        // Calculate the next long and short rates based on the intervals.
-        int256 _longRates = _longRate * _intervals;
-        int256 _shortRates = _shortRate * _intervals;
-
-        return (_longRates, _shortRates);
+    function _getLastCalTimes(address market) private view returns (uint256) {
+        return lastCalTimes[market];
     }
 
     /**
-     * @dev Updates the global funding rate for a specific market in the FeeVault contract.
-     * @param market The address of the market.
-     * @param longRate The current long rate.
-     * @param shortRate The current short rate.
-     * @param nextLongRate The next long rate after the funding interval.
-     * @param nextShortRate The next short rate after the funding interval.
-     * @param timestamp The current timestamp.
+     * @dev Retrieves the funding rate for a market based on the sizes of long and short positions.
+     * @param longSize The size of the long position.
+     * @param shortSize The size of the short position.
      */
-    function _updateGlobalFundingRate(
+    function _calPendingFundingRate(
         address market,
-        int256 longRate,
-        int256 shortRate,
-        int256 nextLongRate,
-        int256 nextShortRate,
-        uint256 timestamp
-    ) private {
+        uint256 longSize,
+        uint256 shortSize
+    ) private view returns (uint256 x, uint256 y) {
+        (x, y) = FundingRateCalculator.capFundingRateByLimits(
+            longSize,
+            shortSize,
+            maxFRate(),
+            minFRate(),
+            _getMaxFRate(market),
+            _calFeeRate(market, longSize, shortSize),
+            minorityFRate()
+        );
+    }
+
+    function _calFeeRate(
+        address _market,
+        uint256 _longSize,
+        uint256 _shortSize
+    ) private view returns (uint256) {
         return
-            IFeeVault(feeVault).updateGlobalFundingRate(
-                market,
-                longRate,
-                shortRate,
-                nextLongRate,
-                nextShortRate,
-                timestamp
+            FundingRateCalculator.calFeeRate(
+                _longSize,
+                _shortSize,
+                _getCalInterval(_market),
+                fRateFactor()
             );
     }
 
-    /**
-     * @dev Retrieves the total skip times accumulated based on the current timestamp and skip times array.
-     * @return totalSkip The total skip times accumulated.
-     */
-    function _getSkipTimes() private view returns (uint256 totalSkip) {
-        // If there are no skip times defined, return the total skip as 0.
-        if (skipTimes.length == 0) {
-            return totalSkip;
-        }
-
-        for (uint i = 0; i < skipTimes.length; i++) {
-            if (block.timestamp > skipTimes[i].end) {
-                totalSkip += (skipTimes[i].end - skipTimes[i].start);
-            }
-        }
+    function _getMaxFRate(address market) private view returns (uint256) {
+        // Calculate the max funding rate if maxFRate is not set
+        IMarketReader mr = IMarketReader(marketReader);
+        uint256 openInterest = getGlobalOpenInterest(); // 6 decimals
+        uint256 aum = mr.vaultRouter().getAUM(); // 6 decimals
+        uint256 fundingInterval = _getCalInterval(market);
+        return
+            FundingRateCalculator.calculateMaxFundingRate(
+                openInterest,
+                aum,
+                maxFRatePerDay(),
+                fundingInterval
+            );
     }
 }

@@ -27,6 +27,8 @@ interface IFundFee {
 
     function addSkipTime(uint256 start, uint256 end) external;
 
+    function addFeeLoss(address, uint256 a) external;
+
     function updateCumulativeFundingRate(
         address market,
         uint256 longSize,

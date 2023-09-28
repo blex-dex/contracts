@@ -15,6 +15,7 @@ import {IVaultRouter} from "./interfaces/IVaultRouter.sol";
 import {Precision, TransferHelper} from "../utils/TransferHelper.sol";
 import {AcUpgradable} from "../ac/AcUpgradable.sol";
 import {IFeeRouter} from "../fee/interfaces/IFeeRouter.sol";
+import {FeeRouterLib} from "../fee/lib/FeeRouterLib.sol";
 import {IVaultReward} from "../vault/interfaces/IVaultReward.sol";
 
 contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
@@ -213,13 +214,15 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
     ) private {
         if (fee == 0) return;
 
-        int256[] memory fees = new int256[](uint8(IFeeRouter.FeeType.Counter));
+        int256[] memory fees = new int256[](
+            uint8(FeeRouterLib.FeeType.Counter)
+        );
         IERC20(_asset).approve(address(feeRouter), fee);
         fees[
             uint8(
                 isBuy
-                    ? IFeeRouter.FeeType.BuyLpFee
-                    : IFeeRouter.FeeType.SellLpFee
+                    ? FeeRouterLib.FeeType.BuyLpFee
+                    : FeeRouterLib.FeeType.SellLpFee
             )
         ] = int256(
             TransferHelper.parseVaultAsset(
@@ -244,7 +247,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         uint256 shares
     ) internal override {
         require(false == isFreeze, "vault:freeze");
-        IVaultReward(vaultReward).updateRewardsByAccount(caller);
+        require(msg.sender == vaultReward, "access deined");
         lastDepositAt[receiver] = block.timestamp;
         uint256 s_assets = super._convertToAssets(shares, Math.Rounding.Up);
         uint256 cost = assets > s_assets
@@ -278,11 +281,11 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         uint256 shares
     ) internal override {
         require(false == isFreeze, "vault:freeze");
+        require(msg.sender == vaultReward, "access deined");
         require(
             block.timestamp > cooldownDuration + lastDepositAt[_owner],
             "vault:cooldown"
         );
-        IVaultReward(vaultReward).updateRewardsByAccount(caller);
         uint256 s_assets = super._convertToAssets(shares, Math.Rounding.Down);
         bool exceeds_assets = s_assets > assets;
 
@@ -301,6 +304,19 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         _transFeeToFeeVault(_owner, address(asset()), cost, false); //ok!
 
         emit WithdrawAsset(caller, receiver, _owner, assets, shares, cost);
+    }
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 /* amount */
+    ) internal override {
+        if (from == address(0))
+            IVaultReward(vaultReward).updateRewardsByAccount(to);
+        if (to == address(0))
+            IVaultReward(vaultReward).updateRewardsByAccount(from);
+        if (from == address(0) || to == address(0)) return;
+        revert("transfer not allowed");
     }
 
     function setIsFreeze(bool f) external onlyFreezer {

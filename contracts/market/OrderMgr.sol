@@ -271,16 +271,12 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
                     execFee,
                     _cache.isLong
                 );
-            if (decreasedCollateral >= execFee) {
-                int256[] memory _fees = new int256[](4);
-                _fees[3] = int256(execFee);
-                IERC20(collateralToken).approve(address(feeRouter), feeAmount);
-                feeRouter.collectFees(
-                    _cache.order.account,
-                    collateralToken,
-                    _fees
-                );
-            }
+
+            // Approve feeRouter and collect fees
+            int256[] memory _fees = new int256[](4);
+            _fees[3] = int256(decreasedCollateral);
+            IERC20(collateralToken).approve(address(feeRouter), feeAmount);
+            feeRouter.collectFees(_cache.order.account, collateralToken, _fees);
         }
 
         MarketDataTypes.UpdatePositionInputs memory inputs;

@@ -60,13 +60,20 @@ library Order {
     }
 
     function getTriggerAbove(Props memory order) internal pure returns (bool) {
-        if (order.triggerAbove == 1) {
-            return true;
-        }
-        if (order.triggerAbove == 2) {
-            return false;
-        }
-        revert("invalid order trigger above");
+        if (order.triggerAbove == 0) revert("invalid order trigger above");
+        return order.triggerAbove % 2 == 1;
+    }
+
+    function setIsFromMarket(
+        Props memory order,
+        bool _isFromMarket
+    ) internal pure {
+        require(order.triggerAbove == 1 || order.triggerAbove == 2);
+        if (_isFromMarket) order.triggerAbove += 2;
+    }
+
+    function getIsFromMarket(Props memory order) internal pure returns (bool) {
+        return order.triggerAbove == 3 || order.triggerAbove == 4;
     }
 
     function isMarkPriceValid(

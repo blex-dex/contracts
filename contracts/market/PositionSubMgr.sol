@@ -7,7 +7,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import "../order/interface/IOrderBook.sol";
-import {PositionSubMgrLib} from "../market/PostionSubMgrLib.sol";
+import {PositionSubMgrLib} from "../market/lib/PostionSubMgrLib.sol";
 
 import {IPrice} from "../oracle/interfaces/IPrice.sol";
 import {IPositionBook} from "../position/interfaces/IPositionBook.sol";
@@ -207,7 +207,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         }
         _params._market = address(this);
 
-        int256[] memory _fees = feeRouter.getFees(_params, _position);
+        int256[] memory _originFees = feeRouter.getFees(_params, _position);
 
         IMarketValid mv = marketValid;
         if (_params._sizeDelta == 0) {
@@ -220,7 +220,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
                 0
             );
         } else {
-            mv.validPosition(_params, _position, _fees);
+            mv.validPosition(_params, _position, _originFees);
         }
 
         int256 dPnl;
@@ -234,14 +234,13 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         }
         _position.realisedPnl = dPnl;
 
-        int256 feesTotal = _fees.totoalFees();
-
-        (uint256 newCollateralUnsigned, ) = _decreaseTransaction(
-            _params,
-            _position,
-            dPnl,
-            feesTotal
-        );
+        PositionSubMgrLib.DecreaseTransactionOuts
+            memory _outs = _decreaseTransaction(
+                _params,
+                _position,
+                dPnl,
+                _originFees
+            );
 
         int256 _nowFundRate = feeRouter.cumulativeFundingRates(
             address(this),
@@ -258,7 +257,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
             _params._account,
             isCloseAll
                 ? _position.collateral
-                : (_position.collateral - newCollateralUnsigned),
+                : (_position.collateral - _outs.newCollateralUnsigned),
             _params._sizeDelta,
             _nowFundRate,
             _params._isLong
@@ -271,19 +270,17 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
             _params._sizeDelta != _position.size
         ) validLiq(_params._account, _params._isLong);
 
-        feeRouter.collectFees(_params._account, collateralToken, _fees);
-
         MarketLib.afterUpdatePosition(
             MarketPositionCallBackIntl.UpdatePositionEvent(
                 _params,
                 _position,
-                _fees,
+                _originFees,
                 collateralToken,
                 indexToken,
                 int256(
                     isCloseAll
                         ? _position.collateral
-                        : (_position.collateral - newCollateralUnsigned)
+                        : (_position.collateral - _outs.newCollateralUnsigned)
                 )
             ),
             PLUGIN_GAS_LIMIT,
@@ -317,67 +314,64 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         MarketDataTypes.UpdatePositionInputs memory _params,
         Position.Props memory _position,
         int256 dPNL,
-        int256 fees
-    ) private returns (uint256 newCollateralUnsigned, int256 transToUser) {
-        address _collateralToken = collateralToken;
-        IERC20 _collateralTokenERC20 = IERC20(_collateralToken);
-        //================================================
-        // fee vault transactions
-        //================================================
-        int256 _transToFeeVault = PositionSubMgrLib.calculateTransToFeeVault(
+        int256[] memory _originFees
+    ) private returns (PositionSubMgrLib.DecreaseTransactionOuts memory _outs) {
+        _outs = PositionSubMgrLib.calDecreaseTransactionValues(
+            _params,
             _position,
             dPNL,
-            fees
+            _originFees
         );
-        if (_transToFeeVault > 0) {
+        uint256 fundfeeLoss = PositionSubMgrLib.calculateFundFeeLoss(
+            _position.collateral.toInt256(),
+            dPNL,
+            _originFees
+        );
+
+        address _collateralToken = collateralToken;
+        IERC20 _collateralTokenERC20 = IERC20(_collateralToken);
+        if (_outs.transToFeeVault > 0) {
             uint256 amount = TransferHelper.formatCollateral(
-                _transToFeeVault.toUint256(),
+                _outs.transToFeeVault.toUint256(),
                 IERC20Metadata(collateralToken).decimals()
             );
             IERC20(collateralToken).approve(address(feeRouter), amount);
+            feeRouter.collectFees(
+                _params._account,
+                collateralToken,
+                _originFees,
+                fundfeeLoss
+            );
+        } else {
+            feeRouter.payoutFees(
+                _params._account,
+                collateralToken,
+                _originFees,
+                _outs.transToFeeVault
+            );
         }
 
         //================================================
         // vault transactions
         //================================================
-        int256 _transToVault = PositionSubMgrLib.calculateTransToVault(
-            _position,
-            dPNL
-        );
-        if (_transToVault > 0)
-            _transferToVault(_collateralTokenERC20, uint256(_transToVault));
+        if (_outs.transToVault > 0)
+            _transferToVault(
+                _collateralTokenERC20,
+                uint256(_outs.transToVault)
+            );
         else
             MarketLib.vaultWithdraw(
                 _collateralToken,
                 address(this),
-                -_transToVault,
+                -_outs.transToVault,
                 collateralTokenDigits,
                 vaultRouter
             );
-        //================================================
-        // newCollateral
-        //================================================
-        newCollateralUnsigned = PositionSubMgrLib.calculateNewCollateral(
-            _params,
-            _position,
-            dPNL,
-            fees
-        );
-
-        //================================================
-        // transToUser
-        //================================================
-        transToUser = PositionSubMgrLib.calculateTransToUser(
-            _params,
-            _position,
-            dPNL,
-            fees
-        );
-        if (transToUser > 0)
+        if (_outs.transToUser > 0)
             TransferHelper.transferOut(
                 _collateralToken,
                 _params._account,
-                uint256(transToUser)
+                uint256(_outs.transToUser)
             );
     }
 
@@ -386,6 +380,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
         MarketDataTypes.UpdatePositionInputs memory _params
     ) private {
         _params._oraclePrice = _getClosePrice(_params._isLong);
+
         Position.Props memory _position = positionBook.getPosition(
             order.account,
             _params._oraclePrice,

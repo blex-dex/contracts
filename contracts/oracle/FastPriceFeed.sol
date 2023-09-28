@@ -193,7 +193,10 @@ contract FastPriceFeed is Ac {
         emit SetMaxDeviationBasisPoints(_maxDeviationBasisPoints);
     }
 
-    event SetMaxCumulativeDeltaDiffs(address[] _tokens, uint256[] _maxCumulativeDeltaDiffs);
+    event SetMaxCumulativeDeltaDiffs(
+        address[] _tokens,
+        uint256[] _maxCumulativeDeltaDiffs
+    );
 
     function setMaxCumulativeDeltaDiffs(
         address[] memory _tokens,
@@ -242,7 +245,6 @@ contract FastPriceFeed is Ac {
         bool shouldUpdate = _setLastUpdatedValues(_timestamp);
 
         if (shouldUpdate) {
-
             for (uint256 i = 0; i < _tokens.length; i++) {
                 address token = _tokens[i];
                 _setPrice(token, _prices[i]);
@@ -252,8 +254,12 @@ contract FastPriceFeed is Ac {
         }
     }
 
-
-    event SetPricesAndExecute(address token, uint256 price, uint256 timestamp, IMarket.OrderExec[] orders);
+    event SetPricesAndExecute(
+        address token,
+        uint256 price,
+        uint256 timestamp,
+        IMarket.OrderExec[] orders
+    );
 
     function setPricesAndExecute(
         address token,
@@ -303,6 +309,7 @@ contract FastPriceFeed is Ac {
         bool shouldUpdate = _setLastUpdatedValues(_timestamp);
 
         if (shouldUpdate) {
+            address _feed = chainPriceFeed;
 
             for (uint256 i = 0; i < _priceBitArray.length; i++) {
                 uint256 priceBits = _priceBitArray[i];
@@ -319,7 +326,7 @@ contract FastPriceFeed is Ac {
                     address token = tokens[i * 8 + j];
                     uint256 tokenPrecision = tokenPrecisions[i * 8 + j];
                     uint256 adjustedPrice = (price * PRICE_PRECISION) /
-                                tokenPrecision;
+                        tokenPrecision;
 
                     _setPrice(token, adjustedPrice);
                 }
@@ -461,7 +468,7 @@ contract FastPriceFeed is Ac {
             uint256[] memory _tokenPrecisions = tokenPrecisions;
             uint256 token_length = _tokens.length;
 
-            for (uint256 j; j < 8;) {
+            for (uint256 j; j < 8; ) {
                 if (j >= token_length) return;
 
                 uint256 startBit;
@@ -471,7 +478,7 @@ contract FastPriceFeed is Ac {
                 uint256 price = (_priceBits >> startBit) & BITMASK_32;
                 address token = _tokens[j];
                 uint256 adjustedPrice = (price * PRICE_PRECISION) /
-                                _tokenPrecisions[j];
+                    _tokenPrecisions[j];
 
                 _setPrice(token, adjustedPrice);
                 unchecked {
@@ -484,7 +491,7 @@ contract FastPriceFeed is Ac {
     }
 
     function _setPrice(address _token, uint256 _price) private {
-        address _feed=chainPriceFeed;
+        address _feed = chainPriceFeed;
         if (_feed != address(0)) {
             uint256 refPrice = IChainPriceFeed(_feed).getLatestPrice(_token);
             uint256 fastPrice = prices[_token];

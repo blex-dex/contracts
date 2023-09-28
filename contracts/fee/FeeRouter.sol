@@ -16,18 +16,19 @@ import "../market/interfaces/IMarketFactory.sol";
 
 import "./interfaces/IFeeRouter.sol";
 import {Precision} from "../utils/TransferHelper.sol";
+import "./lib/FeeRouterLib.sol";
 
 contract FeeRouter is Ac, IFeeRouter {
     using SafeERC20 for IERC20;
     using SafeCast for int256;
     using SafeCast for uint256;
+    using MarketDataTypes for int256[];
 
     address public feeVault;
     address public fundFee;
     address public factory;
 
     uint256 public constant FEE_RATE_PRECISION = Precision.FEE_RATE_PRECISION;
-    uint256 public constant DEFAULT_MIN_RATE=100000;
 
     // market's feeRate and fee
     mapping(address => mapping(uint8 => uint256)) public feeAndRates;
@@ -75,38 +76,26 @@ contract FeeRouter is Ac, IFeeRouter {
         fundFee = fundingFee;
     }
 
-    event SetFeeVault(address vault);
-
     function setFeeVault(address vault) external onlyManager {
         require(vault != address(0), "invalid fee vault");
         feeVault = vault;
-
-        emit SetFeeVault(vault);
     }
-
-    event SetFundFee(address fundingFee);
 
     function setFundFee(address fundingFee) external onlyManager {
         require(fundFee != address(0), "invalid fundFee");
         fundFee = fundingFee;
-
-        emit SetFundFee(fundingFee);
     }
 
     function setFeeAndRates(
         address market,
         uint256[] memory rates
     ) external onlyInitOr(MARKET_MGR_ROLE) {
-        require(
-            rates.length > 0 && rates.length <= uint(type(FeeType).max) + 1,
-            "invalid params"
-        );
+        require(rates.length > 0, "invalid params");
 
         for (uint8 i = 0; i < rates.length; i++) {
-            uint256 old = feeAndRates[market][i];
-            uint256 rate = rates[i];
-            feeAndRates[market][i] = rate;
-            emit UpdateFeeAndRates(market, i, old, rate);
+            uint256 _old = rates[i];
+            feeAndRates[market][i] = rates[i];
+            emit UpdateFeeAndRates(market, i, _old, rates[i]);
         }
     }
 
@@ -142,20 +131,48 @@ contract FeeRouter is Ac, IFeeRouter {
      * Only the controller can call this function.
      * @param account The account to increase fees for.
      * @param token The address of the token to collect fees in.
-     * @param fees The array of fee amounts.
      */
     function collectFees(
         address account,
         address token,
         int256[] memory fees
     ) external onlyFeeController {
+        _collectFees(account, token, fees, 0);
+    }
+
+    function collectFees(
+        address account,
+        address token,
+        int256[] memory fees,
+        uint256 fundfeeLoss
+    ) external onlyFeeController {
+        _collectFees(account, token, fees, fundfeeLoss);
+    }
+
+    function _collectFees(
+        address account,
+        address token,
+        int256[] memory fees,
+        uint256 fundfeeLoss
+    ) private {
         uint256 _amount = IERC20(token).allowance(msg.sender, address(this));
-        if (_amount == 0) {
-            return;
-        }
-
+        if (_amount == 0) return;
         IERC20(token).safeTransferFrom(msg.sender, feeVault, _amount);
+        if (fundfeeLoss > 0)
+            IFundFee(fundFee).addFeeLoss(msg.sender, fundfeeLoss);
+        emit UpdateFee(account, msg.sender, fees, _amount);
+    }
 
+    function payoutFees(
+        address account,
+        address token,
+        int256[] memory fees,
+        int256 feesTotal
+    ) external onlyFeeController {
+        require(feesTotal <= 0, "!feesTotal");
+        uint256 _amount = IERC20(token).balanceOf(feeVault);
+        if (_amount > uint256(-feesTotal)) _amount = uint256(-feesTotal);
+        IFeeVault(feeVault).withdraw(token, msg.sender, _amount);
         emit UpdateFee(account, msg.sender, fees, _amount);
     }
 
@@ -165,7 +182,7 @@ contract FeeRouter is Ac, IFeeRouter {
      * @return The execution fee for the market.
      */
     function getExecFee(address market) external view returns (uint256) {
-        return feeAndRates[market][uint8(FeeType.ExecFee)];
+        return feeAndRates[market][uint8(FeeRouterLib.FeeType.ExecFee)];
     }
 
     /**
@@ -205,13 +222,20 @@ contract FeeRouter is Ac, IFeeRouter {
         uint8 _kind;
 
         if (params.isOpen) {
-            _kind = uint8(FeeType.OpenFee);
+            _kind = uint8(FeeRouterLib.FeeType.OpenFee);
         } else {
-            _kind = uint8(FeeType.CloseFee);
+            _kind = uint8(FeeRouterLib.FeeType.CloseFee);
         }
 
-        uint256 _tradeFee = _getFee(params._market, params._order.size, _kind);
-        uint256 _execFee = feeAndRates[params._market][uint8(FeeType.ExecFee)];
+        uint256 _tradeFee = FeeRouterLib.getFee(
+            params._market,
+            params._order.size,
+            _kind,
+            feeAndRates
+        );
+        uint256 _execFee = feeAndRates[params._market][
+            uint8(FeeRouterLib.FeeType.ExecFee)
+        ];
         return (_tradeFee + _execFee).toInt256();
     }
 
@@ -225,46 +249,17 @@ contract FeeRouter is Ac, IFeeRouter {
         MarketDataTypes.UpdatePositionInputs memory params,
         Position.Props memory position
     ) external view returns (int256[] memory fees) {
-        fees = new int256[](uint8(FeeType.Counter));
-        address _market = params._market;
-
-        int256 _fundFee = _getFundingFee(
-            _market,
-            params._isLong,
-            position.size,
-            position.entryFundingRate
-        );
-        fees[uint8(FeeType.FundFee)] = _fundFee;
-
-        if (params._sizeDelta == 0 && params.collateralDelta != 0) {
-            return fees;
-        }
-
-        // open position
-        if (params.isOpen) {
-            fees[uint8(FeeType.OpenFee)] = (
-                _getFee(_market, params._sizeDelta, uint8(FeeType.OpenFee))
-            ).toInt256();
-        } else {
-            // close position
-            fees[uint8(FeeType.CloseFee)] = (
-                _getFee(_market, params._sizeDelta, uint8(FeeType.CloseFee))
-            ).toInt256();
-
-            // liquidate position
-            if (params.liqState == 1) {
-                uint256 _fee = feeAndRates[_market][uint8(FeeType.LiqFee)];
-                fees[uint8(FeeType.LiqFee)] = _fee.toInt256();
-            }
-        }
-        if (params.execNum > 0) {
-            // exec fee
-            uint256 _fee = feeAndRates[_market][uint8(FeeType.ExecFee)];
-            _fee = _fee * params.execNum;
-
-            fees[uint8(FeeType.ExecFee)] = _fee.toInt256();
-        }
-        return fees;
+        return
+            FeeRouterLib.getFees(
+                params,
+                _getFundingFee(
+                    params._market,
+                    params._isLong,
+                    position.size,
+                    position.entryFundingRate
+                ),
+                feeAndRates
+            );
     }
 
     /**
@@ -281,51 +276,25 @@ contract FeeRouter is Ac, IFeeRouter {
         uint256 sizeDelta,
         int256 entryFundingRate
     ) private view returns (int256) {
-        if (sizeDelta == 0) {
-            return 0;
-        }
-
         return
             IFundFee(fundFee).getFundingFee(
-            market,
-            sizeDelta,
-            entryFundingRate,
-            isLong
-        );
-    }
-
-    /**
-     * @dev Calculates the fee for a given size delta and fee kind.
-     * @param market The address of the market.
-     * @param sizeDelta The change in position size.
-     * @param kind The fee kind.
-     * @return The fee amount.
-     */
-
-    function _getFee(
-        address market,
-        uint256 sizeDelta,
-        uint8 kind
-    ) private view returns (uint256) {
-        if (sizeDelta == 0) {
-            return 0;
-        }
-
-        require(kind <= uint(type(FeeType).max), "invalid FeeType");
-        uint256 _point = feeAndRates[market][kind];
-        if (_point == 0) {
-            _point = DEFAULT_MIN_RATE;
-        }
-
-        uint256 _size = (sizeDelta * (FEE_RATE_PRECISION - _point)) /
-                    FEE_RATE_PRECISION;
-        return sizeDelta - _size;
+                market,
+                sizeDelta,
+                entryFundingRate,
+                isLong
+            );
     }
 
     function _isMarket(address _market) private view returns (bool) {
-        IMarketFactory.Props memory _marketProps = IMarketFactory(factory)
-            .getMarket(_market);
-        return (_marketProps.inputs._allowOpen ||
-            _marketProps.inputs._allowClose);
+        IMarketFactory.Outs[] memory _markets = IMarketFactory(factory)
+            .getMarkets();
+        uint _cnt = _markets.length;
+
+        for (uint i = 0; i < _cnt; i++) {
+            if (_market == _markets[i].addr) {
+                return (_markets[i].allowOpen || _markets[i].allowClose);
+            }
+        }
+        return false;
     }
 }

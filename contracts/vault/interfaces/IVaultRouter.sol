@@ -7,6 +7,8 @@ import {IFeeRouter} from "../../fee/interfaces/IFeeRouter.sol";
 interface IVaultRouter {
     function totalFundsUsed() external view returns (uint256);
 
+    function fundsUsed(address) external view returns (uint256);
+
     function feeRouter() external view returns (IFeeRouter);
 
     function initialize(address _coreVault, address _feeRouter) external;

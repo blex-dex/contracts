@@ -5,6 +5,7 @@ import "./interfaces/IReferral.sol";
 import "./../ac/Ac.sol";
 import "../market/interfaces/IMarket.sol";
 import "../fee/interfaces/IFeeRouter.sol";
+import "../fee/lib/FeeRouterLib.sol";
 import {MarketPositionCallBackIntl, MarketCallBackIntl} from "../market/interfaces/IMarketCallBackIntl.sol";
 
 interface IRewardDistributor {
@@ -226,7 +227,7 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
                 _event.inputs._sizeDelta,
                 IMarket(msg.sender).feeRouter().feeAndRates(
                     msg.sender,
-                    uint8(IFeeRouter.FeeType.OpenFee)
+                    uint8(FeeRouterLib.FeeType.OpenFee)
                 ),
                 _event.inputs._refCode,
                 referrer
@@ -237,7 +238,7 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
                 _event.inputs._sizeDelta,
                 IMarket(msg.sender).feeRouter().feeAndRates(
                     msg.sender,
-                    uint8(IFeeRouter.FeeType.CloseFee)
+                    uint8(FeeRouterLib.FeeType.CloseFee)
                 ),
                 _event.inputs._refCode,
                 referrer
@@ -258,6 +259,7 @@ contract Referral is IReferral, AcUpgradable, MarketPositionCallBackIntl {
                 deleteOrder: false
             });
     }
+
     address public rewarder;
 
     uint256[49] private ______gap;

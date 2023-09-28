@@ -101,6 +101,7 @@ contract OrderBook is IOrderBook, Ac {
     ) private pure returns (Order.Props memory) {
         if (_vars.isFromMarket()) {
             _order.setTriggerAbove(_vars.isOpen == !_vars._isLong);
+            _order.setIsFromMarket(true);
         } else {
             if (_vars.isOpen) {
                 _order.setTriggerAbove(!_vars._isLong);

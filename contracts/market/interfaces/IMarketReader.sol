@@ -1,5 +1,9 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity ^0.8.17;
+import {IMarketFactory} from "./IMarketFactory.sol";
+
+import "../../position/PositionStruct.sol";
+import {IVaultRouter} from "../../vault/interfaces/IVaultRouter.sol";
 
 interface IMarketReader {
     struct ValidOuts {
@@ -45,4 +49,16 @@ interface IMarketReader {
         bool isLong;
         uint256[] orderIDs;
     }
+
+    function vaultRouter() external view returns (IVaultRouter);
+
+    function getMarkets()
+        external
+        view
+        returns (IMarketFactory.Outs[] memory _outs);
+
+    function getPositions(
+        address account,
+        address market
+    ) external view returns (Position.Props[] memory _positions);
 }

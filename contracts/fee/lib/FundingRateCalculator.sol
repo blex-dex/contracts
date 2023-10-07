@@ -48,9 +48,8 @@ library FundingRateCalculator {
         uint256 lossAfter
     );
 
-    /** Calculate the maximum unit funding rate limit */
     /**
-     *
+     * calculateMaxFundingRate Calculate the maximum unit funding rate limit
      * @param openInterest18Decimals 18 zeros
      * @param aumWith18Decimals 18 zeros
      * @param maxFRatePerDayWith8Decimals 8 zeros
@@ -73,7 +72,16 @@ library FundingRateCalculator {
         return _maxFRate;
     }
 
-    /** Calculate the unit funding rate (with maximum and minimum limits) */
+    /**
+     * capFundingRateByLimits Calculate the unit funding rate (with maximum and minimum limits)
+     * @param long long size
+     * @param short short size
+     * @param maxFRate max FRate
+     * @param minFRate min FRate
+     * @param calculatedMaxFRate8Decimals calculated max FRate
+     * @param fRate intervals
+     * @param minority minority rate
+     */
     function capFundingRateByLimits(
         uint256 long,
         uint256 short,
@@ -103,7 +111,7 @@ library FundingRateCalculator {
      * @param _intervals intervals
      * @return _longCumulativeRates long Cumulative Rates with 8 decimals
      * @return _shortCumulativeRates short Cumulative Rates with 8 decimals
-     * @return _roundedTime
+     * @return _roundedTime _roundedTime
      */
     function _getCumulativeFundingRateDelta(
         uint256 _longRate,
@@ -133,7 +141,12 @@ library FundingRateCalculator {
             _lastCalcTime;
     }
 
-    /** Calculate the user's funding fee */
+    /**
+     * calUserFundingFee Calculate the user's funding fee
+     * @param size  position size
+     * @param entryFundingRate the rate of position start
+     * @param cumRates current rate
+     */
     function calUserFundingFee(
         uint256 size,
         int256 entryFundingRate,
@@ -147,7 +160,13 @@ library FundingRateCalculator {
             int256(ONE_WITH_8_DECIMALS);
     }
 
-    /** Calculate the funding fee formula */
+    /**
+     * calFeeRate Calculate the funding fee formula: maxFRate = Total Open interest / AUM * FRate per day /（24/interval）
+     * @param _longSizeWith18Decimals  _longSizeWith18Decimals
+     * @param _shortSizeWith18Decimals _shortSizeWith18Decimals
+     * @param _intervalSeconds _intervalSeconds
+     * @param fRateFactorWith8Decimals fRateFactorWith8Decimals
+     */
     function calFeeRate(
         uint256 _longSizeWith18Decimals,
         uint256 _shortSizeWith18Decimals,
@@ -295,6 +314,7 @@ library FundingRateCalculator {
         return (currentTimeStamp / _fundingInterval) * _fundingInterval;
     }
 
+    // isFundingTimeReached
     function isFundingTimeReached(
         uint256 _roundedTime,
         uint256 _fundingIntervalSeconds,
@@ -353,6 +373,7 @@ library FundingRateCalculator {
 
     /**
      * Common function used to get the funding interval for "Cumulative Funding Rate" or "Temporary Cumulative Funding Rate"
+     * @param fundingIntervals The funding interval.
      */
     function getFundingInterval(
         address market,
@@ -365,7 +386,6 @@ library FundingRateCalculator {
     /**
      * @dev Calculates the number of funding intervals that have passed since the last funding time.
      * @param _intervalSeconds The funding interval.
-     * @return The number of intervals.
      */
     function _calculateIntervals(
         uint256 _end,
@@ -377,6 +397,13 @@ library FundingRateCalculator {
         return (_end - _start) / _intervalSeconds;
     }
 
+    /**
+     * _calcPart1Intervals Number of intervals in the larger time frame. eg: 8 hours
+     * @param _calcIntervalSeconds smaller time frame
+     * @param _lastCalcTime last time calculated
+     * @param _blockTimeStamp current time
+     * @param _collectIntervalSeconds the larger time frame
+     */
     function _calcPart1Intervals(
         uint256 _calcIntervalSeconds, // 3600
         uint256 _lastCalcTime, // 6
@@ -394,6 +421,12 @@ library FundingRateCalculator {
             );
     }
 
+    /**
+     * _calcPart1Intervals Number of intervals in the smaller time frame. eg: 1 hours
+     * @param _calcIntervalSeconds smaller time frame
+     * @param _lastCalcTime last time calculated
+     * @param _blockTimeStamp current time
+     */
     function _calcPart2Intervals(
         uint256 _calcIntervalSeconds, // 3600
         uint256 _lastCalcTime, // 6
@@ -410,6 +443,12 @@ library FundingRateCalculator {
             );
     }
 
+    /**
+     * addNegativeFeeLoss Accumulated funding fee losses.
+     * @param market Market address
+     * @param amount funding fee losses
+     * @param fundFeeLoss the storage of fundFeeLoss
+     */
     function addNegativeFeeLoss(
         address market,
         uint256 amount,
@@ -420,6 +459,12 @@ library FundingRateCalculator {
         emit AddNegativeFeeLoss(market, amount, _before, fundFeeLoss[market]);
     }
 
+    /**
+     * addPositiveFeeLoss Deducting funding fee losses
+     * @param market Market address
+     * @param deductAmount Deducting amount
+     * @param fundFeeLoss the storage of fundFeeLoss
+     */
     function addPositiveFeeLoss(
         address market,
         uint256 deductAmount,
@@ -466,12 +511,19 @@ library FundingRateCalculator {
         uint256 collectIntervals;
     }
 
+    /**
+     * _calcAndUpdateFundingRates about Long_CumFRate and Short_CumFRate
+     * @param _cache infos
+     * @param calFundingRates the storage of FundFee.calFundingRates
+     * @param lastCalTimes the storage of FundFee.lastCalTimes
+     */
     function _calcAndUpdateFundingRates(
         CalcAndUpdateFundingRatesCache memory _cache,
         mapping(address => mapping(bool => int256)) storage calFundingRates,
         mapping(address => uint256) storage lastCalTimes
     ) internal {
         uint256 intervals;
+        // Number of intervals in the larger time frame. eg: 8 hours
         if (_cache.calcPart == 1)
             intervals = _calcPart1Intervals(
                 _cache.calIntervals,
@@ -479,6 +531,7 @@ library FundingRateCalculator {
                 _cache.currentTS,
                 _cache.collectIntervals
             );
+        // Number of intervals in the smaller time frame. eg: 1 hours
         else if (_cache.calcPart == 2)
             intervals = _calcPart2Intervals(
                 _cache.calIntervals,
@@ -486,6 +539,7 @@ library FundingRateCalculator {
                 _cache.currentTS
             );
         else revert("!calcPart");
+        // calculate Long_CumFRate and Short_CumFRate
         (
             _cache.longCumulativeRatesDelta,
             _cache.shortCumulativeRatesDelta,
@@ -498,6 +552,7 @@ library FundingRateCalculator {
             _cache.currentTS,
             intervals
         );
+        // update Long_CumFRate and Short_CumFRate
         _updateGlobalCalRate(
             _cache.market,
             _cache.longCumulativeRatesDelta.toInt256(),
@@ -513,19 +568,27 @@ library FundingRateCalculator {
         uint256 longSize; // 18 decimals
         uint256 shortSize; // 18 decimals
         uint256 calcPart; //1 or 2
-        uint256 calcInterval;
-        uint256 collectInterval;
+        uint256 calcInterval; // FRate periodic interval
+        uint256 collectInterval; // C_FRate periodic interval
         uint256 currentTimeStamp;
         uint256 calculatedMaxFRate; // 8 decimals
         uint256 calculatedFRate; // 8 decimals
     }
 
+    /**
+     * updateCalFundingRate Update the FRate periodic fee rate
+     * @param c infos
+     * @param calFundingRates the storage of FundFee.calFundingRates
+     * @param lastCalTimes the storage of FundFee.lastCalTimes
+     * @param configs the storage of FundFee.configs
+     */
     function updateCalFundingRate(
         UpdateCalFundingRateCache memory c,
         mapping(address => mapping(bool => int256)) storage calFundingRates,
         mapping(address => uint256) storage lastCalTimes,
         uint256[] storage configs
     ) internal {
+        // If FRate periodic fee rate is not initialized, initialize it and exit.
         uint256 _roundedTime = lastCalTimes[c.market];
         if (_roundedTime == 0) {
             _updateGlobalCalRate(
@@ -538,7 +601,7 @@ library FundingRateCalculator {
             );
             return;
         }
-
+        // If it's not time for FRate periodic fee rate update, exit.
         if (
             !isFundingTimeReached(
                 _roundedTime,
@@ -546,7 +609,7 @@ library FundingRateCalculator {
                 c.currentTimeStamp
             )
         ) return;
-
+        // Calculate the FRate for the current point
         (uint256 _longRate, uint256 _shortRate) = capFundingRateByLimits(
             c.longSize,
             c.shortSize,
@@ -556,7 +619,7 @@ library FundingRateCalculator {
             c.calculatedFRate,
             configs[uint256(CfgIdx.MinorityFRate)]
         );
-
+        // update
         _calcAndUpdateFundingRates(
             CalcAndUpdateFundingRatesCache(
                 c.market,

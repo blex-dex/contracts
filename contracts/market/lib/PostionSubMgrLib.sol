@@ -109,6 +109,7 @@ library PositionSubMgrLib {
         int256 transToVault;
         uint256 newCollateralUnsigned;
         int256 transToUser;
+        int256 withdrawAmount;
     }
 
     function calDecreaseTransactionValues(
@@ -122,7 +123,10 @@ library PositionSubMgrLib {
             .calculateWithdrawFromFeeVault(_originFees);
         int256 totalFees = afterFees.totoalFees();
         // If withdrawal amount is greater than 0, increase position collateral
-        if (withdrawAmount > 0) _position.collateral += uint256(withdrawAmount);
+        if (withdrawAmount > 0) {
+            _position.collateral += uint256(withdrawAmount);
+            outs.withdrawAmount = withdrawAmount;
+        }
         // Calculate the amount to transfer to the fee vault
         outs.transToFeeVault =
             calculateTransToFeeVault(_position, dPNL, totalFees) -

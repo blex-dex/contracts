@@ -246,6 +246,16 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
             address(this),
             _params._isLong
         );
+        if (_outs.withdrawAmount > 0)
+            positionBook.increasePosition(
+                _params._account,
+                _outs.withdrawAmount,
+                0, //sizeDelta
+                _params._oraclePrice,
+                _nowFundRate,
+                _params._isLong
+            );
+
         IVaultRouter(vaultRouter).repayToVault(
             TransferHelper.formatCollateral(
                 _params._sizeDelta,

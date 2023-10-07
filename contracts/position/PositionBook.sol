@@ -304,7 +304,7 @@ contract PositionBook is Ac {
         bool isLong
     ) private returns (Position.Props memory result) {
         Position.Props memory _position = _getPosition(account, isLong);
-        require(_position.lastTime != uint32(block.timestamp), "pb:same block");
+        // require(_position.lastTime != uint32(block.timestamp), "pb:same block");
         require(_position.isValid(), "positionBook: invalid position");
         require(
             _position.collateral >= collateralDelta,

@@ -9,8 +9,8 @@ const {
 } = require("../../../../scripts/fee/feeVault");
 const { grantRoleIfNotGranted } = require("../../../../scripts/utils/helpers");
 const { expect } = require("chai");
-const { deployUSDC, batchMint } = require("../../../../scripts/vault/usdc");
-//const { deployUSDC, batchMint } = require("../../../scripts/vault/usdc");
+const { deployUSDC, batchMint } = require("../../../../scripts/mocker/USDC");
+//const { deployUSDC, batchMint } = require("../../../scripts/mocker/USDC");
 
 describe("fundVault", async function () {
   let owner, second, market;

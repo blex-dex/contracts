@@ -131,7 +131,7 @@ const {
 const {
   readOracleContract: readPriceContract,
 } = require("../../../scripts/oracle/price");
-const { readUSDCContract } = require("../../../scripts/vault/usdc");
+const { readUSDCContract } = require("../../../scripts/mocker/USDC");
 const {
   readIndexTokenAddressFromAPI,
 } = require("../../../scripts/vault/indexToken");

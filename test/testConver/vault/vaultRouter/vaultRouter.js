@@ -27,7 +27,7 @@ const {
   readUSDCContract,
   balanceOf,
   approve,
-} = require("../../../../scripts/vault/usdc");
+} = require("../../../../scripts/mocker/USDC");
 
 const { deployVaultAllContract } = require("../deployContract/deploy");
 const { ethers } = require("hardhat");

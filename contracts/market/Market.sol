@@ -36,7 +36,9 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
     //     )
     // );
 
-    constructor(address _f) Ac(_f) {}
+    constructor(address _f) Ac(_f) {
+        _disableInitializers();
+    }
 
     fallback() external payable onlyController {
         _callAddress(orderMgr, msg.data, "unknown", true);

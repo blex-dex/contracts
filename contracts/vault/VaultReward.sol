@@ -29,6 +29,10 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
     mapping(address => uint256) public claimableReward;
     mapping(address => uint256) public averageStakedAmounts;
 
+    constructor(){
+        _disableInitializers();
+    }
+
     function initialize(
         address _coreVault,
         address _vaultRouter,

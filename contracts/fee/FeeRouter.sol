@@ -50,6 +50,7 @@ contract FeeRouter is Ac, IFeeRouter {
         require(_factory != address(0), "invalid address");
         factory = _factory;
         _grantRole(MANAGER_ROLE, msg.sender);
+        _disableInitializers();
     }
 
     modifier onlyMarket() {

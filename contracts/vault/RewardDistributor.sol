@@ -19,6 +19,10 @@ contract RewardDistributor is AcUpgradable {
     event Distribute(uint256 amount);
     event TokensPerIntervalChange(uint256 amount);
 
+    constructor(){
+        _disableInitializers();
+    }
+
     function initialize(
         address _rewardToken,
         address _rewardTracker

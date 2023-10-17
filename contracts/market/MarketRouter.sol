@@ -106,6 +106,10 @@ contract MarketRouter is
         isEnableMarketConvertToOrder = true;
     }
 
+    constructor() {
+        _disableInitializers();
+    }
+
     // USER ACTIONS
 
     /**

@@ -21,7 +21,9 @@ contract OrderStore is Ac {
 
     mapping(address => EnumerableSet.Bytes32Set) internal ordersByAccount; // position => order
 
-    constructor(address _f) Ac(_f) {}
+    constructor(address _f) Ac(_f) {
+        _disableInitializers();
+    }
 
     function initialize(bool _isLong) external initializer {
         isLong = _isLong;

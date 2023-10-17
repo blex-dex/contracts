@@ -47,6 +47,10 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
         emit LogIsFreeze(f, freezeType);
     }
 
+    constructor(){
+        _disableInitializers();
+    }
+
     function initialize(
         address _coreVault,
         address _feeRouter

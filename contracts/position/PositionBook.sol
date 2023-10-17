@@ -13,7 +13,7 @@ contract PositionBook is Ac {
     using SafeCast for uint256;
     using SafeCast for int256;
     uint256 public constant MIN_GLOBAL_AVG_PRICE = 100;
-    address public market;    
+    address public market;
 
     PositionStore public longStore;
 
@@ -22,6 +22,7 @@ contract PositionBook is Ac {
     constructor(address factory) Ac(factory) {
         longStore = new PositionStore(factory, true);
         shortStore = new PositionStore(factory, false);
+        _disableInitializers();
     }
 
     function initialize(address marketAddr) external initializer {

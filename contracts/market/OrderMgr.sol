@@ -34,7 +34,9 @@ contract OrderMgr is MarketStorage, ReentrancyGuard, Ac {
     using MarketDataTypes for MarketDataTypes.UpdateOrderInputs;
     using MarketDataTypes for MarketDataTypes.UpdatePositionInputs;
 
-    constructor() Ac(address(0)) {}
+    constructor() Ac(address(0)) {
+        _disableInitializers();
+    }
 
     function _shouldDeleteOrder(
         string memory errorMessage

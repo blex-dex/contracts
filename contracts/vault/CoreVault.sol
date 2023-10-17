@@ -56,6 +56,10 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         uint256 fee
     );
 
+    constructor() {
+        _disableInitializers();
+    }
+
     function initialize(
         address _asset,
         string memory _name,

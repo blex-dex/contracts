@@ -1,0 +1,4 @@
+
+[submodule "contracts/am"]
+	path = contracts/am
+	url = git@github.com:blex-dex/contracts-automation.git

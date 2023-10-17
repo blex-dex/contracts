@@ -1800,8 +1800,8 @@
       }
     },
     "contracts/mocker/AutoManager.sol": {
-      "lastModificationDate": 1694402779317,
-      "contentHash": "9dab5b81ea224427e0fe25c0fce9bd76",
+      "lastModificationDate": 1697520561764,
+      "contentHash": "674b882b1836fe3c25f611ca4716ef3e",
       "sourceName": "contracts/mocker/AutoManager.sol",
       "solcConfig": {
         "settings": {
@@ -1832,18 +1832,8 @@
           "libraries": {}
         }
       },
-      "imports": [
-        "contracts/mocker/interfaces/IKeeperRegistry.sol",
-        "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/AutomationCompatibleInterface.sol"
-      ],
-      "versionRequirement": "^0.8.17",
+      "imports": [],
+      "versionRequirement": null,
       "artifacts": {
         "AutoManager": {
           "0.8.17+commit.8df45f5f.Darwin.appleclang": "AutoManager.sol/AutoManager.json"
@@ -1851,8 +1841,8 @@
       }
     },
     "contracts/mocker/AutoOrder.sol": {
-      "lastModificationDate": 1694402779317,
-      "contentHash": "454a3d9804b1e899a6c104e12c1d31ce",
+      "lastModificationDate": 1697520558969,
+      "contentHash": "56d1c880df0c464fc27e14ec6ced6892",
       "sourceName": "contracts/mocker/AutoOrder.sol",
       "solcConfig": {
         "settings": {
@@ -1883,44 +1873,17 @@
           "libraries": {}
         }
       },
-      "imports": [
-        "contracts/fee/interfaces/IFeeRouter.sol",
-        "contracts/market/MarketDataTypes.sol",
-        "contracts/market/interfaces/IMarket.sol",
-        "contracts/market/interfaces/IMarketValid.sol",
-        "contracts/oracle/interfaces/IPrice.sol",
-        "contracts/order/OrderLib.sol",
-        "contracts/order/OrderStruct.sol",
-        "contracts/order/interface/IOrderBook.sol",
-        "contracts/order/interface/IOrderStore.sol",
-        "contracts/position/PositionStruct.sol",
-        "contracts/position/interfaces/IPositionBook.sol",
-        "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
-        "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/AutomationCompatibleInterface.sol"
-      ],
-      "versionRequirement": "^0.8.7",
+      "imports": [],
+      "versionRequirement": null,
       "artifacts": {
         "AutoOrder": {
           "0.8.17+commit.8df45f5f.Darwin.appleclang": "AutoOrder.sol/AutoOrder.json"
-        },
-        "AutoOrderBase": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "AutoOrder.sol/AutoOrderBase.json"
-        },
-        "AutoOrderMock": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "AutoOrder.sol/AutoOrderMock.json"
         }
       }
     },
     "contracts/mocker/AutoPrice.sol": {
-      "lastModificationDate": 1694402779317,
-      "contentHash": "efd2cfcf6f752b08550989ac8271a996",
+      "lastModificationDate": 1697520547330,
+      "contentHash": "ab3296dddf7db0796b13af76a30a3b62",
       "sourceName": "contracts/mocker/AutoPrice.sol",
       "solcConfig": {
         "settings": {
@@ -1951,26 +1914,8 @@
           "libraries": {}
         }
       },
-      "imports": [
-        "contracts/oracle/interfaces/IChainPriceFeed.sol",
-        "contracts/oracle/interfaces/IFastPriceFeed.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/Chainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/ChainlinkClient.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/ConfirmedOwner.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/ConfirmedOwnerWithProposal.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/AutomationCompatibleInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/ChainlinkRequestInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/ENSInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OperatorInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OracleInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OwnableInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/PointerInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/BufferChainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/CBORChainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/ENSResolver.sol"
-      ],
-      "versionRequirement": "^0.8.7",
+      "imports": [],
+      "versionRequirement": null,
       "artifacts": {
         "AutoPrice": {
           "0.8.17+commit.8df45f5f.Darwin.appleclang": "AutoPrice.sol/AutoPrice.json"
@@ -3492,8 +3437,8 @@
       }
     },
     "contracts/mocker/autoLiquidate.sol": {
-      "lastModificationDate": 1694670705086,
-      "contentHash": "d2b60f2073e5ccb65bb2ca1b627395f4",
+      "lastModificationDate": 1697520565253,
+      "contentHash": "859429c8693da9ee32b5443e24e2a03e",
       "sourceName": "contracts/mocker/autoLiquidate.sol",
       "solcConfig": {
         "settings": {
@@ -3524,37 +3469,11 @@
           "libraries": {}
         }
       },
-      "imports": [
-        "contracts/fee/interfaces/IFeeRouter.sol",
-        "contracts/market/MarketDataTypes.sol",
-        "contracts/market/interfaces/IMarket.sol",
-        "contracts/market/interfaces/IMarketValid.sol",
-        "contracts/oracle/interfaces/IPrice.sol",
-        "contracts/order/OrderLib.sol",
-        "contracts/order/OrderStruct.sol",
-        "contracts/order/interface/IOrderBook.sol",
-        "contracts/order/interface/IOrderStore.sol",
-        "contracts/position/PositionStruct.sol",
-        "contracts/position/interfaces/IPositionBook.sol",
-        "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol",
-        "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Address.sol",
-        "lib/openzeppelin-contracts/contracts/utils/Context.sol",
-        "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/AutomationCompatibleInterface.sol"
-      ],
-      "versionRequirement": "^0.8.7",
+      "imports": [],
+      "versionRequirement": null,
       "artifacts": {
-        "AutoLiquidate": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "autoLiquidate.sol/AutoLiquidate.json"
-        },
-        "AutoLiquidateBase": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "autoLiquidate.sol/AutoLiquidateBase.json"
-        },
-        "AutoLiquidateMock": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "autoLiquidate.sol/AutoLiquidateMock.json"
+        "autoLiquidate": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "autoLiquidate.sol/autoLiquidate.json"
         }
       }
     },
@@ -3685,8 +3604,8 @@
       }
     },
     "contracts/mocker/price.sol": {
-      "lastModificationDate": 1694402779320,
-      "contentHash": "c72d24443ac46166883727fec00ed27e",
+      "lastModificationDate": 1697520582782,
+      "contentHash": "4a1107811e0410ca4d7a76df5a3ba4e1",
       "sourceName": "contracts/mocker/price.sol",
       "solcConfig": {
         "settings": {
@@ -3717,30 +3636,11 @@
           "libraries": {}
         }
       },
-      "imports": [
-        "contracts/oracle/interfaces/IChainPriceFeed.sol",
-        "contracts/oracle/interfaces/IFastPriceFeed.sol",
-        "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/Chainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/ChainlinkClient.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/ConfirmedOwner.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/ConfirmedOwnerWithProposal.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/AutomationCompatibleInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/ChainlinkRequestInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/ENSInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OperatorInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OracleInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OwnableInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/PointerInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/BufferChainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/CBORChainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/ENSResolver.sol"
-      ],
-      "versionRequirement": "^0.8.7",
+      "imports": [],
+      "versionRequirement": null,
       "artifacts": {
-        "AutoPriceV2": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "price.sol/AutoPriceV2.json"
+        "price": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "price.sol/price.json"
         }
       }
     },
@@ -7145,6 +7045,69 @@
         }
       }
     },
+    "foundry_test/test/order/testOrderStructLibrary.t.sol": {
+      "lastModificationDate": 1697520428899,
+      "contentHash": "7d67b65f79f730d32b534de1766437d9",
+      "sourceName": "foundry_test/test/order/testOrderStructLibrary.t.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "metadata": {
+            "useLiteralContent": false,
+            "bytecodeHash": "ipfs",
+            "appendCBOR": true
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ]
+            }
+          },
+          "evmVersion": "paris",
+          "libraries": {}
+        }
+      },
+      "imports": [
+        "contracts/order/OrderLib.sol",
+        "contracts/order/OrderStruct.sol",
+        "lib/forge-std/lib/ds-test/src/test.sol",
+        "lib/forge-std/src/Base.sol",
+        "lib/forge-std/src/StdAssertions.sol",
+        "lib/forge-std/src/StdChains.sol",
+        "lib/forge-std/src/StdCheats.sol",
+        "lib/forge-std/src/StdError.sol",
+        "lib/forge-std/src/StdInvariant.sol",
+        "lib/forge-std/src/StdJson.sol",
+        "lib/forge-std/src/StdMath.sol",
+        "lib/forge-std/src/StdStorage.sol",
+        "lib/forge-std/src/StdStyle.sol",
+        "lib/forge-std/src/StdUtils.sol",
+        "lib/forge-std/src/Test.sol",
+        "lib/forge-std/src/Vm.sol",
+        "lib/forge-std/src/console.sol",
+        "lib/forge-std/src/console2.sol",
+        "lib/forge-std/src/interfaces/IMulticall3.sol",
+        "lib/forge-std/src/safeconsole.sol",
+        "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol"
+      ],
+      "versionRequirement": "^0.8.17",
+      "artifacts": {
+        "OrderStructTest": {
+          "0.8.17+commit.8df45f5f.Darwin.appleclang": "testOrderStructLibrary.t.sol/OrderStructTest.json"
+        }
+      }
+    },
     "foundry_test/test/utils/calc.sol": {
       "lastModificationDate": 1694679858639,
       "contentHash": "422920ef880f7ee47075839e39136c44",
@@ -7189,7 +7152,7 @@
       }
     },
     "foundry_test/test/vault/docs_test/testDocsCoreVault.t.sol": {
-      "lastModificationDate": 1695027679403,
+      "lastModificationDate": 1697513846639,
       "contentHash": "920a43a0e2c6e634cf0207ea0daf55df",
       "sourceName": "foundry_test/test/vault/docs_test/testDocsCoreVault.t.sol",
       "solcConfig": {
@@ -7304,7 +7267,7 @@
       }
     },
     "foundry_test/test/vault/docs_test/testDocsRewardDistributor.t.sol": {
-      "lastModificationDate": 1695026483448,
+      "lastModificationDate": 1697513846640,
       "contentHash": "b2f6b7296d4ad99f1b48528dc9164bf4",
       "sourceName": "foundry_test/test/vault/docs_test/testDocsRewardDistributor.t.sol",
       "solcConfig": {
@@ -7416,7 +7379,7 @@
       }
     },
     "foundry_test/test/vault/docs_test/testDocsVaultReward.t.sol": {
-      "lastModificationDate": 1695026483448,
+      "lastModificationDate": 1697513846640,
       "contentHash": "ce75691ad284887b648888842247ecc5",
       "sourceName": "foundry_test/test/vault/docs_test/testDocsVaultReward.t.sol",
       "solcConfig": {
@@ -7544,7 +7507,7 @@
       }
     },
     "foundry_test/test/vault/docs_test/testDocsVaultRouter.t.sol": {
-      "lastModificationDate": 1695026483448,
+      "lastModificationDate": 1697513846640,
       "contentHash": "1cb1ef0c882057b2a538e7332d312e70",
       "sourceName": "foundry_test/test/vault/docs_test/testDocsVaultRouter.t.sol",
       "solcConfig": {
@@ -8151,7 +8114,7 @@
       }
     },
     "lib/forge-std/src/StdUtils.sol": {
-      "lastModificationDate": 1695022261306,
+      "lastModificationDate": 1697514201433,
       "contentHash": "3ce83748fd76644688f916c9cced545b",
       "sourceName": "lib/forge-std/src/StdUtils.sol",
       "solcConfig": {
@@ -8195,7 +8158,7 @@
       }
     },
     "lib/forge-std/src/Test.sol": {
-      "lastModificationDate": 1695022261306,
+      "lastModificationDate": 1697514201434,
       "contentHash": "15866901137b5670eabf31362523bd28",
       "sourceName": "lib/forge-std/src/Test.sol",
       "solcConfig": {
@@ -8254,8 +8217,8 @@
       }
     },
     "lib/forge-std/src/Vm.sol": {
-      "lastModificationDate": 1695022282042,
-      "contentHash": "1aa47fad133db768909962309c719f25",
+      "lastModificationDate": 1697514201434,
+      "contentHash": "eff2556a384c025f56150fb3f78de858",
       "sourceName": "lib/forge-std/src/Vm.sol",
       "solcConfig": {
         "settings": {
@@ -10924,645 +10887,6 @@
       "artifacts": {
         "SignedMathUpgradeable": {
           "0.8.17+commit.8df45f5f.Darwin.appleclang": "SignedMathUpgradeable.sol/SignedMathUpgradeable.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/Chainlink.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "9dc050539cdf1579d5650d41d0df9ec2",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/Chainlink.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/BufferChainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/CBORChainlink.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "Chainlink": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "Chainlink.sol/Chainlink.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/ChainlinkClient.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "6af479cbde42f1a7225c9cebc6e32239",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/ChainlinkClient.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "node_modules/@chainlink/contracts/src/v0.8/Chainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/ChainlinkRequestInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/ENSInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OperatorInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OracleInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/PointerInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/BufferChainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/CBORChainlink.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/ENSResolver.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "ChainlinkClient": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "ChainlinkClient.sol/ChainlinkClient.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/ConfirmedOwner.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "16d64572b0310127fc8a771e63be6d20",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/ConfirmedOwner.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "node_modules/@chainlink/contracts/src/v0.8/ConfirmedOwnerWithProposal.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OwnableInterface.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "ConfirmedOwner": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "ConfirmedOwner.sol/ConfirmedOwner.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/ConfirmedOwnerWithProposal.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "8b1c5f02622cd87472493bda6595d1be",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/ConfirmedOwnerWithProposal.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OwnableInterface.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "ConfirmedOwnerWithProposal": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "ConfirmedOwnerWithProposal.sol/ConfirmedOwnerWithProposal.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/interfaces/AutomationCompatibleInterface.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "c52969cee392918edbf23f914e01c0dc",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/interfaces/AutomationCompatibleInterface.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "AutomationCompatibleInterface": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "AutomationCompatibleInterface.sol/AutomationCompatibleInterface.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/interfaces/ChainlinkRequestInterface.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "14407a6ead15cff8a0e0a7f8037c68f5",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/interfaces/ChainlinkRequestInterface.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "ChainlinkRequestInterface": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "ChainlinkRequestInterface.sol/ChainlinkRequestInterface.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/interfaces/ENSInterface.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "06b6aefcae95de6d1597ad8e1d73a08b",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/interfaces/ENSInterface.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "ENSInterface": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "ENSInterface.sol/ENSInterface.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "da5a0c3bd86c896f6a407f909c57edf3",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "LinkTokenInterface": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "LinkTokenInterface.sol/LinkTokenInterface.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/interfaces/OperatorInterface.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "e1822c36361fc3a26b5a68df3ddab15d",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/interfaces/OperatorInterface.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/ChainlinkRequestInterface.sol",
-        "node_modules/@chainlink/contracts/src/v0.8/interfaces/OracleInterface.sol"
-      ],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "OperatorInterface": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "OperatorInterface.sol/OperatorInterface.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/interfaces/OracleInterface.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "6283e42024961596926c2b5015eef8e0",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/interfaces/OracleInterface.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "OracleInterface": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "OracleInterface.sol/OracleInterface.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/interfaces/OwnableInterface.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "2e814c8a9f77897f6995436d97c23d99",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/interfaces/OwnableInterface.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "OwnableInterface": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "OwnableInterface.sol/OwnableInterface.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/interfaces/PointerInterface.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "27da4b2007d200dd5afff31dbf31ac99",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/interfaces/PointerInterface.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "PointerInterface": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "PointerInterface.sol/PointerInterface.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/vendor/BufferChainlink.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "52ac6f99fb0635751ae4ed11139878fd",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/vendor/BufferChainlink.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "BufferChainlink": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "BufferChainlink.sol/BufferChainlink.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/vendor/CBORChainlink.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "99b3ee2c29bc0d1a5cba583d9e8d835e",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/vendor/CBORChainlink.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [
-        "node_modules/@chainlink/contracts/src/v0.8/vendor/BufferChainlink.sol"
-      ],
-      "versionRequirement": ">=0.4.19",
-      "artifacts": {
-        "CBORChainlink": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "CBORChainlink.sol/CBORChainlink.json"
-        }
-      }
-    },
-    "node_modules/@chainlink/contracts/src/v0.8/vendor/ENSResolver.sol": {
-      "lastModificationDate": 1684235655573,
-      "contentHash": "24a98b0606654e662097eed9ffa91a11",
-      "sourceName": "node_modules/@chainlink/contracts/src/v0.8/vendor/ENSResolver.sol",
-      "solcConfig": {
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "metadata": {
-            "useLiteralContent": false,
-            "bytecodeHash": "ipfs",
-            "appendCBOR": true
-          },
-          "outputSelection": {
-            "*": {
-              "": [
-                "ast"
-              ],
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ]
-            }
-          },
-          "evmVersion": "paris",
-          "libraries": {}
-        }
-      },
-      "imports": [],
-      "versionRequirement": "^0.8.0",
-      "artifacts": {
-        "ENSResolver": {
-          "0.8.17+commit.8df45f5f.Darwin.appleclang": "ENSResolver.sol/ENSResolver.json"
         }
       }
     },

@@ -361,7 +361,7 @@ contract DocsVaultRewardTest is Test {
 
     function testVR04001() public {
         address firstUser = address(0x1);
-        //授予合约mint权限
+
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
         usdc.mint(address(rewardDistributor), 10000000 * 10 ** 20);
         vm.warp(15 * 60 * 60 + block.timestamp);
@@ -375,14 +375,14 @@ contract DocsVaultRewardTest is Test {
 
     function testVR04002() public {
         address firstUser = address(0x1);
-        //授予合约mint权限
+
         usdc.grantRole(keccak256("MINTER_ROLE"), address(this));
         usdc.mint(address(rewardDistributor), 10000000 * 10 ** 20);
         uint256 targetAmount = 10000 * 10 ** 6;
         uint256 shares = vaultReward.previewDeposit(targetAmount);
 
         usdc.mint(firstUser, targetAmount);
-        //以firstUser的身份进行一下交易
+
         vm.startPrank(firstUser);
         usdc.approve(address(vaultReward), targetAmount);
         vaultReward.buy(coreVault, firstUser, targetAmount, shares);

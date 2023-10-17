@@ -204,7 +204,7 @@ contract PositionAddMgr is MarketStorage, ReentrancyGuard, Ac {
         _commitIncreasePosition(_params, collD, _fundingRate);
         _validLiq(_params._account, _params._isLong);
 
-        _approveTransationsFees(_totalfee); // 手续费转账
+        _approveTransationsFees(_totalfee);
 
         feeRouter.collectFees(_params._account, collateralToken, _fees);
 

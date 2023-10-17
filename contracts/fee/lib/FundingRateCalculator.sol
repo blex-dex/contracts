@@ -107,7 +107,6 @@ library FundingRateCalculator {
      * @param _shortRate with 8 decimals
      * @param _calcIntervalSeconds calculative interval seconds
      * @param _lastCalcTime last calculated time
-     * @param _blockTimeStamp block time stamp
      * @param _intervals intervals
      * @return _longCumulativeRates long Cumulative Rates with 8 decimals
      * @return _shortCumulativeRates short Cumulative Rates with 8 decimals
@@ -118,7 +117,7 @@ library FundingRateCalculator {
         uint256 _shortRate,
         uint256 _calcIntervalSeconds, // 3600 seconds
         uint256 _lastCalcTime,
-        uint256 _blockTimeStamp,
+        uint256 /* _blockTimeStamp */,
         uint256 _intervals
     )
         internal
@@ -531,7 +530,7 @@ library FundingRateCalculator {
                 _cache.currentTS,
                 _cache.collectIntervals
             );
-        // Number of intervals in the smaller time frame. eg: 1 hours
+            // Number of intervals in the smaller time frame. eg: 1 hours
         else if (_cache.calcPart == 2)
             intervals = _calcPart2Intervals(
                 _cache.calIntervals,

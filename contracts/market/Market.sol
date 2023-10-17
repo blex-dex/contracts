@@ -63,6 +63,9 @@ contract Market is MarketStorage, ReentrancyGuard, Ac {
         _callAddress(positionSubMgr, msg.data, "decreasePosition", true);
     }
 
+    /**
+     * called by AutoLiquidate.sol
+     */
     function liquidatePositions(
         address[] memory /* accounts */,
         bool /* _isLong */

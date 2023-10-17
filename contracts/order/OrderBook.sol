@@ -14,7 +14,7 @@ contract OrderBook is IOrderBook, Ac {
     using Order for Order.Props;
     using MarketDataTypes for MarketDataTypes.UpdateOrderInputs;
 
-    uint256  public constant MAX_ORDER_LIMIT=5;
+    uint256 public constant MAX_ORDER_LIMIT = 9999;
 
     IOrderStore public override openStore;
     IOrderStore public override closeStore;
@@ -41,7 +41,6 @@ contract OrderBook is IOrderBook, Ac {
         bool isOpen,
         uint256 _oraclePrice
     ) external view override returns (Order.Props[] memory _orders) {
-        uint256 MAX_ORDER_LIMIT = 5;
         require(_oraclePrice > 0, "oraclePrice zero");
         IOrderStore _store = isOpen ? openStore : closeStore;
         bytes32[] memory keys = _store.getKeys(start, end);

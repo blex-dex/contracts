@@ -90,8 +90,11 @@ contract FeeRouter is Ac, IFeeRouter {
         address market,
         uint256[] memory rates
     ) external onlyInitOr(MARKET_MGR_ROLE) {
-        require(rates.length > 0, "invalid params");
-
+        // FeeType.Counter is not a fee type
+        require(
+            rates.length > 0 && rates.length <= uint(type(FeeType).max),
+            "invalid params"
+        );
         for (uint8 i = 0; i < rates.length; i++) {
             uint256 _old = rates[i];
             feeAndRates[market][i] = rates[i];

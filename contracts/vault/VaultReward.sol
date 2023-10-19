@@ -52,19 +52,18 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
 
     /**
      * @dev This function is used to buy shares in a vault using an ERC20 asset as payment.
-     * @param vault The address of the vault.
      * @param to The address where the purchased shares will be sent.
      * @param amount The amount of ERC20 tokens to use for purchasing the shares.
      * @param minSharesOut The minimum number of shares that the buyer expects to receive for their payment.
      * @return sharesOut The actual number of shares purchased by the buyer.
      */
     function buy(
-        IERC4626 vault,
+        IERC4626 /* vault */, //deprecated
         address to,
         uint256 amount,
         uint256 minSharesOut
     ) public nonReentrant returns (uint256 sharesOut) {
-        address _token = vault.asset();
+        address _token = coreVault.asset();
 
         SafeERC20.safeTransferFrom(
             IERC20(_token),
@@ -72,27 +71,26 @@ contract VaultReward is AcUpgradable, ReentrancyGuard {
             address(this),
             amount
         );
-        IERC20(_token).approve(address(vault), amount);
-        if ((sharesOut = vault.deposit(amount, to)) < minSharesOut)
+        IERC20(_token).approve(address(coreVault), amount);
+        if ((sharesOut = coreVault.deposit(amount, to)) < minSharesOut)
             revert("MinSharesError");
     }
 
     /**
      * @dev This function sells a specified amount of shares in a given vault on behalf of the caller using the `vaultReward` contract.
      * The `to` address receives the resulting assets of the sale.
-     * @param vault The address of the vault to sell assets from.
      * @param to The address that receives the resulting shares of the sale.
      * @param shares The amount of shares to sell.
      * @param minAssetsOut The minimum amount of assets the caller expects to receive from the sale.
      * @return assetOut The resulting number of shares received by the `to` address.
      */
     function sell(
-        IERC4626 vault,
+        IERC4626 /* vault */, //deprecated
         address to,
         uint256 shares,
         uint256 minAssetsOut
     ) public nonReentrant returns (uint256 assetOut) {
-        if ((assetOut = vault.redeem(shares, to, to)) < minAssetsOut)
+        if ((assetOut = coreVault.redeem(shares, to, to)) < minAssetsOut)
             revert("MinOutError");
     }
 

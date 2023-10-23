@@ -63,6 +63,7 @@ contract MarketFactory is Ac {
         return markets[index];
     }
 
+    /* 
     event Remove(address _addr);
 
     function remove(address _addr) external onlyRole(MARKET_MGR_ROLE) {
@@ -83,6 +84,7 @@ contract MarketFactory is Ac {
             }
         }
     }
+    */
 
     event Create(IMarketFactory.CreateInputs _inputs);
 

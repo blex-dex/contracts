@@ -20,7 +20,9 @@ contract OrderBook is IOrderBook, Ac {
     IOrderStore public override closeStore;
     bool public isLong;
 
-    constructor(address _f) Ac(_f) {}
+    constructor(address _f) Ac(_f) {
+        _disableInitializers();
+    }
 
     function initialize(
         bool _isLong,

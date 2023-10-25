@@ -52,4 +52,18 @@ interface IFundFee {
         uint256 longSize,
         uint256 shortSize
     ) external view returns (int256, int256);
+
+    function fundFeeLoss(address) external view returns (uint256);
+
+    function setTimeStamp(uint256 ts) external;
+
+    function lastCalRate(
+        address market,
+        bool isLong
+    ) external view returns (uint256);
+
+    function nextFundingRate(
+        address,
+        bool
+    ) external view returns (int256, int256);
 }

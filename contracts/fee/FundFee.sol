@@ -41,7 +41,8 @@ contract FundFee is FundFeeStore {
             ),
             calFundingRates,
             lastCalTimes,
-            configs
+            configs,
+            lastCalRate
         );
     }
 
@@ -52,6 +53,8 @@ contract FundFee is FundFeeStore {
         int256 collectInterval;
         int256 longCumCFRateDelta;
         int256 shortCumCFRateDelta;
+        int256 longRate;
+        int256 shortRate;
     }
 
     /**
@@ -61,11 +64,65 @@ contract FundFee is FundFeeStore {
      * @param longSize The size of the long position.
      * @param shortSize The size of the short position.
      */
+
     function updateCumulativeFundingRate(
         address market,
         uint256 longSize,
         uint256 shortSize
     ) external onlyController {
+        // ==================================================================
+        //                                 part1
+        // ==================================================================
+        (, uint256 endRoundedTime) = FundingRateCalculator._calcPart1Intervals(
+            _getCalInterval(market),
+            lastCalTimes[market],
+            _getTimeStamp(),
+            _getCollectInterval(market)
+        );
+        _updateCumulativeFundingRate(
+            market,
+            longSize,
+            shortSize,
+            endRoundedTime
+        );
+
+        // ==================================================================
+        //                                 part2
+        // ==================================================================
+        (uint256 collectIntervals, ) = FundingRateCalculator
+            ._calcPart2Intervals(
+                _getCalInterval(market),
+                lastCalTimes[market],
+                _getTimeStamp(),
+                _getCollectInterval(market)
+            );
+
+        for (uint i = 0; i < collectIntervals; i++) {
+            _updateCumulativeFundingRate(
+                market,
+                longSize,
+                shortSize,
+                endRoundedTime + (i + 1) * _getCollectInterval(market)
+            );
+        }
+
+        // ==================================================================
+        //                                 part3
+        // ==================================================================
+        _updateCalFundingRate(market, longSize, shortSize, 3);
+
+        (
+            nextFundingRate[market][true],
+            nextFundingRate[market][false]
+        ) = getNextFundingRate(market, longSize, shortSize);
+    }
+
+    function _updateCumulativeFundingRate(
+        address market,
+        uint256 longSize,
+        uint256 shortSize,
+        uint256 ts
+    ) internal {
         UpdateCumulativeFundingRateCache memory _cache;
         // Update the funding rate calculation
         _updateCalFundingRate(market, longSize, shortSize, 1);
@@ -74,7 +131,7 @@ contract FundFee is FundFeeStore {
         _cache.fundingInterval = _getCollectInterval(market);
         _cache.roundedTime = _getLastCollectTimes(market);
 
-        _cache.currentTimeStamp = _getTimeStamp();
+        _cache.currentTimeStamp = ts;
         // Initialize the state
         if (_cache.roundedTime == 0) {
             _cache.roundedTime =
@@ -99,10 +156,10 @@ contract FundFee is FundFeeStore {
                 _cache.currentTimeStamp
             )
         ) return;
-        (int256 _longRate, int256 _shortRate) = getCalFundingRates(market);
+        (_cache.longRate, _cache.shortRate) = getCalFundingRates(market);
         uint256 CFRate = FundingRateCalculator.calCFRate(
-            _longRate,
-            _shortRate,
+            _cache.longRate,
+            _cache.shortRate,
             minCFRate()
         );
         (
@@ -110,8 +167,8 @@ contract FundFee is FundFeeStore {
             int256 _shortCFRate,
             uint256 deductFundFeeAmount
         ) = FundingRateCalculator.calNextCFRate(
-                _longRate,
-                _shortRate,
+                _cache.longRate,
+                _cache.shortRate,
                 CFRate,
                 fundingFeeLossOffLimit(),
                 fundingFeeLoss(market),
@@ -164,8 +221,6 @@ contract FundFee is FundFeeStore {
             calFundingRates,
             lastCalTimes
         );
-
-        _updateCalFundingRate(market, longSize, shortSize, 2);
     }
 
     //==========================================================
@@ -175,31 +230,34 @@ contract FundFee is FundFeeStore {
     /**
      * @dev Retrieves the next funding rates for a market based on the sizes of long and short positions.
      * @param market The address of the market.
-     * @param longSize The size of the long position.
-     * @param shortSize The size of the short position.
-     * @return _longRates The next funding rates for long and short positions.
-     * @return _shortRates The next funding rates for long and short positions.
+     * @param longSize The size of the long position on single market.
+     * @param shortSize The size of the short position on single market.
+     * @return _longCFRate The next funding rates for long and short positions.
+     * @return _shortCFRate The next funding rates for long and short positions.
      */
     function getNextFundingRate(
         address market,
         uint256 longSize,
         uint256 shortSize
-    ) external view returns (int256 _longRates, int256 _shortRates) {
-        (int256 _longRate, int256 _shortRate) = getCalFundingRates(market);
-        uint256 CFRate = FundingRateCalculator.calCFRate(
-            _longRate,
-            _shortRate,
-            minCFRate()
-        );
-        (_longRates, _shortRates, ) = FundingRateCalculator.calNextCFRate(
-            _longRate,
-            _shortRate,
-            CFRate,
-            fundingFeeLossOffLimit(),
-            fundingFeeLoss(market),
-            longSize,
-            shortSize
-        );
+    ) public view returns (int256 _longCFRate, int256 _shortCFRate) {
+        FundingRateCalculator.GetNextFundingRateCache memory c;
+        c.calInterval = _getCalInterval(market);
+        c.lastCalTimes = lastCalTimes[market];
+        c.ts = _getTimeStamp();
+        c.collectInterval = _getCollectInterval(market);
+        c.minCFRate = minCFRate();
+        c.fundingFeeLossOffLimit = fundingFeeLossOffLimit();
+        c.fundingFeeLoss = fundingFeeLoss(market);
+
+        return
+            FundingRateCalculator.getNextFundingRate(
+                market,
+                longSize,
+                shortSize,
+                c,
+                calFundingRates,
+                lastCalRate
+            );
     }
 
     /**

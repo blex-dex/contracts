@@ -66,6 +66,6 @@ interface IFeeRouter {
         address account,
         address token,
         int256[] memory fees,
-        int256 feesTotal
+        uint256 feesTotal
     ) external;
 }

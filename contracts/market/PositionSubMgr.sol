@@ -340,11 +340,14 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
 
         address _collateralToken = collateralToken;
         IERC20 _collateralTokenERC20 = IERC20(_collateralToken);
+        uint256 amount = TransferHelper.formatCollateral(
+            _outs.transToFeeVault > 0
+                ? _outs.transToFeeVault.toUint256()
+                : (-_outs.transToFeeVault).toUint256(),
+            IERC20Decimals(collateralToken).decimals()
+        );
+
         if (_outs.transToFeeVault > 0) {
-            uint256 amount = TransferHelper.formatCollateral(
-                _outs.transToFeeVault.toUint256(),
-                IERC20Metadata(collateralToken).decimals()
-            );
             IERC20(collateralToken).approve(address(feeRouter), amount);
             feeRouter.collectFees(
                 _params._account,
@@ -357,7 +360,7 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
                 _params._account,
                 collateralToken,
                 _originFees,
-                _outs.transToFeeVault
+                amount
             );
         }
 
@@ -426,7 +429,15 @@ contract PositionSubMgr is MarketStorage, ReentrancyGuard, Ac {
                 collateralToken,
                 address(this)
             );
-            if (i == 0) _params.execNum += 1;
+            if (i == 0) {
+                _params.execNum += 1;
+                require(
+                    od.isMarkPriceValid(_params._oraclePrice),
+                    order.getIsFromMarket()
+                        ? "PositionSubMgr:market slippage"
+                        : StringsPlus.POSITION_TRIGGER_ABOVE
+                );
+            }
         }
 
         _decreasePosition(_params, _position);

@@ -2,11 +2,14 @@
 pragma solidity ^0.8.17;
 
 import {AcUpgradable} from "../ac/AcUpgradable.sol";
-import "./lib/FundingRateCalculator.sol";
+import {FundingRateCalculator} from "./lib/FundingRateCalculator.sol";
 
 import {IFeeVault} from "./interfaces/IFeeVault.sol";
 
 abstract contract FundFeeStore is AcUpgradable {
+    uint256 public constant FEERATEPRECISION =
+        FundingRateCalculator.ONE_WITH_8_DECIMALS;
+
     address public feeVault;
     address public marketReader;
 
@@ -18,6 +21,8 @@ abstract contract FundFeeStore is AcUpgradable {
     mapping(address => uint256) public lastCalTimes;
     mapping(address => mapping(bool => int256)) public calFundingRates;
     mapping(address => uint256) public fundFeeLoss;
+    mapping(address => mapping(bool => uint256)) public lastCalRate;
+    mapping(address => mapping(bool => int256)) public nextFundingRate;
 
     //======================================================
     event UpdateFundInterval(address indexed market, uint256 interval);
@@ -201,6 +206,10 @@ abstract contract FundFeeStore is AcUpgradable {
 
     function fundingFeeLoss(address market) public view returns (uint256) {
         return fundFeeLoss[market];
+    }
+
+    function setMinorityFRate(uint256 limit) external onlyManager {
+        _setConfig(uint256(FundingRateCalculator.CfgIdx.MinorityFRate), limit);
     }
 
     function minorityFRate() public view returns (uint256) {

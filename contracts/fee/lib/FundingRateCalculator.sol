@@ -10,10 +10,10 @@ library FundingRateCalculator {
     using SafeCast for uint256;
     using SafeCast for int256;
 
-    uint256 public constant MIN_FUNDING_INTERVAL_3600 = 1 hours; // Minimum funding interval of 1 hour
-    uint256 public constant ONE_WITH_8_DECIMALS = 10 ** 8; // 0.0001666666 * 100000000
-    uint256 public constant BASIS_INTERVAL_HOUR_24 = 24; // 24 hours in a day
-    uint256 public constant DEFAULT_RATE_DIVISOR_100 = 100; // Default rate divisor of 100
+    uint256 public constant MIN_FUNDING_INTERVAL_3600 = 1 hours; // 8hours
+    uint256 public constant ONE_WITH_8_DECIMALS = 10 ** 8; //0.0001666666*100000000
+    uint256 public constant BASIS_INTERVAL_HOUR_24 = 24;
+    uint256 public constant DEFAULT_RATE_DIVISOR_100 = 100;
 
     enum CfgIdx {
         Skiptime,
@@ -29,11 +29,18 @@ library FundingRateCalculator {
         Counter
     }
 
-    event UpdateCalFundRate(
+    event UpdateCalFundRates(
         address indexed market,
         int256 longRate,
         int256 shortRate
     );
+
+    event UpdateLastCalRate(
+        address indexed market,
+        uint256 longRate,
+        uint256 shortRate
+    );
+
     event UpdateLastCalTime(address indexed market, uint256 timestamp);
     event AddNegativeFeeLoss(
         address indexed market,
@@ -49,10 +56,10 @@ library FundingRateCalculator {
     );
 
     /**
-     * calculateMaxFundingRate Calculate the maximum unit funding rate limit
-     * @param openInterest18Decimals 18 zeros
-     * @param aumWith18Decimals 18 zeros
-     * @param maxFRatePerDayWith8Decimals 8 zeros
+     *
+     * @param openInterest18Decimals 18zeros
+     * @param aumWith18Decimals 18zeros
+     * @param maxFRatePerDayWith8Decimals 8zeros
      * @param fundingIntervalSeconds seconds
      */
     function calculateMaxFundingRate(
@@ -115,9 +122,8 @@ library FundingRateCalculator {
     function _getCumulativeFundingRateDelta(
         uint256 _longRate,
         uint256 _shortRate,
-        uint256 _calcIntervalSeconds, // 3600 seconds
+        uint256 _calcIntervalSeconds, //3600
         uint256 _lastCalcTime,
-        uint256 /* _blockTimeStamp */,
         uint256 _intervals
     )
         internal
@@ -252,7 +258,7 @@ library FundingRateCalculator {
         // - When the fee collection period has a negative funding fee position of 0, the positive funding fee >0, and the negative funding fee rate is 0;
         bool isFomular = Size_Long > 0 && Size_Short > 0;
         if (Long_CumFRate >= Short_CumFRate) {
-            deductFundFeeAmount = _getFundingFeeLoss(
+            deductFundFeeAmount = _getLossOffset(
                 Size_Long,
                 C_FRate,
                 fundingFeeLossOffLimit,
@@ -266,7 +272,7 @@ library FundingRateCalculator {
                         ONE_WITH_8_DECIMALS.toInt256()) /
                     Size_Short.toInt256();
         } else {
-            deductFundFeeAmount = _getFundingFeeLoss(
+            deductFundFeeAmount = _getLossOffset(
                 Size_Short,
                 C_FRate,
                 fundingFeeLossOffLimit,
@@ -290,18 +296,19 @@ library FundingRateCalculator {
      * @param fundingFeeLossOffLimit Funding fee loss formula offset percentage (configured in admin) with 8 decimal precision
      * @param fundingFeeLoss Total funding fee loss for a single market with 18 decimal precision
      */
-    function _getFundingFeeLoss(
+    // function _getFundingFeeLoss(
+    function _getLossOffset(
         uint256 size,
         uint256 _CFRate,
         uint256 fundingFeeLossOffLimit,
-        uint256 fundingFeeLoss
+        uint256 totalLoss
     ) internal pure returns (uint256) {
         // Funding fee loss <= Size_Long * C_FRate_Long * 10%
         return
             Math.min(
                 (size * _CFRate * fundingFeeLossOffLimit) /
                     (ONE_WITH_8_DECIMALS ** 2),
-                fundingFeeLoss
+                totalLoss
             );
     }
 
@@ -346,7 +353,7 @@ library FundingRateCalculator {
         // Record the time of this update
         lastCalTimes[market] = roundedTime;
 
-        emit UpdateCalFundRate(market, cumLongRateDelta, cumShortRateDelta);
+        emit UpdateCalFundRates(market, cumLongRateDelta, cumShortRateDelta);
         emit UpdateLastCalTime(market, roundedTime);
     }
 
@@ -366,7 +373,7 @@ library FundingRateCalculator {
         calFundingRates[market][true] = 0;
         calFundingRates[market][false] = 0;
         lastCalTimes[market] = timestamp;
-        emit UpdateCalFundRate(market, 0, 0);
+        emit UpdateCalFundRates(market, 0, 0);
         emit UpdateLastCalTime(market, timestamp);
     }
 
@@ -385,6 +392,7 @@ library FundingRateCalculator {
     /**
      * @dev Calculates the number of funding intervals that have passed since the last funding time.
      * @param _intervalSeconds The funding interval.
+     * @return The number of intervals.
      */
     function _calculateIntervals(
         uint256 _end,
@@ -404,40 +412,69 @@ library FundingRateCalculator {
      * @param _collectIntervalSeconds the larger time frame
      */
     function _calcPart1Intervals(
-        uint256 _calcIntervalSeconds, // 3600
-        uint256 _lastCalcTime, // 6
+        uint256 _calcIntervalSeconds, //3600
+        uint256 _lastCalcTime, //6
         uint256 _blockTimeStamp,
-        uint256 _collectIntervalSeconds // 8 hours
-    ) internal pure returns (uint256) {
-        return
-            _calculateIntervals(
-                // Interval multiples of eight hours
-                calcRoundedTime(_blockTimeStamp, _collectIntervalSeconds), // Current whole point in time
-                // Last time
-                _lastCalcTime, // Last time
-                // One-hour interval
-                _calcIntervalSeconds // Interval
-            );
+        uint256 _collectIntervalSeconds //8 hours
+    ) internal pure returns (uint256 intervals, uint256 endRoundedTime) {
+        // current time = 17
+        // roundedCollectedTime = 16
+        // lastcaltime = 6
+        // calInterval = 1 hr
+        // return 10
+
+        uint256 lastRoundedTime = calcRoundedTime(
+            _lastCalcTime,
+            _collectIntervalSeconds
+        );
+        uint256 nowRoundedTime = calcRoundedTime(
+            _blockTimeStamp,
+            _collectIntervalSeconds
+        );
+
+        if (lastRoundedTime == nowRoundedTime) return (0, lastRoundedTime);
+
+        intervals = _calculateIntervals(
+            lastRoundedTime + _collectIntervalSeconds,
+            _lastCalcTime,
+            _calcIntervalSeconds
+        );
+
+        return (intervals, lastRoundedTime + _collectIntervalSeconds);
     }
 
-    /**
-     * _calcPart1Intervals Number of intervals in the smaller time frame. eg: 1 hours
-     * @param _calcIntervalSeconds smaller time frame
-     * @param _lastCalcTime last time calculated
-     * @param _blockTimeStamp current time
-     */
     function _calcPart2Intervals(
-        uint256 _calcIntervalSeconds, // 3600
-        uint256 _lastCalcTime, // 6
+        uint256 _calcIntervalSeconds, //3600
+        uint256 _lastCalcTime, //6
+        uint256 _blockTimeStamp,
+        uint256 _collectIntervalSeconds //8 hours
+    ) internal pure returns (uint256 collectIntervals, uint256 collectDivCalc) {
+        collectDivCalc = _collectIntervalSeconds / _calcIntervalSeconds;
+
+        uint256 nowRoundedTime = calcRoundedTime(
+            _blockTimeStamp,
+            _collectIntervalSeconds
+        );
+        if (_lastCalcTime >= nowRoundedTime)
+            return (0, _collectIntervalSeconds);
+
+        collectIntervals = _calculateIntervals(
+            nowRoundedTime,
+            _lastCalcTime,
+            _collectIntervalSeconds
+        );
+        collectDivCalc = _collectIntervalSeconds;
+    }
+
+    function _calcPart3Intervals(
+        uint256 _calcIntervalSeconds, //3600
+        uint256 _lastCalcTime, //6
         uint256 _blockTimeStamp
     ) internal pure returns (uint256) {
         return
             _calculateIntervals(
-                // Interval multiples of one hour
                 calcRoundedTime(_blockTimeStamp, _calcIntervalSeconds),
-                // Last time
                 _lastCalcTime,
-                // One-hour interval
                 _calcIntervalSeconds
             );
     }
@@ -471,7 +508,6 @@ library FundingRateCalculator {
     ) internal {
         uint256 _before = fundFeeLoss[market];
 
-        // When the total loss cannot be completely deducted in one go, the funding fee continues to deduct until the total loss is deducted.
         fundFeeLoss[market] = (fundFeeLoss[market] > deductAmount)
             ? (fundFeeLoss[market] - deductAmount)
             : 0;
@@ -494,8 +530,8 @@ library FundingRateCalculator {
      * @param longCumulativeRatesDelta
      * @param shortCumulativeRatesDelta
      * @param roundedTime
-     * @param calIntervals Calculative intervals
-     * @param collectIntervals Collective intervals
+     * @param calIntervals calculative intervals
+     * @param collectIntervals collective intervals
      */
     struct CalcAndUpdateFundingRatesCache {
         address market;
@@ -520,25 +556,24 @@ library FundingRateCalculator {
         CalcAndUpdateFundingRatesCache memory _cache,
         mapping(address => mapping(bool => int256)) storage calFundingRates,
         mapping(address => uint256) storage lastCalTimes
-    ) internal {
-        uint256 intervals;
-        // Number of intervals in the larger time frame. eg: 8 hours
+    ) internal returns (uint256 intervals, uint256 collectIntervals) {
+        collectIntervals = 1;
         if (_cache.calcPart == 1)
-            intervals = _calcPart1Intervals(
+            (intervals, ) = _calcPart1Intervals(
                 _cache.calIntervals,
                 lastCalTimes[_cache.market],
                 _cache.currentTS,
                 _cache.collectIntervals
             );
-            // Number of intervals in the smaller time frame. eg: 1 hours
         else if (_cache.calcPart == 2)
-            intervals = _calcPart2Intervals(
+            intervals = _cache.collectIntervals / _cache.calIntervals;
+        else if (_cache.calcPart == 3)
+            intervals = _calcPart3Intervals(
                 _cache.calIntervals,
                 lastCalTimes[_cache.market],
                 _cache.currentTS
             );
         else revert("!calcPart");
-        // calculate Long_CumFRate and Short_CumFRate
         (
             _cache.longCumulativeRatesDelta,
             _cache.shortCumulativeRatesDelta,
@@ -548,10 +583,8 @@ library FundingRateCalculator {
             _cache.shortRate,
             _cache.calIntervals,
             lastCalTimes[_cache.market],
-            _cache.currentTS,
             intervals
         );
-        // update Long_CumFRate and Short_CumFRate
         _updateGlobalCalRate(
             _cache.market,
             _cache.longCumulativeRatesDelta.toInt256(),
@@ -567,8 +600,8 @@ library FundingRateCalculator {
         uint256 longSize; // 18 decimals
         uint256 shortSize; // 18 decimals
         uint256 calcPart; //1 or 2
-        uint256 calcInterval; // FRate periodic interval
-        uint256 collectInterval; // C_FRate periodic interval
+        uint256 calcInterval;
+        uint256 collectInterval;
         uint256 currentTimeStamp;
         uint256 calculatedMaxFRate; // 8 decimals
         uint256 calculatedFRate; // 8 decimals
@@ -585,7 +618,8 @@ library FundingRateCalculator {
         UpdateCalFundingRateCache memory c,
         mapping(address => mapping(bool => int256)) storage calFundingRates,
         mapping(address => uint256) storage lastCalTimes,
-        uint256[] storage configs
+        uint256[] storage configs,
+        mapping(address => mapping(bool => uint256)) storage lastCalRate
     ) internal {
         // If FRate periodic fee rate is not initialized, initialize it and exit.
         uint256 _roundedTime = lastCalTimes[c.market];
@@ -609,7 +643,7 @@ library FundingRateCalculator {
             )
         ) return;
         // Calculate the FRate for the current point
-        (uint256 _longRate, uint256 _shortRate) = capFundingRateByLimits(
+        (uint256 _longFRate, uint256 _shortFRate) = capFundingRateByLimits(
             c.longSize,
             c.shortSize,
             configs[uint256(CfgIdx.MaxFRate)],
@@ -618,12 +652,16 @@ library FundingRateCalculator {
             c.calculatedFRate,
             configs[uint256(CfgIdx.MinorityFRate)]
         );
-        // update
+        lastCalRate[c.market][true] = _longFRate;
+        lastCalRate[c.market][false] = _shortFRate;
+
+        emit UpdateLastCalRate(c.market, _longFRate, _shortFRate);
+
         _calcAndUpdateFundingRates(
             CalcAndUpdateFundingRatesCache(
                 c.market,
-                _longRate,
-                _shortRate,
+                _longFRate,
+                _shortFRate,
                 c.currentTimeStamp,
                 c.calcPart,
                 0,
@@ -635,5 +673,117 @@ library FundingRateCalculator {
             calFundingRates,
             lastCalTimes
         );
+    }
+
+    struct GetNextFundingRateCache {
+        int256 Long_CumFRate;
+        int256 Short_CumFRate;
+        uint256 longFRate;
+        uint256 shortFRate;
+        uint256 leftIntervals;
+        // inputs
+        uint256 calInterval;
+        uint256 lastCalTimes;
+        uint256 ts;
+        uint256 collectInterval;
+        uint256 minCFRate;
+        uint256 fundingFeeLossOffLimit;
+        uint256 fundingFeeLoss;
+    }
+
+    /**
+     * @dev Retrieves the next funding rates for a market based on the sizes of long and short positions.
+     * @param market The address of the market.
+     * @param longSize The size of the long position on single market.
+     * @param shortSize The size of the short position on single market.
+     * @return _longCFRate The next funding rates for long and short positions.
+     * @return _shortCFRate The next funding rates for long and short positions.
+     */
+    function getNextFundingRate(
+        address market,
+        uint256 longSize,
+        uint256 shortSize,
+        GetNextFundingRateCache memory c,
+        mapping(address => mapping(bool => int256)) storage calFundingRates,
+        mapping(address => mapping(bool => uint256)) storage lastCalRate
+    ) internal view returns (int256 _longCFRate, int256 _shortCFRate) {
+        bool _isCalcBegan = isCalcBegan(
+            c.ts,
+            c.collectInterval,
+            c.lastCalTimes
+        );
+        if (_isCalcBegan) {
+            c.Long_CumFRate = calFundingRates[market][true];
+            c.Short_CumFRate = calFundingRates[market][false];
+        }
+
+        c.longFRate = lastCalRate[market][true];
+        c.shortFRate = lastCalRate[market][false];
+
+        c.leftIntervals = _calcLeftIntervals(
+            c.calInterval,
+            c.lastCalTimes,
+            c.ts,
+            c.collectInterval,
+            _isCalcBegan
+        );
+
+        c.Long_CumFRate += (c.longFRate * c.leftIntervals).toInt256();
+        c.Short_CumFRate += (c.shortFRate * c.leftIntervals).toInt256();
+
+        uint256 CFRate = calCFRate(
+            c.Long_CumFRate,
+            c.Short_CumFRate,
+            c.minCFRate
+        );
+        (_longCFRate, _shortCFRate, ) = calNextCFRate(
+            c.Long_CumFRate,
+            c.Short_CumFRate,
+            CFRate,
+            c.fundingFeeLossOffLimit,
+            c.fundingFeeLoss,
+            longSize,
+            shortSize
+        );
+    }
+
+    function _calcLeftIntervals(
+        uint256 calInterval,
+        uint256 lastCalTimes,
+        uint256 ts,
+        uint256 collectInterval,
+        bool _isCalcBegan
+    ) internal pure returns (uint256 leftIntervals) {
+        uint256 part1;
+        if (_isCalcBegan) {
+            (part1, ) = _calcPart1Intervals(
+                calInterval, // _cache.calIntervals
+                lastCalTimes,
+                ts,
+                collectInterval
+            );
+
+            return
+                collectInterval /
+                calInterval -
+                _calcPart3Intervals(
+                    calInterval,
+                    lastCalTimes + part1 * calInterval,
+                    ts
+                );
+        } else return collectInterval / calInterval;
+    }
+
+    function isCalcBegan(
+        uint256 ts,
+        uint256 collectInterval,
+        uint256 lastCalTimes
+    ) internal pure returns (bool) {
+        uint256 collectRoundedTime = calcRoundedTime(ts, collectInterval);
+        if (
+            (collectRoundedTime < lastCalTimes) ||
+            (collectRoundedTime - lastCalTimes) < collectInterval
+        ) return true;
+        return false;
     }
 }

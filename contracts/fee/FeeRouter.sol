@@ -93,7 +93,8 @@ contract FeeRouter is Ac, IFeeRouter {
     ) external onlyInitOr(MARKET_MGR_ROLE) {
         // FeeType.Counter is not a fee type
         require(
-            rates.length > 0 && rates.length <= uint(type(FeeType).max),
+            rates.length > 0 &&
+                rates.length <= uint(type(FeeRouterLib.FeeType).max),
             "invalid params"
         );
         for (uint8 i = 0; i < rates.length; i++) {

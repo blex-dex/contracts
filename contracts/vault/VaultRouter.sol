@@ -17,14 +17,13 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
     using SafeERC20 for IERC20;
     using EnumerableSet for EnumerableSet.AddressSet;
 
-
     IFeeRouter public feeRouter;
     ICoreVault public coreVault;
 
     EnumerableSet.AddressSet private markets;
     EnumerableSet.AddressSet private vaults;
     bool public isFreezeTransfer = false;
-    uint256 public constant PRICE_DECIMALS=8;
+    uint256 public constant PRICE_DECIMALS = 8;
     uint256 public totalFundsUsed;
     mapping(address => uint256) public fundsUsed;
     mapping(address => ICoreVault) public marketVaults;
@@ -47,8 +46,8 @@ contract VaultRouter is AcUpgradable, ReentrancyGuard {
         emit LogIsFreeze(f, freezeType);
     }
 
-    constructor(){
-        _disableInitializers();
+    constructor() {
+        //_disableInitializers();
     }
 
     function initialize(

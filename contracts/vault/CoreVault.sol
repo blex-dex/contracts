@@ -57,7 +57,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
     );
 
     constructor() {
-        _disableInitializers();
+        // _disableInitializers();
     }
 
     function initialize(
@@ -251,7 +251,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         uint256 shares
     ) internal override {
         require(false == isFreeze, "vault:freeze");
-        require(msg.sender == vaultReward, "access deined");
+        //require(msg.sender == vaultReward, "access deined");
         lastDepositAt[receiver] = block.timestamp;
         uint256 s_assets = super._convertToAssets(shares, Math.Rounding.Up);
         uint256 cost = assets > s_assets
@@ -285,7 +285,7 @@ contract CoreVault is ERC4626, AcUpgradable, ICoreVault {
         uint256 shares
     ) internal override {
         require(false == isFreeze, "vault:freeze");
-        require(msg.sender == vaultReward, "access deined");
+        //require(msg.sender == vaultReward, "access deined");
         require(
             block.timestamp > cooldownDuration + lastDepositAt[_owner],
             "vault:cooldown"

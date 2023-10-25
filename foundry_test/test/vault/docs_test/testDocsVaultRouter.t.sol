@@ -49,7 +49,7 @@ contract MockDocsVaultRouterTest is Test {
 
         feeRouter = new MockFeeRouter();
         // feeVault = new FeeVault();
-        // fundFee = new FundFee(address(feeVault));
+        // fundFee = new FundFee(address(feeVault)s);
         mockMarket = new MockMarket();
         coreVault.initialize(
             address(usdc),
@@ -101,7 +101,10 @@ contract MockDocsVaultRouterTest is Test {
         );
         vaultRouter.setMarket(address(mockMarket), address(coreVault));
         ICoreVault vault = vaultRouter.marketVaults(address(mockMarket));
-        vaultRouter.grantRole(bytes32(keccak256("VAULT_MGR_ROLE")),address(this));
+        vaultRouter.grantRole(
+            bytes32(keccak256("VAULT_MGR_ROLE")),
+            address(this)
+        );
         vm.expectEmit(false, false, false, true, address(vaultRouter));
         emit MarketRemoved(address(mockMarket), address(coreVault));
         vaultRouter.removeMarket(address(mockMarket));
@@ -179,7 +182,7 @@ contract MockDocsVaultRouterTest is Test {
     }
 
     function testVR03004(uint256 amount) public {
-        vm.assume(amount>0 && amount < 100000000000000 * 10 ** 6);
+        vm.assume(amount > 0 && amount < 100000000000000 * 10 ** 6);
         vaultRouter.grantRole(
             bytes32(keccak256("MULTI_SIGN_ROLE")),
             address(this)

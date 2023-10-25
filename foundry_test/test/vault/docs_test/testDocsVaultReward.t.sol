@@ -68,7 +68,7 @@ contract DocsVaultRewardTest is Test {
         vaultRouter = new VaultRouter();
         feeRouter = new MockFeeRouter();
         feeVault = new FeeVault();
-        fundFee = new FundFee(address(feeVault));
+        fundFee = new FundFee();
         coreVault.initialize(
             address(usdc),
             "CoreVault",

@@ -38,7 +38,7 @@ contract ChainPriceFeed is Ac {
         priceDecimals[_token] = _decimal;
     }
 
-    function getLatestPrice(address token) public view returns (uint256) {
+    function getLatestPrice(address _token) public view returns (uint256) {
         uint256 xxxUSD = _getLatestPrice(_token);
         uint256 _USDTUSD = _getLatestPrice(USDT);
         if (xxxUSD < (2 ** 256 - 1) / PRICE_PRECISION)
@@ -46,7 +46,7 @@ contract ChainPriceFeed is Ac {
         return (xxxUSD / PRICE_PRECISION) * _USDTUSD;
     }
 
-    function _getLatestPrice(address _token) private view returns (uint256) {
+    function _getLatestPrice(address token) private view returns (uint256) {
         address feed = priceFeeds[token];
         require(feed != address(0), "PriceFeed: invalid price feed");
 
@@ -61,12 +61,12 @@ contract ChainPriceFeed is Ac {
         address token,
         bool maximise
     ) public view returns (uint256) {
-        return _getPrice(token, maximise, uint80(sampleSpace));
+        return _getPriceWithUSDT(token, maximise, uint80(sampleSpace));
     }
 
-    function _getPrice(
-        address token,
-        bool maximise,
+    function _getPriceWithUSDT(
+        address _token,
+        bool _maximise,
         uint80 rounds_
     ) internal view returns (uint256 finalPrice) {
         uint256 xxxUSD = _getPrice(_token, _maximise, rounds_);
